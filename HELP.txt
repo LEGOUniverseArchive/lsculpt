@@ -1,0 +1,86 @@
+LSculpt
+Copyright (C) 2006-2007 Bram Lambrecht <lego@bldesign.org>
+
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+  LSculpt is a command line program.  To run it, open a command prompt
+  window.  Hit Start > Run..., and then type:
+    cmd.exe
+  Now navigate to the directory where you unzipped LSculpt:
+    cd "C:\MY\LSCULPT\FOLDER\"
+  You're all set to run LSculpt!
+
+  LSculpt takes a triangle mesh in PLY or STL format as input.  It'll
+  make things easier if you put the meshes you want to convert in the
+  same directory as your LSculpt installation.
+
+  Here's an example command:
+    lsculpt -u stud -f 32 bunny.ply legobunny.ldr
+
+  This command will read "bunny.ply" and create an LDraw file called
+  "legobunny.ldr".  The LDraw model will be 32 studs long on in the
+  largest dimension.  Below are the other options you can use to alter
+  the output.  For example, "-v" will include lots more information
+  about what's going on as the program runs.
+
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+Usage: LSculpt [OPTIONS] inputfile [outputfile]
+inputfile     is a mesh of triangles in a supported format.
+outputfile    is the desired filename for the LDraw file.  If no filename is
+              provided, the inputfile will receive an .ldr or .mpd extension.
+
+OPTIONS may appear anywhere in the command line.  OPTIONS are:
+
+These options modify the input mesh before filling with Lego pieces:
+
+ -i  format   force input format for mesh.  Default is from file extension.
+              format = [ply, stl]
+ -u  unit     units for mesh, offset, or fit.
+              unit = [mm, cm, m, in, ft, stud, ldu (default)]
+ -o  x y z    offset the origin to this location.
+ -c           re-center mesh at the origin.
+ -d  up       up axis: up = [y (default), z].
+ -r  angle    rotate mesh about the 'up' axis by angle degrees.
+ -f  length   fit the mesh so the longest side is 'length' units.
+ -s  factor   scale factor for mesh
+
+These options affect the way Lego pieces fill in the mesh:
+
+ -b  level    use a base of studs up pieces for the bottom 'level' layers
+ -n           use only studs up pieces for the first attempt
+ -e           create an empty shell (use with disconnected or overlapping
+              surfaces that otherwise result in lots of artifacts)
+
+These options affect the look of the LDraw file:
+
+ -a  part     choose which part to use in LDraw file. Choose from:
+              0:  1 x 1 plate (default)
+              1:  1 x 1 tile
+              2:  simplifed 1 x 1 plate for fast rendering
+              3:  simplifed 1 x 1 tile for fast rendering
+ -k  color    choose a color option for the output file. Choose from:
+              0:  default color
+              1:  color pieces in layers
+              2:  color pieces according to their orientation
+
+Advanced options:
+
+ -p  iter     optimize orientation of studs for 'iter' iterations
+ -q           quick: same as -p 0
+ -y  a b c    optimization options (defaults are given in []):
+              a [0.25] amount to match piece orientation to surface normal
+              b [0.25] amount to make studs point outward from surface
+              c [0.50] amount to match piece orientation to neighbors
+ -z  a to e   optimization options (values may be negative or positive):
+              a [0.00] extra weight for thin neighbors
+              b [0.00] extra weight for lonely neighbors
+              c [0.00] extra weight for neighbors pointing the opposite way
+              d [0.00] extra weight for neighbors in front or behind
+              e [0.00] extra weight for neighbors which match c AND d
+
+Other options:
+
+ -h           show this message.
+ -v           verbose output
+ -w           suppress all warning messages

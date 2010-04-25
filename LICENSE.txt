@@ -1,0 +1,7 @@
+LSculpt Copyright (C) 2006-2007 Bram Lambrecht <lego@bldesign.org>
+LSculpt is free for personal use and may be redistributed provided no changes
+are made, no fee is charged, and this copyright notice is included in the
+distribution.  LSculpt is provided "as is"; use it at your own risk.
+
+LEGO(R) and the LEGO logo are registered trademarks of the LEGO Group, which
+does not sponser, endorse, or authorize this program.
