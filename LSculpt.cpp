@@ -7,6 +7,8 @@
 //
 
 #include "LSculpt_functions.h"
+#include <string.h>
+#include <limits.h>
 
 #ifdef _GENERIC_STR_S_
 
@@ -63,6 +65,7 @@ int strncpy_s(char *dst, size_t dst_size, const char *src, size_t src_size) {
 
 #endif
 
+#ifdef LSCULPT_CONSOLE
 int main(int argc, char *argv[])
 {
 	bool noerr;
@@ -116,6 +119,7 @@ int main(int argc, char *argv[])
 
 	return 0;
 }
+#endif
 
 float now()
 {
