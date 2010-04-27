@@ -2,6 +2,9 @@
 #define LSCULPTMAINWIN_H
 
 #include <QMainWindow>
+#include <QTextEdit>
+
+#include "argpanel.h"
 
 namespace Ui {
     class LSculptMainWin;
@@ -16,8 +19,17 @@ public:
 protected:
     void changeEvent(QEvent *e);
 
+private slots:
+    void import();
+
 private:
     Ui::LSculptMainWin *ui;
+    ArgPanel *panel;
+    QTextEdit *console;
+
+    bool offerSave();
+
+    QString currentFilename;
 };
 
 #endif // LSCULPTMAINWIN_H

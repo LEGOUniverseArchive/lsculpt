@@ -1,6 +1,6 @@
 #ifndef LSCULPT_CONSOLE
 
-#include <QtGui/QApplication>
+#include <QApplication>
 #include "lsculptmainwin.h"
 
 int main(int argc, char *argv[])

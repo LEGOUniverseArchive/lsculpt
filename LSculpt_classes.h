@@ -5,6 +5,9 @@
 // Class definitions for PLY/STL to LDR oriented voxelization
 //
 
+#ifndef LSCULPT_CLASSES_H
+#define LSCULPT_CLASSES_H
+
 #include <vector>
 #include <map>
 #include <set>
@@ -21,7 +24,7 @@ using namespace std;
 
 // shortcuts for SpCube flags
 #define ORIENT_0         0x0001  // 0000 0000 0000 0001
-#define ORIENT_1		 0x0002  // 0000 0000 0000 0010
+#define ORIENT_1         0x0002  // 0000 0000 0000 0010
 #define ORIENT_2         0x0004  // 0000 0000 0000 0100
 #define ORIENT_NEG       0x0008  // 0000 0000 0000 1000
 #define ORIENT_CLEAR     0xFFF8  // 1111 1111 1111 1000
@@ -439,3 +442,5 @@ inline unsigned char SpCubeEnergy::orientget() const
 {
 	return (flags & ORIENT_0) ? 0 : ((flags & ORIENT_1) ? 1 : 2);
 }
+
+#endif // LSCULPT_CLASSES_H

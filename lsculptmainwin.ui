@@ -27,23 +27,23 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
-    <addaction name="action_Import_3D_File"/>
-    <addaction name="action_Export_LDraw_File"/>
+    <addaction name="importAction"/>
+    <addaction name="exportAction"/>
     <addaction name="separator"/>
-    <addaction name="action_Quit"/>
+    <addaction name="exitAction"/>
    </widget>
    <widget class="QMenu" name="menu_Edit">
     <property name="title">
      <string>&amp;Edit</string>
     </property>
-    <addaction name="action_Undo"/>
-    <addaction name="action_Redo"/>
+    <addaction name="undoAction"/>
+    <addaction name="redoAction"/>
    </widget>
    <addaction name="menuLSculpt"/>
    <addaction name="menu_Edit"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <action name="action_Undo">
+  <action name="undoAction">
    <property name="text">
     <string>&amp;Undo</string>
    </property>
@@ -51,7 +51,7 @@
     <string>Ctrl+Z</string>
    </property>
   </action>
-  <action name="action_Redo">
+  <action name="redoAction">
    <property name="text">
     <string>&amp;Redo</string>
    </property>
@@ -59,7 +59,7 @@
     <string>Ctrl+Y</string>
    </property>
   </action>
-  <action name="action_Import_3D_File">
+  <action name="importAction">
    <property name="text">
     <string>&amp;Import 3D File...</string>
    </property>
@@ -67,7 +67,7 @@
     <string>Ctrl+O</string>
    </property>
   </action>
-  <action name="action_Export_LDraw_File">
+  <action name="exportAction">
    <property name="text">
     <string>&amp;Export LDraw File...</string>
    </property>
@@ -75,7 +75,7 @@
     <string>Ctrl+S</string>
    </property>
   </action>
-  <action name="action_Quit">
+  <action name="exitAction">
    <property name="text">
     <string>E&amp;xit</string>
    </property>
@@ -86,5 +86,25 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>importAction</sender>
+   <signal>triggered()</signal>
+   <receiver>LSculptMainWin</receiver>
+   <slot>import()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>298</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>import()</slot>
+ </slots>
 </ui>
