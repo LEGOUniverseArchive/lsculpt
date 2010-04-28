@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>585</height>
+    <height>567</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,7 +19,7 @@
   <property name="minimumSize">
    <size>
     <width>400</width>
-    <height>585</height>
+    <height>567</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -29,7 +29,7 @@
    <property name="geometry">
     <rect>
      <x>315</x>
-     <y>560</y>
+     <y>544</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -44,7 +44,7 @@
      <x>10</x>
      <y>10</y>
      <width>380</width>
-     <height>200</height>
+     <height>192</height>
     </rect>
    </property>
    <property name="title">
@@ -53,10 +53,10 @@
    <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
      <rect>
-      <x>9</x>
-      <y>56</y>
+      <x>12</x>
+      <y>54</y>
       <width>182</width>
-      <height>130</height>
+      <height>126</height>
      </rect>
     </property>
     <property name="title">
@@ -130,10 +130,10 @@
    <widget class="QGroupBox" name="groupBox_3">
     <property name="geometry">
      <rect>
-      <x>202</x>
-      <y>106</y>
+      <x>204</x>
+      <y>104</y>
       <width>165</width>
-      <height>80</height>
+      <height>76</height>
      </rect>
     </property>
     <property name="title">
@@ -181,7 +181,7 @@
    <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">
      <rect>
-      <x>202</x>
+      <x>204</x>
       <y>17</y>
       <width>164</width>
       <height>80</height>
@@ -303,7 +303,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>220</y>
+     <y>212</y>
      <width>380</width>
      <height>110</height>
     </rect>
@@ -316,7 +316,7 @@
      <rect>
       <x>10</x>
       <y>24</y>
-      <width>271</width>
+      <width>263</width>
       <height>78</height>
      </rect>
     </property>
@@ -405,7 +405,7 @@
    <widget class="QCheckBox" name="checkBox_2">
     <property name="geometry">
      <rect>
-      <x>284</x>
+      <x>286</x>
       <y>50</y>
       <width>90</width>
       <height>18</height>
@@ -418,7 +418,7 @@
    <widget class="QCheckBox" name="checkBox_3">
     <property name="geometry">
      <rect>
-      <x>284</x>
+      <x>286</x>
       <y>25</y>
       <width>168</width>
       <height>18</height>
@@ -433,9 +433,9 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>340</y>
+     <y>332</y>
      <width>380</width>
-     <height>210</height>
+     <height>203</height>
     </rect>
    </property>
    <property name="title">
@@ -444,10 +444,10 @@
    <widget class="QGroupBox" name="groupBox_7">
     <property name="geometry">
      <rect>
-      <x>189</x>
-      <y>16</y>
+      <x>187</x>
+      <y>20</y>
       <width>177</width>
-      <height>165</height>
+      <height>171</height>
      </rect>
     </property>
     <property name="title">
@@ -456,10 +456,10 @@
     <widget class="QWidget" name="formLayoutWidget_5">
      <property name="geometry">
       <rect>
-       <x>8</x>
-       <y>15</y>
+       <x>9</x>
+       <y>24</y>
        <width>156</width>
-       <height>140</height>
+       <height>137</height>
       </rect>
      </property>
      <layout class="QFormLayout" name="formLayout_5">
@@ -521,7 +521,7 @@
     <property name="geometry">
      <rect>
       <x>11</x>
-      <y>74</y>
+      <y>68</y>
       <width>164</width>
       <height>123</height>
      </rect>
@@ -579,9 +579,9 @@ neighbors:</string>
     <property name="geometry">
      <rect>
       <x>12</x>
-      <y>19</y>
+      <y>18</y>
       <width>161</width>
-      <height>52</height>
+      <height>47</height>
      </rect>
     </property>
     <layout class="QFormLayout" name="formLayout_7">
