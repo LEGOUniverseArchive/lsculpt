@@ -25,7 +25,7 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="runLSculptBtn">
    <property name="geometry">
     <rect>
      <x>315</x>
@@ -316,7 +316,7 @@
      <rect>
       <x>10</x>
       <y>24</y>
-      <width>254</width>
+      <width>271</width>
       <height>78</height>
      </rect>
     </property>
@@ -405,7 +405,7 @@
    <widget class="QCheckBox" name="checkBox_2">
     <property name="geometry">
      <rect>
-      <x>278</x>
+      <x>284</x>
       <y>50</y>
       <width>90</width>
       <height>18</height>
@@ -418,7 +418,7 @@
    <widget class="QCheckBox" name="checkBox_3">
     <property name="geometry">
      <rect>
-      <x>278</x>
+      <x>284</x>
       <y>25</y>
       <width>168</width>
       <height>18</height>

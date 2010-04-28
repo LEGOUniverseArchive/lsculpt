@@ -10,6 +10,54 @@
 #include <string.h>
 #include <limits.h>
 
+//
+// ===== Global variables =====
+//
+
+// Triangle mesh input:  Rotation of the mesh is done during
+// file input.  Scaling and translation is done on the fly
+// by scaling and translating the space partitioning cubes
+vector<Triangle>       inputmesh;
+
+// Pairing of each space partitioning cube with its location
+// in space.  The map allows easy lookup of a cube based
+// on its location in space.
+map<SpCubeKey, SpCube> cubelist;
+
+// Queue of optimization energies
+multiset<SpCubeEnergy> cubeenergy;
+
+//
+// ===== Command line options =====
+//
+
+unsigned char OPTS_FORMAT  = 0;            // input file format
+unsigned char OPTS_MESSAGE = MESSAGE_ERR;  // verbosity
+bool          OPTS_CENTER  = false;        // center mesh?
+bool          OPTS_STUDSUP = false;        // initialize studs-up instead of studs-out
+bool          OPTS_NOFILL  = false;        // just convert the surface, don't try to fill it
+unsigned char OPTS_BASE    = 0;            // bias studs-up at the bottom
+unsigned char OPTS_UP      = UP_Y;         // up vector of input mesh
+SmVector3     OPTS_OFFSET;                 // amount to offset input mesh
+double        OPTS_FIT     = 0.0;          // size to fit input mesh to
+double        OPTS_SCALE   = 1.0;          // scale factor for mesh
+double        OPTS_ROT     = 0.0;          // rotation of mesh
+double        OPTS_ROT_SIN = 0.0;          // sin of said rotation
+double        OPTS_ROT_COS = 1.0;          // cos of said rotation
+int           OPTS_MAXITER = OPTIM_MAX;    // maximum optimization iterations
+unsigned char OPTS_PART    = 0;            // part to use for output
+unsigned char OPTS_COLOR   = COLOR_OFF;    // color scheme for output
+
+// Energy functional weights for cube optimization
+double OP_ORN =   0.25;  // Weight of orientation with respect to cube's average normal
+double OP_DIR =   0.25;  // Weight of direction with respect to cube's average normal
+double OP_NBR =   0.50;  // Weight of orientation/direction of neighbors
+double OP_THN =   0.00;  // Importance of whether a neighbor is thin or not
+double OP_NCT =   0.00;  // Importance of the number of neighboring cubes a neighbor has
+double OP_SOR =   0.00;  // Importance of neighbors with the same orientation but different direction
+double OP_BAK =   0.00;  // Importance of neighbor directly behind or in front of cube
+double OP_BKO =   0.00;  // Importance of neighbor directly behind or in front of cube with same orientation
+
 #ifdef _GENERIC_STR_S_
 
 // (portable str_s functions by Jim DeVona)
@@ -68,11 +116,26 @@ int strncpy_s(char *dst, size_t dst_size, const char *src, size_t src_size) {
 #ifdef LSCULPT_CONSOLE
 int main(int argc, char *argv[])
 {
-	bool noerr;
 	char infile[80] = "", outfile[80] = "";
+	load_options(argc, argv, infile, outfile);
+	return main_wrapper(infile, outfile, false);
+}
+#endif
+
+int main_wrapper(char *infile, char *outfile, bool set_defaults)
+{
+	bool noerr;
 	SmVector3 mn, mx, sz;
 
-	load_options(argc, argv, infile, outfile);
+	if (set_defaults)
+	{
+		// Temporary arguments, until full UI hooked up
+		OPTS_SCALE = UNIT_LDU_ST;
+		OPTS_FIT = 20;
+		OPTS_MESSAGE = MESSAGE_ALL;
+		load_options(0, 0, infile, outfile);
+	}
+
 	if(OPTS_MESSAGE==MESSAGE_ALL) cout << "TIME\t: PROGRESS" << endl;
 	if(OPTS_MESSAGE==MESSAGE_ALL) cout << now() << "\t: reading input file: " << infile << endl;
 
@@ -119,7 +182,6 @@ int main(int argc, char *argv[])
 
 	return 0;
 }
-#endif
 
 float now()
 {
@@ -354,10 +416,12 @@ void usage()
 // PLY input code adapted from source code available at
 // http://www.cs.princeton.edu/~diego/professional/rply
 //
+int bad_faces;  // reduce error output - one error message for all bad faces
 vector<SmVector3> vtxs; // temporary global variable for storing vertices
 bool load_triangles_ply(char *fname)
 {
-    long nvertices, ntriangles;
+	bad_faces = 0;
+	long nvertices, ntriangles;
 
 	// Open PLY file
     p_ply ply = ply_open(fname, NULL);
@@ -378,11 +442,14 @@ bool load_triangles_ply(char *fname)
 	if (!ply_read(ply)) return false;
     ply_close(ply);
 
+	if (bad_faces)
+		cerr << "PLY file contains " << bad_faces << " non-triangular faces." << endl;
+
 	return true; //success
 }
 
 // PLY file: read vertex callback function
-static int myply_vertex_cb(p_ply_argument argument) {
+int myply_vertex_cb(p_ply_argument argument) {
     long coord;
     ply_get_argument_user_data(argument, NULL, &coord);
 
@@ -407,7 +474,7 @@ static int myply_vertex_cb(p_ply_argument argument) {
 }
 
 // PLY file: read triangle callback function
-static int myply_face_cb(p_ply_argument argument) {
+int myply_face_cb(p_ply_argument argument) {
     long length, face_vertex_index;
     ply_get_argument_property(argument, NULL, &length, &face_vertex_index);
 	
@@ -423,7 +490,7 @@ static int myply_face_cb(p_ply_argument argument) {
 			inputmesh.back().v[face_vertex_index] = roty(vtxs.at(ply_get_argument_value(argument)));
 			break;
 		default:
-			cerr << "PLY file contains a non-triangular face." << endl;
+			bad_faces++;
 			break;
 	}	
 

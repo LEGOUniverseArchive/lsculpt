@@ -11,6 +11,7 @@ public:
     ~ArgPanel();
 
 signals:
+    void runLSculptBtnClicked();
 
 public slots:
 

@@ -5,6 +5,7 @@ ArgPanel::ArgPanel(QWidget *parent) :
     ui(new Ui::ArgPanel)
 {
     ui->setupUi(this);
+    connect(ui->runLSculptBtn, SIGNAL(clicked()), this, SIGNAL(runLSculptBtnClicked()));
 }
 
 ArgPanel::~ArgPanel()

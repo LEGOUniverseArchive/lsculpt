@@ -199,20 +199,20 @@ public:
 //
 // Triangle member functions
 //
-SmVector3 Triangle::computenormal(bool area)
+inline SmVector3 Triangle::computenormal(bool area)
 {
 	an = cross(v[1] - v[0], v[2] - v[0]);
 	un = an / mag(an);
 	return area ? an : un;
 }
 
-double Triangle::area()
+inline double Triangle::area()
 {
 	if(an == SmVector3()) computenormal();
 	return mag(an);
 }
 
-void Triangle::computebounds(SmVector3 &retmin, SmVector3 &retmax)
+inline void Triangle::computebounds(SmVector3 &retmin, SmVector3 &retmax)
 // Return the bounds via the pass by reference minimum and maximum positions
 // Also, store the result in the class members mn, mx
 {
@@ -228,8 +228,11 @@ void Triangle::computebounds(SmVector3 &retmin, SmVector3 &retmax)
 
 inline double whichside(SmVector2 a, SmVector2 b, SmVector2 c)
 // Test which side of line a-b point c is on (in the plane)
-{	return a[0]*(b[1] - c[1]) + b[0]*(c[1] - a[1]) + c[0]*(a[1] - b[1]);  }
-bool Triangle::intersect(SmVector3 &pt, unsigned char dir)
+{
+	return a[0]*(b[1] - c[1]) + b[0]*(c[1] - a[1]) + c[0]*(a[1] - b[1]);
+}
+
+inline bool Triangle::intersect(SmVector3 &pt, unsigned char dir)
 // intersect a ray aligned with axis dir through the passed
 // pt with the triangle.  If an intersection exists, return true
 // and move pass by reference "pt" to the point of intersection.

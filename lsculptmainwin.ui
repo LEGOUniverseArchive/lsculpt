@@ -103,6 +103,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>exitAction</sender>
+   <signal>triggered()</signal>
+   <receiver>LSculptMainWin</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>298</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>import()</slot>

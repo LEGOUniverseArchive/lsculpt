@@ -31,10 +31,12 @@ inline SmVector3 roty(SmVector3);
 
 // Load triangles from a ply file using the rPly library
 bool load_triangles_ply(char *f);
-	// callback function for vertices
-	static int myply_vertex_cb(p_ply_argument argument);
-	// callback function for faces
-	static int myply_face_cb(p_ply_argument argument);
+
+// callback function for vertices
+int myply_vertex_cb(p_ply_argument argument);
+
+// callback function for faces
+int myply_face_cb(p_ply_argument argument);
 
 // Load triangles from a binary STL file
 bool load_triangles_stl(char *f);
@@ -106,6 +108,9 @@ unsigned int optimize_voxels();
 // Write the output file
 void save_ldraw(char *f);
 
+// temp wrapper fore existing console's main() function
+int main_wrapper(char *infile, char *outfile, bool set_defaults);
+
 //
 // ===== More definitions ======
 //
@@ -131,53 +136,5 @@ void save_ldraw(char *f);
 
 // Maximum iterations for optimization
 #define OPTIM_MAX    100000
-
-//
-// ===== Global variables =====
-//
-
-// Triangle mesh input:  Rotation of the mesh is done during
-// file input.  Scaling and translation is done on the fly
-// by scaling and translating the space partitioning cubes
-vector<Triangle>       inputmesh; 
-
-// Pairing of each space partitioning cube with its location
-// in space.  The map allows easy lookup of a cube based
-// on its location in space.
-map<SpCubeKey, SpCube> cubelist; 
-
-// Queue of optimization energies
-multiset<SpCubeEnergy> cubeenergy;
-
-//
-// ===== Command line options =====
-//
-
-unsigned char OPTS_FORMAT  = 0;            // input file format
-unsigned char OPTS_MESSAGE = MESSAGE_ERR;  // verbosity
-bool          OPTS_CENTER  = false;        // center mesh?
-bool          OPTS_STUDSUP = false;        // initialize studs-up instead of studs-out
-bool          OPTS_NOFILL  = false;        // just convert the surface, don't try to fill it
-unsigned char OPTS_BASE    = 0;            // bias studs-up at the bottom
-unsigned char OPTS_UP      = UP_Y;         // up vector of input mesh
-SmVector3     OPTS_OFFSET;                 // amount to offset input mesh
-double        OPTS_FIT     = 0.0;          // size to fit input mesh to
-double        OPTS_SCALE   = 1.0;          // scale factor for mesh
-double        OPTS_ROT     = 0.0;          // rotation of mesh
-double        OPTS_ROT_SIN = 0.0;          // sin of said rotation
-double        OPTS_ROT_COS = 1.0;          // cos of said rotation
-int           OPTS_MAXITER = OPTIM_MAX;    // maximum optimization iterations
-unsigned char OPTS_PART    = 0;            // part to use for output
-unsigned char OPTS_COLOR   = COLOR_OFF;    // color scheme for output
-
-// Energy functional weights for cube optimization
-double OP_ORN =   0.25;  // Weight of orientation with respect to cube's average normal
-double OP_DIR =   0.25;  // Weight of direction with respect to cube's average normal
-double OP_NBR =   0.50;  // Weight of orientation/direction of neighbors
-double OP_THN =   0.00;  // Importance of whether a neighbor is thin or not
-double OP_NCT =   0.00;  // Importance of the number of neighboring cubes a neighbor has
-double OP_SOR =   0.00;  // Importance of neighbors with the same orientation but different direction
-double OP_BAK =   0.00;  // Importance of neighbor directly behind or in front of cube
-double OP_BKO =   0.00;  // Importance of neighbor directly behind or in front of cube with same orientation
 
 #endif // LSCULPT_FUNCTIONS_H
