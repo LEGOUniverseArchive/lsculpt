@@ -48,6 +48,11 @@ void LSculptMainWin::invokeLSculpt()
         return;
     }
 
+	// Setup input & output filename (output is
+	QByteArray ba = this->currentFilename.toLatin1();
+	char *infile = ba.data();
+	char outfile[80] = "";
+
     // Redirect cout & cerr to local string buffer
     streambuf *coutBuf = cout.rdbuf();
     streambuf *cerrBuf = cerr.rdbuf();
@@ -56,12 +61,10 @@ void LSculptMainWin::invokeLSculpt()
     cout.rdbuf(&buffer);
 	cerr.rdbuf(&buffer);
 
-    // Setup input & output filename (output is
-    QByteArray ba = this->currentFilename.toLatin1();
-    char *infile = ba.data();
-    char outfile[80] = "";
-
-    main_wrapper(infile, outfile, true);
+	ArgumentSet args = panel->getArguments(infile);
+	setArgumentSet(args);
+	setOutFile(args, infile, outfile);
+	main_wrapper(infile, outfile);
 
     // Copy redirected string buffer to console text editor
     console->append(buffer.str().c_str());

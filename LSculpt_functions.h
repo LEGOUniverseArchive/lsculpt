@@ -23,6 +23,18 @@ void strupper(char *);	// Uppercase a string
 // Load command line options into global variables
 void load_options(int argc, char*argv[], char* in, char* out);
 
+// Set the file format argument based on the input file name's extension
+void setFileFormat(ArgumentSet localArgs, char *in);
+
+// Set an output filename, if there is none
+void setOutFile(ArgumentSet localArgs, char *in, char *out);
+
+// Setting studs up base argument isn't a simple set, so wrap it
+void setStudsUpBase(ArgumentSet localArgs, int value);
+
+// Allow global LSculpt argument set to be set elsewhere
+void setArgumentSet(ArgumentSet args);
+
 // Print out the help file
 void usage();
 
@@ -109,32 +121,6 @@ unsigned int optimize_voxels();
 void save_ldraw(char *f);
 
 // temp wrapper fore existing console's main() function
-int main_wrapper(char *infile, char *outfile, bool set_defaults);
-
-//
-// ===== More definitions ======
-//
-
-#define FORMAT_PLY 1
-#define FORMAT_STL 2
-#define MESSAGE_NONE 0
-#define MESSAGE_ERR  1
-#define MESSAGE_ALL  2
-#define COLOR_LAY    1
-#define COLOR_DIR    2
-#define COLOR_OFF    0
-#define UP_Y 0
-#define UP_Z 1
-
-// Scale conversion factors
-#define UNIT_LDU_MM  0.40005
-#define UNIT_LDU_CM  0.040005
-#define UNIT_LDU_M   0.00040005
-#define UNIT_LDU_IN  0.01575
-#define UNIT_LDU_FT  0.0013125
-#define UNIT_LDU_ST  0.05
-
-// Maximum iterations for optimization
-#define OPTIM_MAX    100000
+int main_wrapper(char *infile, char *outfile);
 
 #endif // LSCULPT_FUNCTIONS_H

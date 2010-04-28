@@ -62,6 +62,89 @@ using namespace std;
 #define COLOR_4  1  // Blue
 #define COLOR_5  2  // Green
 
+//
+// ===== Argument definitions ======
+//
+
+#define FORMAT_PLY 1
+#define FORMAT_STL 2
+#define MESSAGE_NONE 0
+#define MESSAGE_ERR  1
+#define MESSAGE_ALL  2
+#define COLOR_LAY    1
+#define COLOR_DIR    2
+#define COLOR_OFF    0
+#define UP_Y 0
+#define UP_Z 1
+
+// Scale conversion factors
+#define UNIT_LDU_MM  0.40005
+#define UNIT_LDU_CM  0.040005
+#define UNIT_LDU_M   0.00040005
+#define UNIT_LDU_IN  0.01575
+#define UNIT_LDU_FT  0.0013125
+#define UNIT_LDU_ST  0.05
+
+// Maximum iterations for optimization
+#define OPTIM_MAX    100000
+
+struct ArgumentSet {
+	bool          OPTS_CENTER;  // center mesh?
+	unsigned char OPTS_FORMAT;  // input file format
+	unsigned char OPTS_MESSAGE; // verbosity
+	bool          OPTS_STUDSUP; // initialize studs-up instead of studs-out
+	bool          OPTS_NOFILL;  // just convert the surface, don't try to fill it
+	unsigned char OPTS_BASE;    // bias studs-up at the bottom
+	unsigned char OPTS_UP;      // up vector of input mesh
+	SmVector3     OPTS_OFFSET;  // amount to offset input mesh
+	double        OPTS_FIT;     // size to fit input mesh to
+	double        OPTS_SCALE;   // scale factor for mesh
+	double        OPTS_ROT;     // rotation of mesh
+	double        OPTS_ROT_SIN; // sin of said rotation
+	double        OPTS_ROT_COS; // cos of said rotation
+	int           OPTS_MAXITER; // maximum optimization iterations
+	unsigned char OPTS_PART;    // part to use for output
+	unsigned char OPTS_COLOR;   // color scheme for output
+
+	// Energy functional weights for cube optimization
+	double OP_ORN;  // Weight of orientation with respect to cube's average normal
+	double OP_DIR;  // Weight of direction with respect to cube's average normal
+	double OP_NBR;  // Weight of orientation/direction of neighbors
+	double OP_THN;  // Importance of whether a neighbor is thin or not
+	double OP_NCT;  // Importance of the number of neighboring cubes a neighbor has
+	double OP_SOR;  // Importance of neighbors with the same orientation but different direction
+	double OP_BAK;  // Importance of neighbor directly behind or in front of cube
+	double OP_BKO;  // Importance of neighbor directly behind or in front of cube with same orientation
+};
+
+static const ArgumentSet defaultArgs = {
+	true,        // OPTS_CENTER
+	0,           // OPTS_FORMAT
+	MESSAGE_ERR, // OPTS_MESSAGE
+	false,       // OPTS_STUDSUP
+	false,       // OPTS_NOFILL
+	0,           // OPTS_BASE
+	UP_Y,        // OPTS_UP
+	SmVector3(0.0, 0.0, 0.0), // OPTS_OFFSET
+	0.0,         // OPTS_FIT
+	1.0,         // OPTS_SCALE
+	0.0,         // OPTS_ROT
+	0.0,         // OPTS_ROT_SIN
+	1.0,         // OPTS_ROT_COS
+	OPTIM_MAX,   // OPTS_MAXITER
+	0,           // OPTS_PART
+	COLOR_OFF,   // OPTS_COLOR
+	0.25,        // OP_ORN
+	0.25,        // OP_DIR
+	0.50,        // OP_NBR
+	0.00,        // OP_THN
+	0.00,        // OP_NCT
+	0.00,        // OP_SOR
+	0.00,        // OP_BAK
+	0.00,        // OP_BKO
+};
+
+
 // ====== Class Declarations =======
 
 // custom types used by classes

@@ -31,32 +31,7 @@ multiset<SpCubeEnergy> cubeenergy;
 // ===== Command line options =====
 //
 
-unsigned char OPTS_FORMAT  = 0;            // input file format
-unsigned char OPTS_MESSAGE = MESSAGE_ERR;  // verbosity
-bool          OPTS_CENTER  = false;        // center mesh?
-bool          OPTS_STUDSUP = false;        // initialize studs-up instead of studs-out
-bool          OPTS_NOFILL  = false;        // just convert the surface, don't try to fill it
-unsigned char OPTS_BASE    = 0;            // bias studs-up at the bottom
-unsigned char OPTS_UP      = UP_Y;         // up vector of input mesh
-SmVector3     OPTS_OFFSET;                 // amount to offset input mesh
-double        OPTS_FIT     = 0.0;          // size to fit input mesh to
-double        OPTS_SCALE   = 1.0;          // scale factor for mesh
-double        OPTS_ROT     = 0.0;          // rotation of mesh
-double        OPTS_ROT_SIN = 0.0;          // sin of said rotation
-double        OPTS_ROT_COS = 1.0;          // cos of said rotation
-int           OPTS_MAXITER = OPTIM_MAX;    // maximum optimization iterations
-unsigned char OPTS_PART    = 0;            // part to use for output
-unsigned char OPTS_COLOR   = COLOR_OFF;    // color scheme for output
-
-// Energy functional weights for cube optimization
-double OP_ORN =   0.25;  // Weight of orientation with respect to cube's average normal
-double OP_DIR =   0.25;  // Weight of direction with respect to cube's average normal
-double OP_NBR =   0.50;  // Weight of orientation/direction of neighbors
-double OP_THN =   0.00;  // Importance of whether a neighbor is thin or not
-double OP_NCT =   0.00;  // Importance of the number of neighboring cubes a neighbor has
-double OP_SOR =   0.00;  // Importance of neighbors with the same orientation but different direction
-double OP_BAK =   0.00;  // Importance of neighbor directly behind or in front of cube
-double OP_BKO =   0.00;  // Importance of neighbor directly behind or in front of cube with same orientation
+ArgumentSet args = defaultArgs;  // global set of command line arguments, initialized to default values
 
 #ifdef _GENERIC_STR_S_
 
@@ -116,30 +91,23 @@ int strncpy_s(char *dst, size_t dst_size, const char *src, size_t src_size) {
 #ifdef LSCULPT_CONSOLE
 int main(int argc, char *argv[])
 {
+	args = defaultArgs;
+
 	char infile[80] = "", outfile[80] = "";
 	load_options(argc, argv, infile, outfile);
-	return main_wrapper(infile, outfile, false);
+	return main_wrapper(infile, outfile);
 }
 #endif
 
-int main_wrapper(char *infile, char *outfile, bool set_defaults)
+int main_wrapper(char *infile, char *outfile)
 {
 	bool noerr;
 	SmVector3 mn, mx, sz;
 
-	if (set_defaults)
-	{
-		// Temporary arguments, until full UI hooked up
-		OPTS_SCALE = UNIT_LDU_ST;
-		OPTS_FIT = 20;
-		OPTS_MESSAGE = MESSAGE_ALL;
-		load_options(0, 0, infile, outfile);
-	}
+	if(args.OPTS_MESSAGE==MESSAGE_ALL) cout << "TIME\t: PROGRESS" << endl;
+	if(args.OPTS_MESSAGE==MESSAGE_ALL) cout << now() << "\t: reading input file: " << infile << endl;
 
-	if(OPTS_MESSAGE==MESSAGE_ALL) cout << "TIME\t: PROGRESS" << endl;
-	if(OPTS_MESSAGE==MESSAGE_ALL) cout << now() << "\t: reading input file: " << infile << endl;
-
-	switch(OPTS_FORMAT) {
+	switch(args.OPTS_FORMAT) {
 		case FORMAT_STL:
 			noerr = load_triangles_stl(infile);
 			break;
@@ -148,7 +116,7 @@ int main_wrapper(char *infile, char *outfile, bool set_defaults)
 			noerr = load_triangles_ply(infile);
 			break;
 	}
-	if(OPTS_MESSAGE==MESSAGE_ALL) cout << now() << "\t: mesh loaded, " << inputmesh.size() << " triangles" << endl;
+	if(args.OPTS_MESSAGE==MESSAGE_ALL) cout << now() << "\t: mesh loaded, " << inputmesh.size() << " triangles" << endl;
 
 	if(noerr) {
 		// calculate bounding box and normal vectors for triangles
@@ -156,28 +124,28 @@ int main_wrapper(char *infile, char *outfile, bool set_defaults)
 		sz = mx - mn;
 		int tmp = cout.precision();
 		cout.precision(3);
-		if(OPTS_MESSAGE==MESSAGE_ALL) cout << now() << "\t: output size is " <<
-			sz[0] / (OPTS_SCALE*VOXEL_WIDTH) << " x " << 
-			sz[2] / (OPTS_SCALE*VOXEL_WIDTH) << " x " << 
-			sz[1] / (OPTS_SCALE*VOXEL_WIDTH) << " studs" << endl;
+		if(args.OPTS_MESSAGE==MESSAGE_ALL) cout << now() << "\t: output size is " <<
+			sz[0] / (args.OPTS_SCALE*VOXEL_WIDTH) << " x " <<
+			sz[2] / (args.OPTS_SCALE*VOXEL_WIDTH) << " x " <<
+			sz[1] / (args.OPTS_SCALE*VOXEL_WIDTH) << " studs" << endl;
 		cout.precision(tmp);
 		partition_space();
-		if(OPTS_MESSAGE==MESSAGE_ALL) cout << now() << "\t: mesh partitioned into " << cubelist.size() << " cubes" << endl;
-		if(OPTS_MAXITER >= 0) {
+		if(args.OPTS_MESSAGE==MESSAGE_ALL) cout << now() << "\t: mesh partitioned into " << cubelist.size() << " cubes" << endl;
+		if(args.OPTS_MAXITER >= 0) {
 			compute_cube_normals();
-			if(OPTS_MESSAGE==MESSAGE_ALL) cout << now() << "\t: computed initial cube orientations" << endl;
+			if(args.OPTS_MESSAGE==MESSAGE_ALL) cout << now() << "\t: computed initial cube orientations" << endl;
 			init_voxels();		
-			if(OPTS_MESSAGE==MESSAGE_ALL) cout << now() << "\t: surfaces found in " << cubelist.size() << " cubes" << endl;
+			if(args.OPTS_MESSAGE==MESSAGE_ALL) cout << now() << "\t: surfaces found in " << cubelist.size() << " cubes" << endl;
 		}
-		if(OPTS_MAXITER > 0) {
+		if(args.OPTS_MAXITER > 0) {
 			identify_neighbors();
 			initialize_energy();
-			if(OPTS_MESSAGE==MESSAGE_ALL) cout << now() << "\t: optimization started" << endl;
+			if(args.OPTS_MESSAGE==MESSAGE_ALL) cout << now() << "\t: optimization started" << endl;
 			unsigned int it = optimize_voxels();
-			if(OPTS_MESSAGE==MESSAGE_ALL) cout << now() << "\t: optimization finished in " << it << " iterations" << endl;
+			if(args.OPTS_MESSAGE==MESSAGE_ALL) cout << now() << "\t: optimization finished in " << it << " iterations" << endl;
 		}
 		save_ldraw(outfile);
-		if(OPTS_MESSAGE==MESSAGE_ALL) cout << now() << "\t: output file " << outfile << " saved" << endl;
+		if(args.OPTS_MESSAGE==MESSAGE_ALL) cout << now() << "\t: output file " << outfile << " saved" << endl;
 	}	
 
 	return 0;
@@ -186,6 +154,11 @@ int main_wrapper(char *infile, char *outfile, bool set_defaults)
 float now()
 {
 	return float(clock()) / CLK_TCK;
+}
+
+void setArgumentSet(ArgumentSet localArgs)
+{
+	args = localArgs;
 }
 
 void load_options(int argc, char*argv[], char* in, char* out)
@@ -197,18 +170,18 @@ void load_options(int argc, char*argv[], char* in, char* out)
 		if (argv[i][0] == '-') {
 			switch (argv[i][1]) {
 				case 'k':
-					OPTS_COLOR = atoi(argv[++i]);
+					args.OPTS_COLOR = atoi(argv[++i]);
 					break;
 				case 'a':
-					OPTS_PART = atoi(argv[++i]);
+					args.OPTS_PART = atoi(argv[++i]);
 					break;
 				case 'i':
 					strcpy_s(arg,80,argv[++i]);
 					strupper(arg);
 					if (strcmp(arg,"PLY")==0)
-						OPTS_FORMAT = FORMAT_PLY;
+						args.OPTS_FORMAT = FORMAT_PLY;
 					else if (strcmp(arg,"STL")==0)
-						OPTS_FORMAT = FORMAT_STL;
+						args.OPTS_FORMAT = FORMAT_STL;
 					else {
 						strcpy_s(message, 80, "ERROR: Unknown input file format: ");
 						strcat_s(message, 80, arg);
@@ -218,85 +191,83 @@ void load_options(int argc, char*argv[], char* in, char* out)
 					strcpy_s(arg,80,argv[++i]);
 					strupper(arg);
 					if (strcmp(arg,"MM")==0)
-						OPTS_SCALE *= UNIT_LDU_MM;
+						args.OPTS_SCALE *= UNIT_LDU_MM;
 					else if (strcmp(arg,"CM")==0)
-						OPTS_SCALE *= UNIT_LDU_CM;
+						args.OPTS_SCALE *= UNIT_LDU_CM;
 					else if (strcmp(arg,"M")==0)
-						OPTS_SCALE *= UNIT_LDU_M;
+						args.OPTS_SCALE *= UNIT_LDU_M;
 					else if (strcmp(arg,"IN")==0)
-						OPTS_SCALE *= UNIT_LDU_IN;
+						args.OPTS_SCALE *= UNIT_LDU_IN;
 					else if (strcmp(arg,"FT")==0)
-						OPTS_SCALE *= UNIT_LDU_FT;
+						args.OPTS_SCALE *= UNIT_LDU_FT;
 					else if (strcmp(arg,"STUD")==0)
-						OPTS_SCALE *= UNIT_LDU_ST;
-					else if (strcmp(arg,"LDU")==0);				
+						args.OPTS_SCALE *= UNIT_LDU_ST;
+					else if (strcmp(arg,"LDU")==0);
 					else {
 						strcpy_s(message, 80, "ERROR: Unknown units: ");
 						strcat_s(message, 80, arg);
 					}
 					break;
 				case 'o':
-					OPTS_OFFSET[0] = atof(argv[++i]);
-					OPTS_OFFSET[1] = atof(argv[++i]);
-					OPTS_OFFSET[2] = atof(argv[++i]);
+					args.OPTS_OFFSET[0] = atof(argv[++i]);
+					args.OPTS_OFFSET[1] = atof(argv[++i]);
+					args.OPTS_OFFSET[2] = atof(argv[++i]);
 					break;
 				case 'c':
-					OPTS_CENTER = true;
+					args.OPTS_CENTER = true;
 					break;
 				case 'b':
-					OPTS_BASE = atoi(argv[++i]);
-					OPTS_BASE = (OPTS_BASE/(SPCUBE_WIDTH/VOXEL_HEIGHT)) 
-						+ (OPTS_BASE%(SPCUBE_WIDTH/VOXEL_HEIGHT)>0 ? 1 : 0);
+					setStudsUpBase(args, atoi(argv[++i]));
 					break;
 				case 'd':
 					strcpy_s(arg,80,argv[++i]);
 					strupper(arg);
-					if (strcmp(arg,"Z")==0) OPTS_UP = UP_Z;
+					if (strcmp(arg,"Z")==0) args.OPTS_UP = UP_Z;
 					break;
 				case 'n':
-					OPTS_STUDSUP = true;
+					args.OPTS_STUDSUP = true;
 					break;
 				case 'f':
-					OPTS_FIT = atof(argv[++i]);
+					args.OPTS_FIT = atof(argv[++i]);
 					break;
 				case 'r':
-					OPTS_ROT = atof(argv[++i]);
-					OPTS_ROT_SIN = sin(OPTS_ROT*PI/180.0);
-					OPTS_ROT_COS = cos(OPTS_ROT*PI/180.0);
+					args.OPTS_ROT = atof(argv[++i]);
+					args.OPTS_ROT_SIN = sin(args.OPTS_ROT*PI/180.0);
+					args.OPTS_ROT_COS = cos(args.OPTS_ROT*PI/180.0);
 					break;				
 				case 's':
-					OPTS_SCALE /= atof(argv[++i]);
+					args.OPTS_SCALE /= atof(argv[++i]);
 					break;
 				case 'h':
 					usage();
 					exit(0);
 					break;
 				case 'p':
-					OPTS_MAXITER = atoi(argv[++i]);
+					args.OPTS_MAXITER = atoi(argv[++i]);
 					break;
 				case 'q':
-					OPTS_MAXITER = 0;
+					args.OPTS_MAXITER = 0;
 					break;
 				case 'v':
-					OPTS_MESSAGE = MESSAGE_ALL;
+					args.OPTS_MESSAGE = MESSAGE_ALL;
 					break;
 				case 'w':
-					OPTS_MESSAGE = MESSAGE_NONE;
+					args.OPTS_MESSAGE = MESSAGE_NONE;
 					break;
 				case 'y':
-					OP_ORN = atoi(argv[++i]);
-					OP_DIR = atoi(argv[++i]);
-					OP_NBR = atoi(argv[++i]);
+					args.OP_ORN = atoi(argv[++i]);
+					args.OP_DIR = atoi(argv[++i]);
+					args.OP_NBR = atoi(argv[++i]);
 					break;
 				case 'z':
-					OP_THN = atoi(argv[++i]);
-					OP_NCT = atoi(argv[++i]);
-					OP_SOR = atoi(argv[++i]);
-					OP_BAK = atoi(argv[++i]);
-					OP_BKO = atoi(argv[++i]);
+					args.OP_THN = atoi(argv[++i]);
+					args.OP_NCT = atoi(argv[++i]);
+					args.OP_SOR = atoi(argv[++i]);
+					args.OP_BAK = atoi(argv[++i]);
+					args.OP_BKO = atoi(argv[++i]);
 					break;
 				case 'e':
-					OPTS_NOFILL = true;
+					args.OPTS_NOFILL = true;
 					break;
 				default:
 					strcpy_s(message, 80, "ERROR: Unknown option: ");
@@ -325,31 +296,53 @@ void load_options(int argc, char*argv[], char* in, char* out)
 		cerr << endl << "ERROR: No input file specified." << endl;
 		exit(1);
 	}
-	if(OPTS_SCALE <= 0.0 || OPTS_FIT < 0.0) {
-		if(OPTS_MESSAGE) cerr << "ERROR: Scale factor must be positive" << endl;
+	if(args.OPTS_SCALE <= 0.0 || args.OPTS_FIT < 0.0) {
+		if(args.OPTS_MESSAGE) cerr << "ERROR: Scale factor must be positive" << endl;
 		exit(1);
 	}
 
-	if(strcmp(out,"")==0) {
-		if (!OPTS_FORMAT) strncpy_s(out,80,in,strrchr(in,'.')-in);
-		else              strcpy_s(out,80,in);
-		if(OPTS_PART > 1) strcat_s(out,80,".mpd");
-		else              strcat_s(out,80,".ldr");
+	setOutFile(args, in, out);
+	setFileFormat(args, in);
+}
 
+void setStudsUpBase(ArgumentSet localArgs, int value)
+{
+	localArgs.OPTS_BASE = (value/(SPCUBE_WIDTH/VOXEL_HEIGHT))
+		+ (value%(SPCUBE_WIDTH/VOXEL_HEIGHT)>0 ? 1 : 0);
+}
+
+void setOutFile(ArgumentSet localArgs, char *in, char *out)
+{
+	if(strcmp(out,"")==0)
+	{
+		if (!localArgs.OPTS_FORMAT)
+			strncpy_s(out,80,in,strrchr(in,'.')-in);
+		else
+			strcpy_s(out,80,in);
+
+		if (localArgs.OPTS_PART > 1)
+			strcat_s(out,80,".mpd");
+		else
+			strcat_s(out,80,".ldr");
 	}
+}
+
+void setFileFormat(ArgumentSet localArgs, char *in)
+{
+	char arg[80] = "";
 
 	// if no input format specified, get it from the file extension
-	if(!OPTS_FORMAT) {
+	if(!localArgs.OPTS_FORMAT) {
 		strcpy_s(arg,80,strrchr(in,'.') + 1);
 		strupper(arg);
 		if (strcmp(arg,"PLY")==0)
-			OPTS_FORMAT = FORMAT_PLY;
+			localArgs.OPTS_FORMAT = FORMAT_PLY;
 		else if (strcmp(arg,"STL")==0)
-			OPTS_FORMAT = FORMAT_STL;
+			localArgs.OPTS_FORMAT = FORMAT_STL;
 		else {
-			OPTS_FORMAT = FORMAT_PLY;
-			if(OPTS_MESSAGE) cerr << "WARNING: Could not determine file format, assuming PLY." << endl;
-		}		
+			localArgs.OPTS_FORMAT = FORMAT_PLY;
+			if(localArgs.OPTS_MESSAGE) cerr << "WARNING: Could not determine file format, assuming PLY." << endl;
+		}
 	}
 }
 
@@ -458,7 +451,7 @@ int myply_vertex_cb(p_ply_argument argument) {
 		vtxs.push_back(SmVector3());
 
 	// store vertex coordinate
-	switch (OPTS_UP) {
+	switch (args.OPTS_UP) {
 		case UP_Z:
 			switch (coord) {
 				case 0:	vtxs.back()[0] = ply_get_argument_value(argument); break;
@@ -499,9 +492,9 @@ int myply_face_cb(p_ply_argument argument) {
 inline SmVector3 roty(SmVector3 pt)
 {
 	return SmVector3(
-		OPTS_ROT_COS*pt[0] + OPTS_ROT_SIN*pt[2],
+		args.OPTS_ROT_COS*pt[0] + args.OPTS_ROT_SIN*pt[2],
 		pt[1],
-		-OPTS_ROT_SIN*pt[0] + OPTS_ROT_COS*pt[2]
+		-args.OPTS_ROT_SIN*pt[0] + args.OPTS_ROT_COS*pt[2]
 		);
 }
 
@@ -543,7 +536,7 @@ bool load_triangles_stl(char *fname)
 					stl.read((char *) &vtx[0],STL_FLOAT);
 					stl.read((char *) &vtx[1],STL_FLOAT);
 					stl.read((char *) &vtx[2],STL_FLOAT);
-					switch (OPTS_UP) {
+					switch (args.OPTS_UP) {
 						case UP_Z:
 							inputmesh.back().v[i] = roty(SmVector3(vtx[0],vtx[2],-vtx[1]));
 							break;
@@ -582,7 +575,7 @@ bool load_triangles_stla(char *fname)
 				stl >> str;
 				if(strstr(str, "vertex")) {
 					stl >> vtx[0] >> vtx[1] >> vtx[2];
-					switch (OPTS_UP) {
+					switch (args.OPTS_UP) {
 						case UP_Z:
 							inputmesh.back().v[i] = roty(SmVector3(vtx[0],vtx[2],-vtx[1]));
 							break;
@@ -624,22 +617,22 @@ void mesh_bounds(SmVector3 &mn, SmVector3 &mx)
 	// longest edge
 	maxlen = max(sz[0],max(sz[1],sz[2]));
 	// if fitting is turned on, adjust the scale factor for SpCube
-	if(OPTS_FIT > 0.0) OPTS_SCALE *= maxlen/OPTS_FIT;
+	if(args.OPTS_FIT > 0.0) args.OPTS_SCALE *= maxlen/args.OPTS_FIT;
 	// if centering is turned on, adjust the offset for the mesh
-	if(OPTS_CENTER) OPTS_OFFSET -= 0.5*(mx+mn);
+	if(args.OPTS_CENTER) args.OPTS_OFFSET -= 0.5*(mx+mn);
 	// check if the mesh is too big in + direction
-	sz = mx + OPTS_OFFSET;
+	sz = mx + args.OPTS_OFFSET;
 	maxlen = max(sz[0],max(sz[1],sz[2]));
-	if(maxlen / (SPCUBE_WIDTH*OPTS_SCALE) > (1 << (sizeof(SpCubeCoord)*CHAR_BIT-1))) {
-		if(OPTS_MESSAGE) cerr << "ERROR: The mesh is larger than the maximum allowed stud length." << endl
+	if(maxlen / (SPCUBE_WIDTH*args.OPTS_SCALE) > (1 << (sizeof(SpCubeCoord)*CHAR_BIT-1))) {
+		if(args.OPTS_MESSAGE) cerr << "ERROR: The mesh is larger than the maximum allowed stud length." << endl
 			                  << "       Try centering the mesh with option '-c'" << endl;
 		exit(1);
 	}
 	// check if the mesh is too big in - direction
-	sz = mn + OPTS_OFFSET;
+	sz = mn + args.OPTS_OFFSET;
 	maxlen = -min(sz[0],min(sz[1],sz[2]));
-	if(maxlen / (SPCUBE_WIDTH*OPTS_SCALE) > (1 << (sizeof(SpCubeCoord)*CHAR_BIT-1))) {
-		if(OPTS_MESSAGE) cerr << "ERROR: The mesh is larger than the maximum allowed stud length." << endl
+	if(maxlen / (SPCUBE_WIDTH*args.OPTS_SCALE) > (1 << (sizeof(SpCubeCoord)*CHAR_BIT-1))) {
+		if(args.OPTS_MESSAGE) cerr << "ERROR: The mesh is larger than the maximum allowed stud length." << endl
 			                  << "       Try centering the mesh with option '-c'" << endl;
 		exit(1);
 	}
@@ -650,16 +643,16 @@ void partition_space()
 	SpCube      cube;
 	SpCubeKey   mn, mx, k;
 	SmVector3   loc;
-	double      scale = 1.0 / (OPTS_SCALE * SPCUBE_WIDTH),
+	double      scale = 1.0 / (args.OPTS_SCALE * SPCUBE_WIDTH),
 		        pad = double(SPCUBE_PAD) / SPCUBE_WIDTH;
 
 	for(vector<Triangle>::iterator i = inputmesh.begin(); i != inputmesh.end(); i++) {
-		loc = (*i).mx + OPTS_OFFSET;
+		loc = (*i).mx + args.OPTS_OFFSET;
 		mx[0] = ceil(loc[0] * scale + pad);
 		mx[1] = ceil(loc[1] * scale + pad);
 		mx[2] = ceil(loc[2] * scale + pad);
 
-		loc = (*i).mn + OPTS_OFFSET;
+		loc = (*i).mn + args.OPTS_OFFSET;
 		mn[0] = floor(loc[0] * scale - pad);
 		mn[1] = floor(loc[1] * scale - pad);
 		mn[2] = floor(loc[2] * scale - pad);
@@ -748,12 +741,12 @@ void init_voxels()
 		orient = (*c).second.orientget();
 
 		// keep positive direction for base:
-		if(OPTS_BASE>0 && orient == 1 && (*c).first.loc[1] < (*cubelist.begin()).first.loc[1] + OPTS_BASE);			
+		if(args.OPTS_BASE>0 && orient == 1 && (*c).first.loc[1] < (*cubelist.begin()).first.loc[1] + args.OPTS_BASE);
 		// otherwise check to see if direction should be switched.
 		else if((*c).second.avgnormal[orient] < 0.0)
 			(*c).second.orientneg();
 
-		if(OPTS_STUDSUP) {
+		if(args.OPTS_STUDSUP) {
 			orient = 1;
 			(*c).second.orientset(1);
 			(*c).second.orientpos();
@@ -788,7 +781,7 @@ void init_voxels()
 			(*c).second.voxels[(orient+2)%3] = 0;
 		}
 
-		if(OPTS_STUDSUP) (*c).second.orientset(1);
+		if(args.OPTS_STUDSUP) (*c).second.orientset(1);
 		c++;
 	}
 }
@@ -810,22 +803,22 @@ void voxelize(SpCubeKey loc, SpCube *cubeptr)
 	f = (d+2) % 3;
 
 	// minimum corner of cube
-	llc = SmVector3(loc[0],loc[1],loc[2])*OPTS_SCALE*SPCUBE_WIDTH - OPTS_OFFSET;
+	llc = SmVector3(loc[0],loc[1],loc[2])*args.OPTS_SCALE*SPCUBE_WIDTH - args.OPTS_OFFSET;
 
 	// initialize to empty;
 	cubeptr->voxels[d] = 0;
 
 	for (i = 0; i < SPCUBE_WIDTH / VOXEL_WIDTH; i++) {
-		pt[e] = llc[e] + (2*i+1)*OPTS_SCALE*VOXEL_WIDTH/2;
+		pt[e] = llc[e] + (2*i+1)*args.OPTS_SCALE*VOXEL_WIDTH/2;
 		for (j = 0; j < SPCUBE_WIDTH / VOXEL_WIDTH; j++) {
-			pt[f] = llc[f] + (2*j+1)*OPTS_SCALE*VOXEL_WIDTH/2;
+			pt[f] = llc[f] + (2*j+1)*args.OPTS_SCALE*VOXEL_WIDTH/2;
 			intersections.clear();
 			for (t = cubeptr->tlist.begin(); t != cubeptr->tlist.end(); t++) {
 				// check the triangle for intersection
 				if(recordintersect((*t), pt, d, &intersections) && !cubeptr->isthin(d)) break;
 			}
 
-			if(intersections.empty() && !OPTS_NOFILL){
+			if(intersections.empty() && !args.OPTS_NOFILL){
 				if(!intersectneighbors(loc, pt, d, &intersections, true))
 					intersectneighbors(loc, pt, d, &intersections, false);
 			}
@@ -834,20 +827,20 @@ void voxelize(SpCubeKey loc, SpCube *cubeptr)
 			// compute fill between intersections
 			if(!intersections.empty()) {
 				k = 0; fill = 0;
-				if(OPTS_NOFILL) {
+				if(args.OPTS_NOFILL) {
 					for(s = intersections.begin(); s != intersections.end(); s++) {
-                        k = (((*s).position+SPCUBE_PAD*OPTS_SCALE - llc[d]) / VOXEL_HEIGHT / OPTS_SCALE - 0.5);
+						k = (((*s).position+SPCUBE_PAD*args.OPTS_SCALE - llc[d]) / VOXEL_HEIGHT / args.OPTS_SCALE - 0.5);
 						if( k < SPCUBE_WIDTH/VOXEL_HEIGHT )
 							fill |= 1 << k;
 					}
 				} else {
 					for(s = intersections.begin(); s != intersections.end(); s++) {
-						for (;k < SPCUBE_WIDTH/VOXEL_HEIGHT && (k+1)*VOXEL_HEIGHT*OPTS_SCALE + llc[d] < (*s).position+SPCUBE_PAD*OPTS_SCALE; k++) {
+						for (;k < SPCUBE_WIDTH/VOXEL_HEIGHT && (k+1)*VOXEL_HEIGHT*args.OPTS_SCALE + llc[d] < (*s).position+SPCUBE_PAD*args.OPTS_SCALE; k++) {
 							if((*s).inside) fill |= 1 << k;
 						}
 					}
 					// finish the fill after the last intersection
-					for (; k < SPCUBE_WIDTH/VOXEL_HEIGHT && (k+1)*VOXEL_HEIGHT*OPTS_SCALE + llc[d] >= (*intersections.rbegin()).position+SPCUBE_PAD*OPTS_SCALE; k++) {
+					for (; k < SPCUBE_WIDTH/VOXEL_HEIGHT && (k+1)*VOXEL_HEIGHT*args.OPTS_SCALE + llc[d] >= (*intersections.rbegin()).position+SPCUBE_PAD*args.OPTS_SCALE; k++) {
 						if(!(*intersections.rbegin()).inside) fill |= 1 << k;
 					} 
 				}
@@ -942,7 +935,7 @@ unsigned int optimize_voxels()
 	unsigned char n, i;
 	int j;
 
-	for (j = 0; j < OPTS_MAXITER && !cubeenergy.empty(); j++) {
+	for (j = 0; j < args.OPTS_MAXITER && !cubeenergy.empty(); j++) {
 
 		// pop of the cube that reduces the energy the most
 		loc = (*cubeenergy.begin()).cube;
@@ -1030,22 +1023,22 @@ double compute_energy(SpCube *cubeptr[7], unsigned char d, bool neg)
 	for (i=1;i<7;i++) {
 		if (cubeptr[i]) {
 			if (cubeptr[i]->orientget() != d || cubeptr[i]->isorientneg() != neg) {
-				e += (1 + (cubeptr[i]->isthin() ? OP_THN : 0)) * 
-					 (1 - OP_NCT/6.0*cubeptr[i]->neighborcount()) *
-					 (1 + (cubeptr[i]->orientget() == d == i/2 ? OP_BKO :
-					 (cubeptr[i]->orientget() == d ? OP_SOR : (d == i/2 ? OP_BAK : 0))));
+				e += (1 + (cubeptr[i]->isthin() ? args.OP_THN : 0)) *
+					 (1 - args.OP_NCT/6.0*cubeptr[i]->neighborcount()) *
+					 (1 + (cubeptr[i]->orientget() == d == i/2 ? args.OP_BKO :
+					 (cubeptr[i]->orientget() == d ? args.OP_SOR : (d == i/2 ? args.OP_BAK : 0))));
 			}
 		}
 	}
 
-	e *= OP_NBR;
+	e *= args.OP_NBR;
 
 	// compare orientation to cube's average normal
 	// 1.0 for worst match, 0 for best
-	e += OP_ORN * (1.0 - fabs(cubeptr[0]->avgnormal[d])); 
+	e += args.OP_ORN * (1.0 - fabs(cubeptr[0]->avgnormal[d]));
 	// compare direction to cube's average normal
 	// 1 for mismatch, 0 for match
-	e += OP_DIR * (cubeptr[0]->isthin(d) ? 0 : 1)*(neg == (cubeptr[0]->avgnormal[d] > 0)); 
+	e += args.OP_DIR * (cubeptr[0]->isthin(d) ? 0 : 1)*(neg == (cubeptr[0]->avgnormal[d] > 0));
 
 	return e;
 }
@@ -1053,7 +1046,7 @@ void save_ldraw(char *fname)
 {
 	ofstream ldr(fname, ios::out);
 	if(ldr.good()) {
-		if(OPTS_MAXITER < 0) {
+		if(args.OPTS_MAXITER < 0) {
 			ldr << "0 Cube partitioned space of " << fname << endl;
 			ldr << "0 Author: LSculpt" << endl;
 			for(map<SpCubeKey,SpCube>::iterator c = cubelist.begin(); c != cubelist.end(); c++) {
@@ -1078,10 +1071,10 @@ void save_ldraw(char *fname)
 			ldr << "0 FILE " << fname << endl;
 			ldr << "0 Author: LSculpt" << endl;
 			ldr << "0 LSculpt options:" << endl;
-			ldr << "0 Up vector: " << ((OPTS_UP == UP_Y) ? "Y" : "Z") << endl;
-			ldr << "0 Rotation:  " << OPTS_ROT << endl;
-			ldr << "0 Offset:    " << OPTS_OFFSET[0] << ", " << OPTS_OFFSET[1] << ", " << OPTS_OFFSET[2] << endl;
-			ldr << "0 Scaling:   " << 1.0/OPTS_SCALE << endl << "0" << endl;
+			ldr << "0 Up vector: " << ((args.OPTS_UP == UP_Y) ? "Y" : "Z") << endl;
+			ldr << "0 Rotation:  " << args.OPTS_ROT << endl;
+			ldr << "0 Offset:    " << args.OPTS_OFFSET[0] << ", " << args.OPTS_OFFSET[1] << ", " << args.OPTS_OFFSET[2] << endl;
+			ldr << "0 Scaling:   " << 1.0/args.OPTS_SCALE << endl << "0" << endl;
 			for (map<SpCubeKey,SpCube>::iterator c = cubelist.begin(); c != cubelist.end(); c++) {
 
 				d = (*c).second.orientget();
@@ -1122,7 +1115,7 @@ void save_ldraw(char *fname)
 								break;
 						}
 
-						switch (OPTS_COLOR) {
+						switch (args.OPTS_COLOR) {
 							case COLOR_OFF:
 							default:
 								color = COLOR_NONE;
@@ -1143,7 +1136,7 @@ void save_ldraw(char *fname)
 						ldr << "1 " << (int)color << " "
 							<< loc[0] << " " << -loc[1] << " " << -loc[2] << " "
 							<< o << " ";
-						switch (OPTS_PART){
+						switch (args.OPTS_PART){
 							case 1: ldr << VOXEL_PN_1; break;
 							case 2: ldr << VOXEL_PN_2; break;
 							case 3: ldr << VOXEL_PN_3; break;
@@ -1155,7 +1148,7 @@ void save_ldraw(char *fname)
 				}
 			}
 			ldr << "0" << endl;
-			switch (OPTS_PART) {
+			switch (args.OPTS_PART) {
 				default: break;
 				case 2: 
 					ldr << "0 FILE " << VOXEL_PN_2 << endl;
