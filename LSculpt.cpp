@@ -307,7 +307,7 @@ void load_options(int argc, char*argv[], char* in, char* out)
 	}
 
 	setOutFile(args, in, out);
-	setFileFormat(args, in);
+	setFileFormat(&args, in);
 }
 
 void setStudsUpBase(ArgumentSet localArgs, int value)
@@ -332,21 +332,21 @@ void setOutFile(ArgumentSet localArgs, char *in, char *out)
 	}
 }
 
-void setFileFormat(ArgumentSet localArgs, char *in)
+void setFileFormat(ArgumentSet *localArgs, char *in)
 {
 	char arg[80] = "";
 
 	// if no input format specified, get it from the file extension
-	if(!localArgs.OPTS_FORMAT) {
+	if(!localArgs->OPTS_FORMAT) {
 		strcpy_s(arg,80,strrchr(in,'.') + 1);
 		strupper(arg);
 		if (strcmp(arg,"PLY")==0)
-			localArgs.OPTS_FORMAT = FORMAT_PLY;
+			localArgs->OPTS_FORMAT = FORMAT_PLY;
 		else if (strcmp(arg,"STL")==0)
-			localArgs.OPTS_FORMAT = FORMAT_STL;
+			localArgs->OPTS_FORMAT = FORMAT_STL;
 		else {
-			localArgs.OPTS_FORMAT = FORMAT_PLY;
-			if(localArgs.OPTS_MESSAGE) cerr << "WARNING: Could not determine file format, assuming PLY." << endl;
+			localArgs->OPTS_FORMAT = FORMAT_PLY;
+			if(localArgs->OPTS_MESSAGE) cerr << "WARNING: Could not determine file format, assuming PLY." << endl;
 		}
 	}
 }

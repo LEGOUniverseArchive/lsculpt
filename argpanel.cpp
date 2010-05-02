@@ -33,7 +33,7 @@ ArgumentSet ArgPanel::getArguments(char *infile)
 	args.OPTS_PART = ui->partCombo->currentIndex();
 
 	// TODO: need UI widget for forcing a mesh file format
-	setFileFormat(args, infile);
+	setFileFormat(&args, infile);
 
 	args.OPTS_SCALE *= ui->unitsCombo->itemData(ui->unitsCombo->currentIndex()).toDouble();
 

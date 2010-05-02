@@ -24,7 +24,7 @@ void strupper(char *);	// Uppercase a string
 void load_options(int argc, char*argv[], char* in, char* out);
 
 // Set the file format argument based on the input file name's extension
-void setFileFormat(ArgumentSet localArgs, char *in);
+void setFileFormat(ArgumentSet *localArgs, char *in);
 
 // Set an output filename, if there is none
 void setOutFile(ArgumentSet localArgs, char *in, char *out);
