@@ -91,10 +91,10 @@
       <item row="0" column="1">
        <widget class="QDoubleSpinBox" name="offsetXDSpin">
         <property name="minimum">
-         <double>-1000.000000000000000</double>
+         <double>-5000000.000000000000000</double>
         </property>
         <property name="maximum">
-         <double>1000.000000000000000</double>
+         <double>5000000.000000000000000</double>
         </property>
         <property name="value">
          <double>0.000000000000000</double>
@@ -114,10 +114,10 @@
       <item row="1" column="1">
        <widget class="QDoubleSpinBox" name="offsetYDSpin">
         <property name="minimum">
-         <double>-1000.000000000000000</double>
+         <double>-5000000.000000000000000</double>
         </property>
         <property name="maximum">
-         <double>1000.000000000000000</double>
+         <double>5000000.000000000000000</double>
         </property>
        </widget>
       </item>
@@ -134,10 +134,10 @@
       <item row="2" column="1">
        <widget class="QDoubleSpinBox" name="offsetZDSpin">
         <property name="minimum">
-         <double>-1000.000000000000000</double>
+         <double>-5000000.000000000000000</double>
         </property>
         <property name="maximum">
-         <double>1000.000000000000000</double>
+         <double>5000000.000000000000000</double>
         </property>
        </widget>
       </item>
@@ -170,35 +170,12 @@
      <property name="geometry">
       <rect>
        <x>6</x>
-       <y>16</y>
-       <width>162</width>
-       <height>51</height>
+       <y>18</y>
+       <width>152</width>
+       <height>48</height>
       </rect>
      </property>
-     <layout class="QFormLayout" name="formLayout_3">
-      <item row="0" column="1">
-       <widget class="QDoubleSpinBox" name="scaleDSpin">
-        <property name="minimum">
-         <double>-1000.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>1000.000000000000000</double>
-        </property>
-        <property name="value">
-         <double>1.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QDoubleSpinBox" name="lengthDSpin">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="maximum">
-         <double>1000.000000000000000</double>
-        </property>
-       </widget>
-      </item>
+     <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0">
        <widget class="QRadioButton" name="scaleRadio">
         <property name="text">
@@ -209,10 +186,45 @@
         </property>
        </widget>
       </item>
+      <item row="0" column="1">
+       <widget class="QDoubleSpinBox" name="scaleDSpin">
+        <property name="maximumSize">
+         <size>
+          <width>60</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="minimum">
+         <double>-5000000.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>5000000.000000000000000</double>
+        </property>
+        <property name="value">
+         <double>1.000000000000000</double>
+        </property>
+       </widget>
+      </item>
       <item row="1" column="0">
        <widget class="QRadioButton" name="lengthRadio">
         <property name="text">
          <string>Max Size:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QDoubleSpinBox" name="lengthDSpin">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>60</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="maximum">
+         <double>1000.000000000000000</double>
         </property>
        </widget>
       </item>

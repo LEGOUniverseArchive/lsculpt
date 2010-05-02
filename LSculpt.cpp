@@ -27,6 +27,10 @@ map<SpCubeKey, SpCube> cubelist;
 // Queue of optimization energies
 multiset<SpCubeEnergy> cubeenergy;
 
+// Globals for PLY file reading
+int bad_faces;  //reduce error output - one error message for all bad faces
+vector<SmVector3> vtxs; // temporary global variable for storing vertices
+
 //
 // ===== Command line options =====
 //
@@ -111,6 +115,8 @@ int main_wrapper(char *infile, char *outfile)
 	inputmesh.clear();
 	cubelist.clear();
 	cubeenergy.clear();
+	bad_faces = 0;
+	vtxs.clear();
 
 	switch(args.OPTS_FORMAT) {
 		case FORMAT_STL:
@@ -414,8 +420,6 @@ void usage()
 // PLY input code adapted from source code available at
 // http://www.cs.princeton.edu/~diego/professional/rply
 //
-int bad_faces;  // reduce error output - one error message for all bad faces
-vector<SmVector3> vtxs; // temporary global variable for storing vertices
 bool load_triangles_ply(char *fname)
 {
 	bad_faces = 0;
