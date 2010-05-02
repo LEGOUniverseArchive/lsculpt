@@ -30,7 +30,7 @@ void setFileFormat(ArgumentSet *localArgs, char *in);
 void setOutFile(ArgumentSet localArgs, char *in, char *out);
 
 // Setting studs up base argument isn't a simple set, so wrap it
-void setStudsUpBase(ArgumentSet localArgs, int value);
+void setStudsUpBaseArg(ArgumentSet *localArgs, int value);
 
 // Allow global LSculpt argument set to be set elsewhere
 void setArgumentSet(ArgumentSet args);

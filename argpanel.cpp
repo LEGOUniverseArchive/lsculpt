@@ -43,7 +43,7 @@ ArgumentSet ArgPanel::getArguments(char *infile)
 
 	args.OPTS_CENTER = ui->centerCheck->isChecked();
 
-	setStudsUpBase(args, ui->baseSpin->value());
+	setStudsUpBaseArg(&args, ui->baseSpin->value());
 
 	args.OPTS_UP = (ui->upYRadio->isChecked()) ? UP_Y : UP_Z;
 	args.OPTS_STUDSUP = ui->studsUpCheck->isChecked();
@@ -65,6 +65,8 @@ ArgumentSet ArgPanel::getArguments(char *infile)
 	// TODO: need UI widget to set message output level
 	args.OPTS_MESSAGE = MESSAGE_ALL;
 
+	args.OPTS_NOFILL = ui->emptyCheck->isChecked();
+
 #if 0  // Remove advanced argument widgets for now
 	args.OPTS_MAXITER = ui->optimizeSpin->value();
 	if (ui->noOptimizeCheck->isChecked())
@@ -80,7 +82,6 @@ ArgumentSet ArgPanel::getArguments(char *infile)
 	args.OP_BAK = ui->weightDDSpin->value();
 	args.OP_BKO = ui->weightEDSpin->value();
 
-	args.OPTS_NOFILL = ui->emptyCheck->isChecked();
 #endif
 
 	return args;

@@ -222,7 +222,7 @@ void load_options(int argc, char*argv[], char* in, char* out)
 					args.OPTS_CENTER = true;
 					break;
 				case 'b':
-					setStudsUpBase(args, atoi(argv[++i]));
+					setStudsUpBaseArg(&args, atoi(argv[++i]));
 					break;
 				case 'd':
 					strcpy_s(arg,80,argv[++i]);
@@ -310,9 +310,9 @@ void load_options(int argc, char*argv[], char* in, char* out)
 	setFileFormat(&args, in);
 }
 
-void setStudsUpBase(ArgumentSet localArgs, int value)
+void setStudsUpBaseArg(ArgumentSet *localArgs, int value)
 {
-	localArgs.OPTS_BASE = (value/(SPCUBE_WIDTH/VOXEL_HEIGHT))
+	localArgs->OPTS_BASE = (value/(SPCUBE_WIDTH/VOXEL_HEIGHT))
 		+ (value%(SPCUBE_WIDTH/VOXEL_HEIGHT)>0 ? 1 : 0);
 }
 
