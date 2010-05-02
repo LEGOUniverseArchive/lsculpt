@@ -9,7 +9,6 @@
  * at the end of this file.
  * ---------------------------------------------------------------------- */
 
-#define _CRT_SECURE_NO_DEPRECATE
 #ifdef __cplusplus
 extern "C" {
 #endif

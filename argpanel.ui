@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>563</height>
+    <height>350</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,7 +19,7 @@
   <property name="minimumSize">
    <size>
     <width>400</width>
-    <height>563</height>
+    <height>350</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -29,9 +29,9 @@
    <property name="geometry">
     <rect>
      <x>315</x>
-     <y>540</y>
+     <y>326</y>
      <width>75</width>
-     <height>23</height>
+     <height>24</height>
     </rect>
    </property>
    <property name="text">
@@ -44,7 +44,7 @@
      <x>10</x>
      <y>6</y>
      <width>380</width>
-     <height>192</height>
+     <height>190</height>
     </rect>
    </property>
    <property name="title">
@@ -157,9 +157,9 @@
    <widget class="QGroupBox" name="groupBox_3">
     <property name="geometry">
      <rect>
-      <x>204</x>
+      <x>202</x>
       <y>104</y>
-      <width>165</width>
+      <width>168</width>
       <height>76</height>
      </rect>
     </property>
@@ -169,23 +169,13 @@
     <widget class="QWidget" name="formLayoutWidget_3">
      <property name="geometry">
       <rect>
-       <x>9</x>
+       <x>6</x>
        <y>16</y>
-       <width>148</width>
+       <width>162</width>
        <height>51</height>
       </rect>
      </property>
      <layout class="QFormLayout" name="formLayout_3">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_6">
-        <property name="text">
-         <string>Scale Factor:</string>
-        </property>
-        <property name="buddy">
-         <cstring>scaleDSpin</cstring>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="1">
        <widget class="QDoubleSpinBox" name="scaleDSpin">
         <property name="minimum">
@@ -194,22 +184,35 @@
         <property name="maximum">
          <double>1000.000000000000000</double>
         </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_7">
-        <property name="text">
-         <string>Max dimension</string>
-        </property>
-        <property name="buddy">
-         <cstring>lengthDSpin</cstring>
+        <property name="value">
+         <double>1.000000000000000</double>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
        <widget class="QDoubleSpinBox" name="lengthDSpin">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="maximum">
          <double>1000.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QRadioButton" name="scaleRadio">
+        <property name="text">
+         <string>Scale Factor:</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QRadioButton" name="lengthRadio">
+        <property name="text">
+         <string>Max Size:</string>
         </property>
        </widget>
       </item>
@@ -219,9 +222,9 @@
    <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">
      <rect>
-      <x>204</x>
+      <x>202</x>
       <y>17</y>
-      <width>164</width>
+      <width>168</width>
       <height>80</height>
      </rect>
     </property>
@@ -299,7 +302,7 @@
      <rect>
       <x>62</x>
       <y>26</y>
-      <width>130</width>
+      <width>129</width>
       <height>22</height>
      </rect>
     </property>
@@ -470,293 +473,6 @@
     </property>
    </widget>
   </widget>
-  <widget class="QGroupBox" name="groupBox_6">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>328</y>
-     <width>380</width>
-     <height>203</height>
-    </rect>
-   </property>
-   <property name="title">
-    <string>Advanced</string>
-   </property>
-   <widget class="QGroupBox" name="groupBox_7">
-    <property name="geometry">
-     <rect>
-      <x>187</x>
-      <y>20</y>
-      <width>177</width>
-      <height>171</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>Extra Neighbour Weights:</string>
-    </property>
-    <widget class="QWidget" name="formLayoutWidget_5">
-     <property name="geometry">
-      <rect>
-       <x>9</x>
-       <y>24</y>
-       <width>156</width>
-       <height>137</height>
-      </rect>
-     </property>
-     <layout class="QFormLayout" name="formLayout_5">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_12">
-        <property name="text">
-         <string>Thin:</string>
-        </property>
-        <property name="buddy">
-         <cstring>weightADSpin</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QDoubleSpinBox" name="weightADSpin">
-        <property name="minimum">
-         <double>-100.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>100.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_13">
-        <property name="text">
-         <string>Lonely:</string>
-        </property>
-        <property name="buddy">
-         <cstring>weightBDSpin</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QDoubleSpinBox" name="weightBDSpin">
-        <property name="minimum">
-         <double>-100.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>100.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_14">
-        <property name="text">
-         <string>Opposite:</string>
-        </property>
-        <property name="buddy">
-         <cstring>weightCDSpin</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QDoubleSpinBox" name="weightCDSpin">
-        <property name="minimum">
-         <double>-100.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>100.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="label_15">
-        <property name="text">
-         <string>Front or Behind:</string>
-        </property>
-        <property name="buddy">
-         <cstring>weightDDSpin</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QDoubleSpinBox" name="weightDDSpin">
-        <property name="minimum">
-         <double>-100.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>100.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="label_16">
-        <property name="text">
-         <string>Front, Behind 
-&amp;&amp; Opposite:</string>
-        </property>
-        <property name="buddy">
-         <cstring>weightEDSpin</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="1">
-       <widget class="QDoubleSpinBox" name="weightEDSpin">
-        <property name="minimum">
-         <double>-100.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>100.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </widget>
-   <widget class="QGroupBox" name="groupBox_8">
-    <property name="geometry">
-     <rect>
-      <x>11</x>
-      <y>68</y>
-      <width>164</width>
-      <height>123</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>Optimization Balances:</string>
-    </property>
-    <widget class="QWidget" name="formLayoutWidget_6">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>19</y>
-       <width>143</width>
-       <height>92</height>
-      </rect>
-     </property>
-     <layout class="QFormLayout" name="formLayout_6">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_17">
-        <property name="text">
-         <string>Part face to
-surface face:</string>
-        </property>
-        <property name="buddy">
-         <cstring>balanceADSpin</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QDoubleSpinBox" name="balanceADSpin">
-        <property name="minimum">
-         <double>-99.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>99.000000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>0.100000000000000</double>
-        </property>
-        <property name="value">
-         <double>0.250000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_18">
-        <property name="text">
-         <string>Point Studs out
-from surface:</string>
-        </property>
-        <property name="buddy">
-         <cstring>balanceBDSpin</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QDoubleSpinBox" name="balanceBDSpin">
-        <property name="minimum">
-         <double>-99.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>99.000000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>0.100000000000000</double>
-        </property>
-        <property name="value">
-         <double>0.250000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_19">
-        <property name="text">
-         <string>Part face to
-neighbors:</string>
-        </property>
-        <property name="buddy">
-         <cstring>balanceCDSpin</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QDoubleSpinBox" name="balanceCDSpin">
-        <property name="minimum">
-         <double>-99.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>99.000000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>0.100000000000000</double>
-        </property>
-        <property name="value">
-         <double>0.500000000000000</double>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </widget>
-   <widget class="QWidget" name="formLayoutWidget_7">
-    <property name="geometry">
-     <rect>
-      <x>12</x>
-      <y>18</y>
-      <width>161</width>
-      <height>47</height>
-     </rect>
-    </property>
-    <layout class="QFormLayout" name="formLayout_7">
-     <item row="1" column="0">
-      <widget class="QLabel" name="optimizeLabel">
-       <property name="text">
-        <string>Optimization tries:</string>
-       </property>
-       <property name="buddy">
-        <cstring>optimizeSpin</cstring>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QSpinBox" name="optimizeSpin">
-       <property name="maximum">
-        <number>100000</number>
-       </property>
-       <property name="singleStep">
-        <number>100</number>
-       </property>
-       <property name="value">
-        <number>100000</number>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0" colspan="2">
-      <widget class="QCheckBox" name="noOptimizeCheck">
-       <property name="text">
-        <string>Quick Optimization</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-  </widget>
  </widget>
  <tabstops>
   <tabstop>unitsCombo</tabstop>
@@ -774,49 +490,39 @@ neighbors:</string>
   <tabstop>baseSpin</tabstop>
   <tabstop>emptyCheck</tabstop>
   <tabstop>studsUpCheck</tabstop>
-  <tabstop>noOptimizeCheck</tabstop>
-  <tabstop>optimizeSpin</tabstop>
-  <tabstop>balanceADSpin</tabstop>
-  <tabstop>balanceBDSpin</tabstop>
-  <tabstop>balanceCDSpin</tabstop>
-  <tabstop>weightADSpin</tabstop>
-  <tabstop>weightBDSpin</tabstop>
-  <tabstop>weightCDSpin</tabstop>
-  <tabstop>weightDDSpin</tabstop>
-  <tabstop>weightEDSpin</tabstop>
   <tabstop>runLSculptBtn</tabstop>
  </tabstops>
  <resources/>
  <connections>
   <connection>
-   <sender>noOptimizeCheck</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>optimizeSpin</receiver>
+   <sender>scaleRadio</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>lengthDSpin</receiver>
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>102</x>
-     <y>355</y>
+     <x>261</x>
+     <y>135</y>
     </hint>
     <hint type="destinationlabel">
-     <x>148</x>
-     <y>380</y>
+     <x>341</x>
+     <y>162</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>noOptimizeCheck</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>optimizeLabel</receiver>
-   <slot>setDisabled(bool)</slot>
+   <sender>scaleRadio</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>scaleDSpin</receiver>
+   <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>102</x>
-     <y>355</y>
+     <x>261</x>
+     <y>135</y>
     </hint>
     <hint type="destinationlabel">
-     <x>66</x>
-     <y>380</y>
+     <x>341</x>
+     <y>136</y>
     </hint>
    </hints>
   </connection>

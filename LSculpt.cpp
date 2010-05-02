@@ -107,6 +107,11 @@ int main_wrapper(char *infile, char *outfile)
 	if(args.OPTS_MESSAGE==MESSAGE_ALL) cout << "TIME\t: PROGRESS" << endl;
 	if(args.OPTS_MESSAGE==MESSAGE_ALL) cout << now() << "\t: reading input file: " << infile << endl;
 
+	// Reset global collections - necessary now that main can be called multiple times per execution
+	inputmesh.clear();
+	cubelist.clear();
+	cubeenergy.clear();
+
 	switch(args.OPTS_FORMAT) {
 		case FORMAT_STL:
 			noerr = load_triangles_stl(infile);

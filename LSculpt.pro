@@ -7,12 +7,8 @@ TEMPLATE = app
 DEFINES += _GENERIC_STR_S_
 
 # Comment this out to build UI version of LSculpt
-#CONFIG += console
-
-console {
-    DEFINES += LSCULPT_CONSOLE
-}
-
+# CONFIG += console
+console:DEFINES += LSCULPT_CONSOLE
 SOURCES += main.cpp \
     LSculpt.cpp \
     rply.c \
@@ -25,4 +21,5 @@ HEADERS += rply.h \
     lsculptmainwin.h \
     argpanel.h
 FORMS += lsculptmainwin.ui \
-    argpanel.ui
+    argpanel.ui \
+    advanced_widgets.ui

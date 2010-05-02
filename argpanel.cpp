@@ -47,21 +47,28 @@ ArgumentSet ArgPanel::getArguments(char *infile)
 
 	args.OPTS_UP = (ui->upYRadio->isChecked()) ? UP_Y : UP_Z;
 	args.OPTS_STUDSUP = ui->studsUpCheck->isChecked();
-	args.OPTS_FIT = ui->lengthDSpin->value();
 
 	args.OPTS_ROT = ui->rotateDSpin->value();
 	args.OPTS_ROT_SIN = sin(args.OPTS_ROT*PI/180.0);
 	args.OPTS_ROT_COS = cos(args.OPTS_ROT*PI/180.0);
 
-	if (ui->scaleDSpin->value() != 0.0)
-		args.OPTS_SCALE /= ui->scaleDSpin->value();
-
-	args.OPTS_MAXITER = ui->optimizeSpin->value();
-	if (ui->noOptimizeCheck->isChecked())
-		args.OPTS_MAXITER = 0;
+	if (ui->scaleRadio->isChecked())
+	{
+		if (ui->scaleDSpin->value() != 0.0)
+			args.OPTS_SCALE /= ui->scaleDSpin->value();
+	}
+	else
+	{
+		args.OPTS_FIT = ui->lengthDSpin->value();
+	}
 
 	// TODO: need UI widget to set message output level
 	args.OPTS_MESSAGE = MESSAGE_ALL;
+
+#if 0  // Remove advanced argument widgets for now
+	args.OPTS_MAXITER = ui->optimizeSpin->value();
+	if (ui->noOptimizeCheck->isChecked())
+		args.OPTS_MAXITER = 0;
 
 	args.OP_ORN = ui->balanceADSpin->value();
 	args.OP_DIR = ui->balanceBDSpin->value();
@@ -74,6 +81,7 @@ ArgumentSet ArgPanel::getArguments(char *infile)
 	args.OP_BKO = ui->weightEDSpin->value();
 
 	args.OPTS_NOFILL = ui->emptyCheck->isChecked();
+#endif
 
 	return args;
 }
