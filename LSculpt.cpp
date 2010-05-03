@@ -131,7 +131,10 @@ int main_wrapper(char *infile, char *outfile)
 
 	if(noerr) {
 		// calculate bounding box and normal vectors for triangles
-		mesh_bounds(mn,mx);
+		noerr = mesh_bounds(mn,mx);
+	}
+
+	if(noerr) {
 		sz = mx - mn;
 		int tmp = cout.precision();
 		cout.precision(3);
@@ -159,7 +162,7 @@ int main_wrapper(char *infile, char *outfile)
 		if(args.OPTS_MESSAGE==MESSAGE_ALL) cout << now() << "\t: output file " << outfile << " saved" << endl;
 	}	
 
-	return 0;
+	return (noerr) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 
 float now()
@@ -601,7 +604,7 @@ bool load_triangles_stla(char *fname)
 	return true;
 }
 
-void mesh_bounds(SmVector3 &mn, SmVector3 &mx)
+bool mesh_bounds(SmVector3 &mn, SmVector3 &mx)
 {
 	SmVector3 tmin, tmax, sz;
 	double maxlen;
@@ -635,7 +638,7 @@ void mesh_bounds(SmVector3 &mn, SmVector3 &mx)
 	if(maxlen / (SPCUBE_WIDTH*args.OPTS_SCALE) > (1 << (sizeof(SpCubeCoord)*CHAR_BIT-1))) {
 		if(args.OPTS_MESSAGE) cerr << "ERROR: The mesh is larger than the maximum allowed stud length." << endl
 			                  << "       Try centering the mesh with option '-c'" << endl;
-		exit(1);
+		return false;
 	}
 	// check if the mesh is too big in - direction
 	sz = mn + args.OPTS_OFFSET;
@@ -643,8 +646,10 @@ void mesh_bounds(SmVector3 &mn, SmVector3 &mx)
 	if(maxlen / (SPCUBE_WIDTH*args.OPTS_SCALE) > (1 << (sizeof(SpCubeCoord)*CHAR_BIT-1))) {
 		if(args.OPTS_MESSAGE) cerr << "ERROR: The mesh is larger than the maximum allowed stud length." << endl
 			                  << "       Try centering the mesh with option '-c'" << endl;
-		exit(1);
+		return false;
 	}
+
+	return true;  // success
 }
 
 void partition_space()

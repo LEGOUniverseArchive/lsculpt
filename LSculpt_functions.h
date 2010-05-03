@@ -59,7 +59,7 @@ bool load_triangles_stla(char *f);
 // Compute the normal vectors and bounding box for each face
 // in the input mesh, and return the bounding box of the overall
 // mesh in the pass by reference variables
-void mesh_bounds(SmVector3 &, SmVector3 &);
+bool mesh_bounds(SmVector3 &, SmVector3 &);
 
 // Intersect the bounding box of each face with the space
 // partitioning cube grid and update the triangle lists in

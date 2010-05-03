@@ -9,6 +9,7 @@ DEFINES += _GENERIC_STR_S_
 # Comment this out to build UI version of LSculpt
 # CONFIG += console
 console:DEFINES += LSCULPT_CONSOLE
+
 SOURCES += main.cpp \
     LSculpt.cpp \
     rply.c \
