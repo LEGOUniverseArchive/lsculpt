@@ -37,61 +37,6 @@ vector<SmVector3> vtxs; // temporary global variable for storing vertices
 
 ArgumentSet args = defaultArgs;  // global set of command line arguments, initialized to default values
 
-#ifdef _GENERIC_STR_S_
-
-// (portable str_s functions by Jim DeVona)
-// Rough approximations of some str_s functions.
-// Although I've made a brief effort to emulate
-// the behavior of the actual functions, these
-// are NOT identical and should not be relied on
-// if rigorous error checking is implemented.
-
-#include <errno.h>
-
-// http://msdn2.microsoft.com/en-us/library/td1esda9(VS.80).aspx
-int strcpy_s(char *dst, size_t dst_size, const char *src) {
-	if ((dst == NULL) || (src == NULL))
-		return EINVAL;
-	if ((dst_size == 0) || (dst_size < strlen(src) + 1))
-		return ERANGE;
-	strncpy(dst, src, dst_size);
-	return 0;
-}
-
-// http://msdn2.microsoft.com/en-us/library/d45bbxx4(VS.80).aspx
-int strcat_s(char *dst, size_t dst_size, const char *src) {
-	size_t c;
-	if ((dst == NULL) || (src == NULL))
-		return EINVAL;
-	// dst must be null terminated to concatenate
-	for (c = 0; c < dst_size; c++) {
-		if (dst[c] == '\0')
-			break;
-	}
-	if (c == dst_size)
-		return EINVAL;
-	if ((dst_size == 0) || (dst_size < strlen(dst) + strlen(src) + 1))
-		return ERANGE;
-	strncat(dst, src, dst_size);
-	return 0;
-}
-
-// http://msdn2.microsoft.com/en-us/library/5dae5d43(VS.80).aspx
-int strncpy_s(char *dst, size_t dst_size, const char *src, size_t src_size) {
-	if ((dst == NULL) || (src == NULL))
-		return EINVAL;
-	if (dst_size == 0)
-		return EINVAL;
-	if (dst_size < src_size + 1) {
-		dst[0] = '\0';
-		return EINVAL;
-	}
-	strncpy(dst, src, dst_size < src_size ? dst_size : src_size);
-	return 0;
-}
-
-#endif
-
 #ifdef LSCULPT_CONSOLE
 int main(int argc, char *argv[])
 {
@@ -190,19 +135,19 @@ void load_options(int argc, char*argv[], char* in, char* out)
 					args.OPTS_PART = atoi(argv[++i]);
 					break;
 				case 'i':
-					strcpy_s(arg,80,argv[++i]);
+          strcpy(arg,argv[++i]);
 					strupper(arg);
 					if (strcmp(arg,"PLY")==0)
 						args.OPTS_FORMAT = FORMAT_PLY;
 					else if (strcmp(arg,"STL")==0)
 						args.OPTS_FORMAT = FORMAT_STL;
 					else {
-						strcpy_s(message, 80, "ERROR: Unknown input file format: ");
-						strcat_s(message, 80, arg);
+            strcpy(message, "ERROR: Unknown input file format: ");
+            strcat(message, arg);
 					}
 					break;
 				case 'u':
-					strcpy_s(arg,80,argv[++i]);
+          strcpy(arg,argv[++i]);
 					strupper(arg);
 					if (strcmp(arg,"MM")==0)
 						args.OPTS_SCALE *= UNIT_LDU_MM;
@@ -218,8 +163,8 @@ void load_options(int argc, char*argv[], char* in, char* out)
 						args.OPTS_SCALE *= UNIT_LDU_ST;
 					else if (strcmp(arg,"LDU")==0);
 					else {
-						strcpy_s(message, 80, "ERROR: Unknown units: ");
-						strcat_s(message, 80, arg);
+            strcpy(message, "ERROR: Unknown units: ");
+            strcat(message, arg);
 					}
 					break;
 				case 'o':
@@ -234,7 +179,7 @@ void load_options(int argc, char*argv[], char* in, char* out)
 					setStudsUpBaseArg(&args, atoi(argv[++i]));
 					break;
 				case 'd':
-					strcpy_s(arg,80,argv[++i]);
+          strcpy(arg,argv[++i]);
 					strupper(arg);
 					if (strcmp(arg,"Z")==0) args.OPTS_UP = UP_Z;
 					break;
@@ -284,8 +229,8 @@ void load_options(int argc, char*argv[], char* in, char* out)
 					args.OPTS_NOFILL = true;
 					break;
 				default:
-					strcpy_s(message, 80, "ERROR: Unknown option: ");
-					strcat_s(message, 80, argv[i]);
+          strcpy(message, "ERROR: Unknown option: ");
+          strcat(message, argv[i]);
 					break;
 			}
 			if (strcmp(message, "")!=0) {
@@ -294,9 +239,9 @@ void load_options(int argc, char*argv[], char* in, char* out)
 				exit(1);
 			}
 		} else if (strcmp(in,"")==0) {
-			strcpy_s(in,80,argv[i]);
+      strcpy(in,argv[i]);
 		} else if (strcmp(out,"")==0) {
-			strcpy_s(out,80,argv[i]);
+      strcpy(out,argv[i]);
 		} else {
 			usage();
 			cerr << endl << "ERROR: Unknown option: " << argv[i] << endl;
@@ -330,14 +275,14 @@ void setOutFile(ArgumentSet localArgs, char *in, char *out)
 	if(strcmp(out,"")==0)
 	{
 		if (!localArgs.OPTS_FORMAT)
-			strncpy_s(out,80,in,strrchr(in,'.')-in);
+      strncpy(out,in,strrchr(in,'.')-in);
 		else
-			strcpy_s(out,80,in);
+      strcpy(out,in);
 
 		if (localArgs.OPTS_PART > 1)
-			strcat_s(out,80,".mpd");
+      strcat(out,".mpd");
 		else
-			strcat_s(out,80,".ldr");
+      strcat(out,".ldr");
 	}
 }
 
@@ -347,7 +292,7 @@ void setFileFormat(ArgumentSet *localArgs, char *in)
 
 	// if no input format specified, get it from the file extension
 	if(!localArgs->OPTS_FORMAT) {
-		strcpy_s(arg,80,strrchr(in,'.') + 1);
+    strcpy(arg,strrchr(in,'.') + 1);
 		strupper(arg);
 		if (strcmp(arg,"PLY")==0)
 			localArgs->OPTS_FORMAT = FORMAT_PLY;
@@ -1110,19 +1055,19 @@ void save_ldraw(char *fname)
 						loc[d] = llc[d] + ((i % h)+1)*VOXEL_HEIGHT;
 						switch((*c).second.orientget()) {
 							case 0:
-								strcpy_s(o, 20, (*c).second.isorientneg() ?
+                strcpy(o, (*c).second.isorientneg() ?
 									"0 1 0 -1 0 0 0 0 1" :
 									"0 -1 0 1 0 0 0 0 1");
 								color = (*c).second.isorientneg() ? COLOR_1 : COLOR_0;
 								break;
 							case 1:
-								strcpy_s(o, 20, (*c).second.isorientneg() ?
+                strcpy(o, (*c).second.isorientneg() ?
 									"-1 0 0 0 -1 0 0 0 1" :
 									"1 0 0 0 1 0 0 0 1");
 								color = (*c).second.isorientneg() ? COLOR_3 : COLOR_2;
 								break;
 							case 2:
-								strcpy_s(o, 20, (*c).second.isorientneg() ?
+                strcpy(o, (*c).second.isorientneg() ?
 									"1 0 0 0 0 1 0 -1 0" :
 									"1 0 0 0 0 -1 0 1 0");
 								color = (*c).second.isorientneg() ? COLOR_5 : COLOR_4;
