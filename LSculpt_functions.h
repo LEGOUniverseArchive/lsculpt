@@ -41,6 +41,9 @@ void usage();
 // Rotate a vector about y axis by the amount stored in OPTS_ROT
 inline SmVector3 roty(SmVector3);
 
+// Load triangles from a OBJ file using the libobj library
+bool load_triangles_obj(char *f);
+
 // Load triangles from a ply file using the rPly library
 bool load_triangles_ply(char *f);
 

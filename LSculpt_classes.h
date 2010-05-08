@@ -68,6 +68,7 @@ using namespace std;
 
 #define FORMAT_PLY 1
 #define FORMAT_STL 2
+#define FORMAT_OBJ 3
 #define MESSAGE_NONE 0
 #define MESSAGE_ERR  1
 #define MESSAGE_ALL  2

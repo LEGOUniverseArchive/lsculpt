@@ -9,18 +9,22 @@ DEFINES += _GENERIC_STR_S_
 # Comment this out to build UI version of LSculpt
 # CONFIG += console
 console:DEFINES += LSCULPT_CONSOLE
-
 SOURCES += main.cpp \
     LSculpt.cpp \
     rply.c \
     lsculptmainwin.cpp \
-    argpanel.cpp
+    argpanel.cpp \
+    obj_parser.cpp
 HEADERS += rply.h \
     LSculpt_functions.h \
     LSculpt_classes.h \
     smVector.h \
     lsculptmainwin.h \
-    argpanel.h
+    argpanel.h \
+    obj_parser.hpp \
+    obj.hpp \
+    obj_config.hpp \
+    LSculpt_obj.h
 FORMS += lsculptmainwin.ui \
     argpanel.ui \
     advanced_widgets.ui

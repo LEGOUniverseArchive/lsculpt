@@ -7,6 +7,7 @@
 //
 
 #include "LSculpt_functions.h"
+#include "LSculpt_obj.h"      // Wavefront OBJ loading
 #include <string.h>
 #include <limits.h>
 
@@ -67,6 +68,9 @@ int main_wrapper(char *infile, char *outfile)
 		case FORMAT_STL:
 			noerr = load_triangles_stl(infile);
 			break;
+        case FORMAT_OBJ:
+            noerr = load_triangles_obj(infile);
+            break;
 		case FORMAT_PLY:
 		default:
 			noerr = load_triangles_ply(infile);
@@ -141,6 +145,8 @@ void load_options(int argc, char*argv[], char* in, char* out)
 						args.OPTS_FORMAT = FORMAT_PLY;
 					else if (strcmp(arg,"STL")==0)
 						args.OPTS_FORMAT = FORMAT_STL;
+                    else if (strcmp(arg,"OBJ")==0)
+                        args.OPTS_FORMAT = FORMAT_OBJ;
 					else {
             strcpy(message, "ERROR: Unknown input file format: ");
             strcat(message, arg);
@@ -298,6 +304,8 @@ void setFileFormat(ArgumentSet *localArgs, char *in)
 			localArgs->OPTS_FORMAT = FORMAT_PLY;
 		else if (strcmp(arg,"STL")==0)
 			localArgs->OPTS_FORMAT = FORMAT_STL;
+        else if (strcmp(arg,"OBJ")==0)
+            localArgs->OPTS_FORMAT = FORMAT_OBJ;
 		else {
 			localArgs->OPTS_FORMAT = FORMAT_PLY;
 			if(localArgs->OPTS_MESSAGE) cerr << "WARNING: Could not determine file format, assuming PLY." << endl;
@@ -364,6 +372,21 @@ void usage()
 	<< " -v           verbose output"                                                  << endl
     << " -w           suppress all warning messages"                                   << endl;
 }
+
+bool load_triangles_obj(char *fname)
+{
+  std::ifstream ifstream;
+
+  ifstream.open(fname);
+  if (!ifstream.is_open()) {
+    std::cerr << "OBJ: " << fname << ": " << "no such file or directory" << "\n";
+    return false;
+  }
+
+  class obj_loader load_obj;
+  return load_obj.convert(ifstream, inputmesh, args);
+}
+
 //
 // PLY input code adapted from source code available at
 // http://www.cs.princeton.edu/~diego/professional/rply

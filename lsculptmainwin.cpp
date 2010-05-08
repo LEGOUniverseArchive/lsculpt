@@ -78,7 +78,7 @@ void LSculptMainWin::import()
 {
     if (this->offerSave())
     {
-        QString filename = QFileDialog::getOpenFileName(this, "Import 3D mesh", QString(), "3D mesh files (*.ply *.stl);;All Files (*)");
+        QString filename = QFileDialog::getOpenFileName(this, "Import 3D mesh", QString(), "3D mesh files (*.ply *.stl *.obj);;All Files (*)");
         if (!filename.isEmpty())
         {
             this->currentFilename = filename;
