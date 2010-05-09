@@ -44,6 +44,9 @@
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="undoAction">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>&amp;Undo</string>
    </property>

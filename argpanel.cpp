@@ -52,6 +52,8 @@ ArgumentSet ArgPanel::getArguments(char *infile)
 	args.OPTS_ROT_SIN = sin(args.OPTS_ROT*PI/180.0);
 	args.OPTS_ROT_COS = cos(args.OPTS_ROT*PI/180.0);
 
+	args.OPTS_MAXITER = (ui->maxDetailRadio->isChecked()) ? OPTIM_MAX : 0;
+
 	if (ui->scaleRadio->isChecked())
 	{
 		if (ui->scaleDSpin->value() != 0.0)

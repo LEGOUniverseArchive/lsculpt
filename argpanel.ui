@@ -34,14 +34,14 @@
   <widget class="QPushButton" name="runLSculptBtn">
    <property name="geometry">
     <rect>
-     <x>315</x>
+     <x>304</x>
      <y>326</y>
-     <width>75</width>
-     <height>24</height>
+     <width>86</width>
+     <height>23</height>
     </rect>
    </property>
    <property name="text">
-    <string>Run LSculpt</string>
+    <string>Update Preview</string>
    </property>
   </widget>
   <widget class="QGroupBox" name="groupBox_4">
@@ -464,31 +464,48 @@
      </item>
     </layout>
    </widget>
-   <widget class="QCheckBox" name="studsUpCheck">
+   <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
-      <x>286</x>
-      <y>50</y>
-      <width>90</width>
-      <height>18</height>
+      <x>278</x>
+      <y>12</y>
+      <width>97</width>
+      <height>92</height>
      </rect>
     </property>
-    <property name="text">
-     <string>Studs Up only</string>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="emptyCheck">
-    <property name="geometry">
-     <rect>
-      <x>286</x>
-      <y>25</y>
-      <width>168</width>
-      <height>18</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Empty Shell</string>
-    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QCheckBox" name="emptyCheck">
+       <property name="text">
+        <string>Empty Shell</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="studsUpCheck">
+       <property name="text">
+        <string>Studs Up only</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="maxDetailRadio">
+       <property name="text">
+        <string>Highest Detail</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="radioButton_2">
+       <property name="text">
+        <string>Easiest to Build</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
  </widget>
@@ -501,13 +518,17 @@
   <tabstop>upYRadio</tabstop>
   <tabstop>upZRadio</tabstop>
   <tabstop>rotateDSpin</tabstop>
+  <tabstop>scaleRadio</tabstop>
   <tabstop>scaleDSpin</tabstop>
+  <tabstop>lengthRadio</tabstop>
   <tabstop>lengthDSpin</tabstop>
   <tabstop>partCombo</tabstop>
   <tabstop>colorCombo</tabstop>
   <tabstop>baseSpin</tabstop>
   <tabstop>emptyCheck</tabstop>
   <tabstop>studsUpCheck</tabstop>
+  <tabstop>maxDetailRadio</tabstop>
+  <tabstop>radioButton_2</tabstop>
   <tabstop>runLSculptBtn</tabstop>
  </tabstops>
  <resources/>
