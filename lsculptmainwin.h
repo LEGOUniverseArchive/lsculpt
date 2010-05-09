@@ -18,6 +18,7 @@ public:
 
 protected:
     void changeEvent(QEvent *e);
+	void resizeEvent(QResizeEvent *e);
 
 private slots:
     void invokeLSculpt();
@@ -27,6 +28,9 @@ private:
     Ui::LSculptMainWin *ui;
     ArgPanel *panel;
     QTextEdit *console;
+	QWidget *ldvWin;
+
+	void *pLDV;
 
     bool offerSave();
 

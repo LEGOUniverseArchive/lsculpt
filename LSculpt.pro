@@ -5,6 +5,7 @@ QT += opengl
 TARGET = LSculpt
 TEMPLATE = app
 DEFINES += _GENERIC_STR_S_
+LIBS += -L./ -lLDVLib
 
 # Comment this out to build UI version of LSculpt
 # CONFIG += console
@@ -24,7 +25,8 @@ HEADERS += rply.h \
     obj_parser.hpp \
     obj.hpp \
     obj_config.hpp \
-    LSculpt_obj.h
+	LSculpt_obj.h \
+	LDVLib.h
 FORMS += lsculptmainwin.ui \
     argpanel.ui \
     advanced_widgets.ui

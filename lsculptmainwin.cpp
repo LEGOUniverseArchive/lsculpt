@@ -11,6 +11,8 @@
 #include "ui_lsculptmainwin.h"
 #include "argpanel.h"
 
+#include "LDVLib.h"
+
 using namespace std;
 
 LSculptMainWin::LSculptMainWin(QWidget *parent) :
@@ -19,32 +21,44 @@ LSculptMainWin::LSculptMainWin(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QWidget *center = new QWidget(this);
-    QHBoxLayout *layout = new QHBoxLayout(center);
+	QWidget *center = new QWidget(this);
+	QHBoxLayout *layout = new QHBoxLayout(center);
 
-    panel = new ArgPanel(this);
-    connect(panel, SIGNAL(runLSculptBtnClicked()), this, SLOT(invokeLSculpt()));
+	panel = new ArgPanel(this);
+	connect(panel, SIGNAL(runLSculptBtnClicked()), this, SLOT(invokeLSculpt()));
 
-    console = new QTextEdit("Welcome to LSculpt's new, totally unfinished UI", this);
-    console->setReadOnly(true);
+	//console = new QTextEdit("Welcome to LSculpt's new, totally unfinished UI", this);
+	//console->setReadOnly(true);
 
-    layout->addWidget(panel);
-    layout->addWidget(console);
-    center->setLayout(layout);
-    setCentralWidget(center);
+	ldvWin = new QWidget(this);
+	ldvWin->setMinimumWidth(panel->minimumWidth());
+	ldvWin->setMinimumHeight(panel->minimumHeight());
+
+	layout->addWidget(panel);
+	layout->addWidget(ldvWin);
+	center->setLayout(layout);
+
+	LDVSetLDrawDir("C:\\LDraw");
+	pLDV = LDVInit(ldvWin->winId());
+	LDVGLInit(pLDV);
+	LDVSetFilename(pLDV, "C:\\ldraw\\models\\car.ldr");
+	LDVLoadModel(pLDV, true);
+
+	setCentralWidget(center);
     setWindowTitle("LSculpt");
 }
 
 LSculptMainWin::~LSculptMainWin()
 {
-    delete ui;
+	LDVDeInit(pLDV);
+	delete ui;
 }
 
 void LSculptMainWin::invokeLSculpt()
 {
     if (this->currentFilename.isEmpty())
     {
-        console->append("Open a 3D mesh before running LSculpt.");
+		//console->append("Open a 3D mesh before running LSculpt.");
         return;
     }
 
@@ -67,7 +81,7 @@ void LSculptMainWin::invokeLSculpt()
 	main_wrapper(infile, outfile);
 
     // Copy redirected string buffer to console text editor
-    console->append(buffer.str().c_str());
+	//console->append(buffer.str().c_str());
 
     // Reset cout & cerr
     cout.rdbuf(coutBuf);
@@ -82,7 +96,7 @@ void LSculptMainWin::import()
         if (!filename.isEmpty())
         {
             this->currentFilename = filename;
-            this->console->setText("Loaded: " + filename);
+			//this->console->setText("Loaded: " + filename);
         }
     }
 }
@@ -90,6 +104,12 @@ void LSculptMainWin::import()
 bool LSculptMainWin::offerSave()
 {
     return true;  // TODO: check modified state of current file & throw up Save dialog, if modified.
+}
+
+void LSculptMainWin::resizeEvent(QResizeEvent *e)
+{
+	QMainWindow::resizeEvent(e);
+	LDVSetSize(pLDV, ldvWin->width(), ldvWin->height());
 }
 
 void LSculptMainWin::changeEvent(QEvent *e)
