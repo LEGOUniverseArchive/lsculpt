@@ -27,7 +27,6 @@ private slots:
 private:
     Ui::LSculptMainWin *ui;
     ArgPanel *panel;
-    QTextEdit *console;
 	QWidget *ldvWin;
 
 	void *pLDV;

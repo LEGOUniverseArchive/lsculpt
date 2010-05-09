@@ -16,19 +16,16 @@
 using namespace std;
 
 LSculptMainWin::LSculptMainWin(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::LSculptMainWin)
+	QMainWindow(parent),
+	ui(new Ui::LSculptMainWin)
 {
-    ui->setupUi(this);
+	ui->setupUi(this);
 
 	QWidget *center = new QWidget(this);
 	QHBoxLayout *layout = new QHBoxLayout(center);
 
 	panel = new ArgPanel(this);
 	connect(panel, SIGNAL(runLSculptBtnClicked()), this, SLOT(invokeLSculpt()));
-
-	//console = new QTextEdit("Welcome to LSculpt's new, totally unfinished UI", this);
-	//console->setReadOnly(true);
 
 	ldvWin = new QWidget(this);
 	ldvWin->setMinimumWidth(panel->minimumWidth());
@@ -41,11 +38,10 @@ LSculptMainWin::LSculptMainWin(QWidget *parent) :
 	LDVSetLDrawDir("C:\\LDraw");
 	pLDV = LDVInit(ldvWin->winId());
 	LDVGLInit(pLDV);
-	LDVSetFilename(pLDV, "C:\\ldraw\\models\\car.ldr");
-	LDVLoadModel(pLDV, true);
 
+	statusBar()->showMessage("Welcome to LSculpt's new, totally unfinished UI");
 	setCentralWidget(center);
-    setWindowTitle("LSculpt");
+	setWindowTitle("LSculpt");
 }
 
 LSculptMainWin::~LSculptMainWin()
@@ -56,23 +52,23 @@ LSculptMainWin::~LSculptMainWin()
 
 void LSculptMainWin::invokeLSculpt()
 {
-    if (this->currentFilename.isEmpty())
-    {
-		//console->append("Open a 3D mesh before running LSculpt.");
-        return;
-    }
+	if (this->currentFilename.isEmpty())
+	{
+		this->statusBar()->showMessage("Open a 3D mesh before running LSculpt");
+		return;
+	}
 
 	// Setup input & output filename (output is
 	QByteArray ba = this->currentFilename.toLatin1();
 	char *infile = ba.data();
 	char outfile[80] = "";
 
-    // Redirect cout & cerr to local string buffer
-    streambuf *coutBuf = cout.rdbuf();
-    streambuf *cerrBuf = cerr.rdbuf();
+	// Redirect cout & cerr to local string buffer
+	streambuf *coutBuf = cout.rdbuf();
+	streambuf *cerrBuf = cerr.rdbuf();
 
-    stringbuf buffer;
-    cout.rdbuf(&buffer);
+	stringbuf buffer;
+	cout.rdbuf(&buffer);
 	cerr.rdbuf(&buffer);
 
 	ArgumentSet args = panel->getArguments(infile);
@@ -80,30 +76,33 @@ void LSculptMainWin::invokeLSculpt()
 	setOutFile(args, infile, outfile);
 	main_wrapper(infile, outfile);
 
-    // Copy redirected string buffer to console text editor
-	//console->append(buffer.str().c_str());
+	// Copy redirected string buffer to status bar
+	statusBar()->showMessage(buffer.str().c_str());
 
-    // Reset cout & cerr
-    cout.rdbuf(coutBuf);
-    cerr.rdbuf(cerrBuf);
+	// Reset cout & cerr
+	cout.rdbuf(coutBuf);
+	cerr.rdbuf(cerrBuf);
+
+	LDVSetFilename(pLDV, outfile);
+	LDVLoadModel(pLDV, true);
 }
 
 void LSculptMainWin::import()
 {
-    if (this->offerSave())
-    {
-        QString filename = QFileDialog::getOpenFileName(this, "Import 3D mesh", QString(), "3D mesh files (*.ply *.stl *.obj);;All Files (*)");
-        if (!filename.isEmpty())
-        {
-            this->currentFilename = filename;
-			//this->console->setText("Loaded: " + filename);
-        }
-    }
+	if (this->offerSave())
+	{
+		QString filename = QFileDialog::getOpenFileName(this, "Import 3D mesh", QString(), "3D mesh files (*.ply *.stl *.obj);;All Files (*)");
+		if (!filename.isEmpty())
+		{
+			this->currentFilename = filename;
+			this->statusBar()->showMessage("Loaded: " + filename);
+		}
+	}
 }
 
 bool LSculptMainWin::offerSave()
 {
-    return true;  // TODO: check modified state of current file & throw up Save dialog, if modified.
+	return true;  // TODO: check modified state of current file & throw up Save dialog, if modified.
 }
 
 void LSculptMainWin::resizeEvent(QResizeEvent *e)
@@ -114,12 +113,12 @@ void LSculptMainWin::resizeEvent(QResizeEvent *e)
 
 void LSculptMainWin::changeEvent(QEvent *e)
 {
-    QMainWindow::changeEvent(e);
-    switch (e->type()) {
-    case QEvent::LanguageChange:
-        ui->retranslateUi(this);
-        break;
-    default:
-        break;
-    }
+	QMainWindow::changeEvent(e);
+	switch (e->type()) {
+	case QEvent::LanguageChange:
+		ui->retranslateUi(this);
+		break;
+	default:
+		break;
+	}
 }

@@ -63,7 +63,7 @@ ArgumentSet ArgPanel::getArguments(char *infile)
 	}
 
 	// TODO: need UI widget to set message output level
-	args.OPTS_MESSAGE = MESSAGE_ALL;
+	args.OPTS_MESSAGE = MESSAGE_ERR; //MESSAGE_ALL;
 
 	args.OPTS_NOFILL = ui->emptyCheck->isChecked();
 
