@@ -121,7 +121,8 @@ double compute_energy(SpCube *cubes[7], unsigned char, bool);
 unsigned int optimize_voxels();
 
 // Write the output file
-void save_ldraw(char *f);
+// Returns true on success, false on error
+bool save_ldraw(char *f);
 
 // temp wrapper fore existing console's main() function
 int main_wrapper(char *infile, char *outfile);

@@ -22,7 +22,8 @@ protected:
 
 private slots:
     void invokeLSculpt();
-    void import();
+	void import3DMesh();
+	void exportToLDraw();
 
 private:
     Ui::LSculptMainWin *ui;

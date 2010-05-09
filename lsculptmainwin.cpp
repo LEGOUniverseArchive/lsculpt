@@ -39,7 +39,7 @@ LSculptMainWin::LSculptMainWin(QWidget *parent) :
 	pLDV = LDVInit(ldvWin->winId());
 	LDVGLInit(pLDV);
 
-	statusBar()->showMessage("Welcome to LSculpt's new, totally unfinished UI");
+	statusBar()->showMessage("Welcome to LSculpt's new, partially finished UI");
 	setCentralWidget(center);
 	setWindowTitle("LSculpt");
 }
@@ -87,7 +87,7 @@ void LSculptMainWin::invokeLSculpt()
 	LDVLoadModel(pLDV, true);
 }
 
-void LSculptMainWin::import()
+void LSculptMainWin::import3DMesh()
 {
 	if (this->offerSave())
 	{
@@ -96,6 +96,24 @@ void LSculptMainWin::import()
 		{
 			this->currentFilename = filename;
 			this->statusBar()->showMessage("Loaded: " + filename);
+		}
+	}
+}
+
+void LSculptMainWin::exportToLDraw()
+{
+	if (this->offerSave())
+	{
+		QString filename = QFileDialog::getSaveFileName(this, "Save LDraw File As", QString(), "LDraw files (*.dat *.ldr *.mpd);;All Files (*)");
+		if (!filename.isEmpty())
+		{
+			QByteArray ba = filename.toLatin1();
+			char *infile = ba.data();
+
+			if (save_ldraw(infile))
+				this->statusBar()->showMessage("Saved LDraw File: " + filename);
+			else
+				this->statusBar()->showMessage("Error Saving LDraw File: " + filename);
 		}
 	}
 }
