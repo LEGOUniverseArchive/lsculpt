@@ -69,6 +69,9 @@
    <property name="text">
     <string>&amp;Import 3D File...</string>
    </property>
+   <property name="toolTip">
+    <string>Import a 3D Mesh to work with</string>
+   </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
    </property>
@@ -76,6 +79,9 @@
   <action name="exportAction">
    <property name="text">
     <string>&amp;Save LDraw File As...</string>
+   </property>
+   <property name="toolTip">
+    <string>Save the current LDraw file</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>

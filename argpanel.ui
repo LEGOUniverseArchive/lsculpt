@@ -40,6 +40,9 @@
      <height>23</height>
     </rect>
    </property>
+   <property name="toolTip">
+    <string>Generate a new Preview Model from the current settings</string>
+   </property>
    <property name="text">
     <string>Update Preview</string>
    </property>
@@ -96,6 +99,9 @@
       </item>
       <item row="0" column="1">
        <widget class="QDoubleSpinBox" name="offsetXDSpin">
+        <property name="toolTip">
+         <string>Offset the Mesh's origin by this much in X direction</string>
+        </property>
         <property name="minimum">
          <double>-5000000.000000000000000</double>
         </property>
@@ -119,6 +125,9 @@
       </item>
       <item row="1" column="1">
        <widget class="QDoubleSpinBox" name="offsetYDSpin">
+        <property name="toolTip">
+         <string>Offset the Mesh's origin by this much in Y direction</string>
+        </property>
         <property name="minimum">
          <double>-5000000.000000000000000</double>
         </property>
@@ -139,6 +148,9 @@
       </item>
       <item row="2" column="1">
        <widget class="QDoubleSpinBox" name="offsetZDSpin">
+        <property name="toolTip">
+         <string>Offset the Mesh's origin by this much in Z direction</string>
+        </property>
         <property name="minimum">
          <double>-5000000.000000000000000</double>
         </property>
@@ -149,6 +161,9 @@
       </item>
       <item row="3" column="1">
        <widget class="QCheckBox" name="centerCheck">
+        <property name="toolTip">
+         <string>Re-center the Mesh at origin</string>
+        </property>
         <property name="text">
          <string>Re-center Mesh at Origin</string>
         </property>
@@ -184,6 +199,9 @@
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0">
        <widget class="QRadioButton" name="lengthRadio">
+        <property name="toolTip">
+         <string>Grow or shrink the Mesh so this is its longest side, measured in the chosen Units</string>
+        </property>
         <property name="text">
          <string>Max Size:</string>
         </property>
@@ -203,6 +221,9 @@
           <height>16777215</height>
          </size>
         </property>
+        <property name="toolTip">
+         <string>Grow or shrink the Mesh so this is its longest side, measured in the chosen Units</string>
+        </property>
         <property name="maximum">
          <double>1000.000000000000000</double>
         </property>
@@ -213,6 +234,9 @@
       </item>
       <item row="1" column="0">
        <widget class="QRadioButton" name="scaleRadio">
+        <property name="toolTip">
+         <string>Grow or shrink the Mesh by this amount overall</string>
+        </property>
         <property name="text">
          <string>Scale Factor:</string>
         </property>
@@ -228,6 +252,9 @@
           <width>60</width>
           <height>16777215</height>
          </size>
+        </property>
+        <property name="toolTip">
+         <string>Grow or shrink the Mesh by this amount overall</string>
         </property>
         <property name="minimum">
          <double>-5000000.000000000000000</double>
@@ -270,6 +297,9 @@
       </property>
       <item row="0" column="0">
        <widget class="QRadioButton" name="upYRadio">
+        <property name="toolTip">
+         <string>Change the Mesh's UP direction</string>
+        </property>
         <property name="text">
          <string>Y</string>
         </property>
@@ -280,6 +310,9 @@
       </item>
       <item row="0" column="1">
        <widget class="QRadioButton" name="upZRadio">
+        <property name="toolTip">
+         <string>Change the Mesh's UP direction</string>
+        </property>
         <property name="text">
          <string>Z</string>
         </property>
@@ -297,6 +330,9 @@
       </item>
       <item row="1" column="1">
        <widget class="QDoubleSpinBox" name="rotateDSpin">
+        <property name="toolTip">
+         <string>Rotate the Mesh this many degrees around its UP direction</string>
+        </property>
         <property name="maximum">
          <double>360.000000000000000</double>
         </property>
@@ -329,6 +365,9 @@
       <width>129</width>
       <height>22</height>
      </rect>
+    </property>
+    <property name="toolTip">
+     <string>Measurement Units to use for the size of the imported Mesh plus Offset and Scaling values</string>
     </property>
     <item>
      <property name="text">
@@ -404,6 +443,9 @@
      </item>
      <item row="0" column="1">
       <widget class="QComboBox" name="partCombo">
+       <property name="toolTip">
+        <string>Use this LEGO part in the LDraw file created by LSculpt</string>
+       </property>
        <item>
         <property name="text">
          <string>1 x 1 plate</string>
@@ -438,6 +480,9 @@
      </item>
      <item row="1" column="1">
       <widget class="QComboBox" name="colorCombo">
+       <property name="toolTip">
+        <string>Choose how the parts in the LEGO model will be colored</string>
+       </property>
        <item>
         <property name="text">
          <string>All the same Color</string>
@@ -466,7 +511,11 @@
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QSpinBox" name="baseSpin"/>
+      <widget class="QSpinBox" name="baseSpin">
+       <property name="toolTip">
+        <string>Use a base of Studs Up parts for this many bottom Mesh layers</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -482,6 +531,9 @@
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <widget class="QCheckBox" name="emptyCheck">
+       <property name="toolTip">
+        <string>Create an empty shell (use with disconnected or overlapping surfaces that otherwise result in lots of artifacts)</string>
+       </property>
        <property name="text">
         <string>Empty Shell</string>
        </property>
@@ -489,6 +541,9 @@
      </item>
      <item>
       <widget class="QCheckBox" name="studsUpCheck">
+       <property name="toolTip">
+        <string>Use only Studs Up parts</string>
+       </property>
        <property name="text">
         <string>Studs Up only</string>
        </property>
@@ -496,6 +551,9 @@
      </item>
      <item>
       <widget class="QRadioButton" name="maxDetailRadio">
+       <property name="toolTip">
+        <string>Create a LEGO model that is the closest match to the Mesh as possible.  Could result in some seriously tricky building.</string>
+       </property>
        <property name="text">
         <string>Highest Detail</string>
        </property>
@@ -506,6 +564,9 @@
      </item>
      <item>
       <widget class="QRadioButton" name="radioButton_2">
+       <property name="toolTip">
+        <string>Create a LEGO model that's as easy to build as possible.  May lose some accuracy in favor of buildability.</string>
+       </property>
        <property name="text">
         <string>Easiest to Build</string>
        </property>
@@ -546,12 +607,12 @@
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>261</x>
-     <y>135</y>
+     <x>262</x>
+     <y>164</y>
     </hint>
     <hint type="destinationlabel">
-     <x>341</x>
-     <y>162</y>
+     <x>369</x>
+     <y>149</y>
     </hint>
    </hints>
   </connection>
@@ -562,12 +623,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>261</x>
-     <y>135</y>
+     <x>262</x>
+     <y>164</y>
     </hint>
     <hint type="destinationlabel">
-     <x>341</x>
-     <y>136</y>
+     <x>369</x>
+     <y>164</y>
     </hint>
    </hints>
   </connection>
