@@ -29,7 +29,6 @@ map<SpCubeKey, SpCube> cubelist;
 multiset<SpCubeEnergy> cubeenergy;
 
 // Globals for PLY file reading
-int bad_faces;  //reduce error output - one error message for all bad faces
 vector<SmVector3> vtxs; // temporary global variable for storing vertices
 
 //
@@ -61,8 +60,7 @@ int main_wrapper(char *infile, char *outfile)
 	inputmesh.clear();
 	cubelist.clear();
 	cubeenergy.clear();
-	bad_faces = 0;
-	vtxs.clear();
+  vtxs.clear();
 
 	switch(args.OPTS_FORMAT) {
 		case FORMAT_STL:
@@ -393,8 +391,7 @@ bool load_triangles_obj(char *fname)
 //
 bool load_triangles_ply(char *fname)
 {
-	bad_faces = 0;
-	long nvertices, ntriangles;
+  long nvertices, ntriangles;
 
 	// Open PLY file
     p_ply ply = ply_open(fname, NULL);
@@ -414,9 +411,6 @@ bool load_triangles_ply(char *fname)
 	// read the actual file in
 	if (!ply_read(ply)) return false;
     ply_close(ply);
-
-	if (bad_faces)
-		cerr << "PLY file contains " << bad_faces << " non-triangular faces." << endl;
 
 	return true; //success
 }
@@ -448,26 +442,32 @@ int myply_vertex_cb(p_ply_argument argument) {
 
 // PLY file: read triangle callback function
 int myply_face_cb(p_ply_argument argument) {
-    long length, face_vertex_index;
-    ply_get_argument_property(argument, NULL, &length, &face_vertex_index);
+  long length, face_vertex_index;
+  static long v_index_first, v_index_prev, v_index_last;
+  ply_get_argument_property(argument, NULL, &length, &face_vertex_index);
 	
 	switch (face_vertex_index) {
 		case -1:
 			// new vertex list
-			inputmesh.push_back(Triangle());
-			break;
+      break;
 		case 0:
+      v_index_first = ply_get_argument_value(argument);
+      break;
 		case 1:
-		case 2:
+      v_index_prev = ply_get_argument_value(argument);
+      break;
+    default:
+      v_index_last = ply_get_argument_value(argument);
+      inputmesh.push_back(Triangle());
 			// store the vertex in the current triangle
-			inputmesh.back().v[face_vertex_index] = roty(vtxs.at(ply_get_argument_value(argument)));
-			break;
-		default:
-			bad_faces++;
+      inputmesh.back().v[0] = roty(vtxs.at(v_index_first));
+      inputmesh.back().v[1] = roty(vtxs.at(v_index_prev));
+      inputmesh.back().v[2] = roty(vtxs.at(v_index_last));
+      v_index_prev = v_index_last;
 			break;
 	}	
 
-    return 1;
+  return 1;
 }
 inline SmVector3 roty(SmVector3 pt)
 {
