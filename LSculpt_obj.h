@@ -50,10 +50,18 @@ void obj_loader::vertex_cb(obj::float_type x, obj::float_type y, obj::float_type
 {
   switch (this->LSculpt_args->OPTS_UP) {
     case UP_Z:
-      vertices_.push_back(std::tr1::tuple<obj::float_type, obj::float_type, obj::float_type >(x, z, -y));
+      vertices_.push_back(std::tr1::tuple<obj::float_type, obj::float_type, obj::float_type >(
+          this->LSculpt_args->OPTS_ROT_COS*x - this->LSculpt_args->OPTS_ROT_SIN*y,
+          z,
+          -this->LSculpt_args->OPTS_ROT_SIN*x - this->LSculpt_args->OPTS_ROT_COS*y
+      ));
       break;
     default:
-      vertices_.push_back(std::tr1::tuple<obj::float_type, obj::float_type, obj::float_type >(x, y, z));
+      vertices_.push_back(std::tr1::tuple<obj::float_type, obj::float_type, obj::float_type >(
+          this->LSculpt_args->OPTS_ROT_COS*x + this->LSculpt_args->OPTS_ROT_SIN*z,
+          y,
+          -this->LSculpt_args->OPTS_ROT_SIN*x + this->LSculpt_args->OPTS_ROT_COS*z
+      ));
       break;
   }
 }
