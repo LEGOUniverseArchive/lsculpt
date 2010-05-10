@@ -125,6 +125,6 @@ unsigned int optimize_voxels();
 bool save_ldraw(char *f);
 
 // temp wrapper fore existing console's main() function
-int main_wrapper(char *infile, char *outfile);
+int main_wrapper(char *infile, char *outfile, void (*progress_cb)(const char *));
 
 #endif // LSCULPT_FUNCTIONS_H

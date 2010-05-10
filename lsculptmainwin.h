@@ -2,7 +2,6 @@
 #define LSCULPTMAINWIN_H
 
 #include <QMainWindow>
-#include <QTextEdit>
 
 #include "argpanel.h"
 
@@ -31,12 +30,11 @@ private:
 	QWidget *ldvWin;
 
 	void *pLDV;
+	bool isLoaded;
 
     bool offerSave();
-
+	void initProgressDialog();
     QString currentFilename;
-
-	bool isLoaded;
 };
 
 #endif // LSCULPTMAINWIN_H

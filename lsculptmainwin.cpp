@@ -5,6 +5,7 @@
 #include <QTextEdit>
 #include <QFileDialog>
 #include <QByteArray>
+#include <QProgressDialog>
 
 #include "LSculpt_functions.h"
 #include "lsculptmainwin.h"
@@ -50,6 +51,24 @@ LSculptMainWin::~LSculptMainWin()
 	delete ui;
 }
 
+// Ugly global variable, for now.  Cleaner than getting a non-static C++ function callback into low-level LSculpt
+QProgressDialog *progress;
+void incrProgress(const char * label)
+{
+	progress->setLabelText(label);
+	progress->setValue(progress->value() + 1);
+}
+
+void LSculptMainWin::initProgressDialog()
+{
+	int maxSteps = 7 + 2;  // Keep this relatively in sync with the # of progress_cb calls in main_wrapper
+	progress = new QProgressDialog("Clearing Preview", "Abort Update", 0, maxSteps, this->ldvWin, Qt::CustomizeWindowHint | Qt::WindowTitleHint);
+	progress->setWindowModality(Qt::WindowModal);
+	progress->setWindowTitle("Updating...");
+	progress->setMinimumDuration(0);
+	progress->setValue(1);  // Force immediate display
+}
+
 void LSculptMainWin::invokeLSculpt()
 {
 	if (this->currentFilename.isEmpty())
@@ -57,6 +76,13 @@ void LSculptMainWin::invokeLSculpt()
 		this->statusBar()->showMessage("Open a 3D mesh before running LSculpt");
 		return;
 	}
+
+	initProgressDialog();
+	incrProgress("Begin Update");
+
+	char emptyLDraw[80] = "C:\\LSculpt\\debug\\empty.ldr";
+	LDVSetFilename(pLDV, emptyLDraw);
+	LDVLoadModel(pLDV, false);
 
 	// Setup input & output filename (output is
 	QByteArray ba = this->currentFilename.toLatin1();
@@ -71,10 +97,11 @@ void LSculptMainWin::invokeLSculpt()
 	cout.rdbuf(&buffer);
 	cerr.rdbuf(&buffer);
 
+	// Build set of arguments from UI, pass to LSculpt, then run LSculpt
 	ArgumentSet args = panel->getArguments(infile);
 	setArgumentSet(args);
 	setOutFile(args, infile, outfile);
-	main_wrapper(infile, outfile);
+	main_wrapper(infile, outfile, incrProgress);
 
 	// Copy redirected string buffer to status bar
 	statusBar()->showMessage(buffer.str().c_str());
@@ -93,6 +120,7 @@ void LSculptMainWin::invokeLSculpt()
 		LDVLoadModel(pLDV, true);
 		isLoaded = true;
 	}
+	progress->setValue(progress->maximum());  // Ensure progress goes away
 }
 
 void LSculptMainWin::import3DMesh()

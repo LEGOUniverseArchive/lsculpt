@@ -44,17 +44,18 @@ int main(int argc, char *argv[])
 
 	char infile[80] = "", outfile[80] = "";
 	load_options(argc, argv, infile, outfile);
-	return main_wrapper(infile, outfile);
+	return main_wrapper(infile, outfile, 0);
 }
 #endif
 
-int main_wrapper(char *infile, char *outfile)
+int main_wrapper(char *infile, char *outfile, void (*progress_cb)(const char *))
 {
 	bool noerr;
 	SmVector3 mn, mx, sz;
 
 	if(args.OPTS_MESSAGE==MESSAGE_ALL) cout << "TIME\t: PROGRESS" << endl;
 	if(args.OPTS_MESSAGE==MESSAGE_ALL) cout << now() << "\t: reading input file: " << infile << endl;
+	if (progress_cb) progress_cb("Importing Mesh Triangles");
 
 	// Reset global collections - necessary now that main can be called multiple times per execution
 	inputmesh.clear();
@@ -75,6 +76,7 @@ int main_wrapper(char *infile, char *outfile)
 			break;
 	}
 	if(args.OPTS_MESSAGE==MESSAGE_ALL) cout << now() << "\t: mesh loaded, " << inputmesh.size() << " triangles" << endl;
+	if (progress_cb) progress_cb("Calculating Mesh Bounds");
 
 	if(noerr) {
 		// calculate bounding box and normal vectors for triangles
@@ -90,21 +92,26 @@ int main_wrapper(char *infile, char *outfile)
 			sz[2] / (args.OPTS_SCALE*VOXEL_WIDTH) << " x " <<
 			sz[1] / (args.OPTS_SCALE*VOXEL_WIDTH) << " studs" << endl;
 		cout.precision(tmp);
+		if (progress_cb) progress_cb("Partitioning Space");
 		partition_space();
 		if(args.OPTS_MESSAGE==MESSAGE_ALL) cout << now() << "\t: mesh partitioned into " << cubelist.size() << " cubes" << endl;
 		if(args.OPTS_MAXITER >= 0) {
+			if (progress_cb) progress_cb("Computing Normals");
 			compute_cube_normals();
 			if(args.OPTS_MESSAGE==MESSAGE_ALL) cout << now() << "\t: computed initial cube orientations" << endl;
-			init_voxels();		
+			if (progress_cb) progress_cb("Initializing Voxels");
+			init_voxels();
 			if(args.OPTS_MESSAGE==MESSAGE_ALL) cout << now() << "\t: surfaces found in " << cubelist.size() << " cubes" << endl;
 		}
 		if(args.OPTS_MAXITER > 0) {
 			identify_neighbors();
 			initialize_energy();
 			if(args.OPTS_MESSAGE==MESSAGE_ALL) cout << now() << "\t: optimization started" << endl;
+			if (progress_cb) progress_cb("Optimizing Voxels");
 			unsigned int it = optimize_voxels();
 			if(args.OPTS_MESSAGE==MESSAGE_ALL) cout << now() << "\t: optimization finished in " << it << " iterations" << endl;
 		}
+		if (progress_cb) progress_cb("Building Temporary Model");
 		save_ldraw(outfile);
 		if(args.OPTS_MESSAGE==MESSAGE_ALL) cout << now() << "\t: output file " << outfile << " saved" << endl;
 	}	
