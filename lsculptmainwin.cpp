@@ -84,7 +84,15 @@ void LSculptMainWin::invokeLSculpt()
 	cerr.rdbuf(cerrBuf);
 
 	LDVSetFilename(pLDV, outfile);
-	LDVLoadModel(pLDV, true);
+	if (isLoaded)
+	{
+		LDVLoadModel(pLDV, false);
+	}
+	else
+	{
+		LDVLoadModel(pLDV, true);
+		isLoaded = true;
+	}
 }
 
 void LSculptMainWin::import3DMesh()
@@ -96,6 +104,8 @@ void LSculptMainWin::import3DMesh()
 		{
 			this->currentFilename = filename;
 			this->statusBar()->showMessage("Loaded: " + filename);
+			isLoaded = false;
+			invokeLSculpt();
 		}
 	}
 }

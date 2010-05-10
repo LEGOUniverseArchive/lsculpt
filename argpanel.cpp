@@ -9,8 +9,8 @@ ArgPanel::ArgPanel(QWidget *parent) :
     ui->setupUi(this);
     connect(ui->runLSculptBtn, SIGNAL(clicked()), this, SIGNAL(runLSculptBtnClicked()));
 
-	ui->unitsCombo->setItemData(0, QVariant(1.0));  // LDraw Units, default 1
-	ui->unitsCombo->setItemData(1, QVariant(UNIT_LDU_ST));
+	ui->unitsCombo->setItemData(0, QVariant(UNIT_LDU_ST));
+	ui->unitsCombo->setItemData(1, QVariant(1.0));  // LDraw Units, default 1
 	ui->unitsCombo->setItemData(2, QVariant(UNIT_LDU_MM));
 	ui->unitsCombo->setItemData(3, QVariant(UNIT_LDU_CM));
 	ui->unitsCombo->setItemData(4, QVariant(UNIT_LDU_M));
@@ -52,7 +52,7 @@ ArgumentSet ArgPanel::getArguments(char *infile)
 	args.OPTS_ROT_SIN = sin(args.OPTS_ROT*PI/180.0);
 	args.OPTS_ROT_COS = cos(args.OPTS_ROT*PI/180.0);
 
-	args.OPTS_MAXITER = (ui->maxDetailRadio->isChecked()) ? OPTIM_MAX : 0;
+	args.OPTS_MAXITER = (ui->maxDetailRadio->isChecked()) ? 0 : OPTIM_MAX;
 
 	if (ui->scaleRadio->isChecked())
 	{

@@ -35,6 +35,8 @@ private:
     bool offerSave();
 
     QString currentFilename;
+
+	bool isLoaded;
 };
 
 #endif // LSCULPTMAINWIN_H

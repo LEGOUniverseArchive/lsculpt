@@ -172,20 +172,20 @@
     <property name="title">
      <string>Scaling:</string>
     </property>
-    <widget class="QWidget" name="formLayoutWidget_3">
+    <widget class="QWidget" name="">
      <property name="geometry">
       <rect>
        <x>6</x>
-       <y>18</y>
+       <y>19</y>
        <width>153</width>
        <height>48</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0">
-       <widget class="QRadioButton" name="scaleRadio">
+       <widget class="QRadioButton" name="lengthRadio">
         <property name="text">
-         <string>Scale Factor:</string>
+         <string>Max Size:</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -193,7 +193,36 @@
        </widget>
       </item>
       <item row="0" column="1">
+       <widget class="QDoubleSpinBox" name="lengthDSpin">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>60</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="maximum">
+         <double>1000.000000000000000</double>
+        </property>
+        <property name="value">
+         <double>32.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QRadioButton" name="scaleRadio">
+        <property name="text">
+         <string>Scale Factor:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
        <widget class="QDoubleSpinBox" name="scaleDSpin">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="maximumSize">
          <size>
           <width>60</width>
@@ -208,29 +237,6 @@
         </property>
         <property name="value">
          <double>1.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QRadioButton" name="lengthRadio">
-        <property name="text">
-         <string>Max Size:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QDoubleSpinBox" name="lengthDSpin">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>60</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="maximum">
-         <double>1000.000000000000000</double>
         </property>
        </widget>
       </item>
@@ -326,12 +332,12 @@
     </property>
     <item>
      <property name="text">
-      <string>LDraw Units</string>
+      <string>Stud</string>
      </property>
     </item>
     <item>
      <property name="text">
-      <string>Stud</string>
+      <string>LDraw Units</string>
      </property>
     </item>
     <item>
@@ -464,7 +470,7 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>278</x>
@@ -518,10 +524,10 @@
   <tabstop>upYRadio</tabstop>
   <tabstop>upZRadio</tabstop>
   <tabstop>rotateDSpin</tabstop>
-  <tabstop>scaleRadio</tabstop>
-  <tabstop>scaleDSpin</tabstop>
   <tabstop>lengthRadio</tabstop>
   <tabstop>lengthDSpin</tabstop>
+  <tabstop>scaleRadio</tabstop>
+  <tabstop>scaleDSpin</tabstop>
   <tabstop>partCombo</tabstop>
   <tabstop>colorCombo</tabstop>
   <tabstop>baseSpin</tabstop>

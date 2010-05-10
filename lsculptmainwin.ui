@@ -33,6 +33,9 @@
     <addaction name="exitAction"/>
    </widget>
    <widget class="QMenu" name="menu_Edit">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="title">
      <string>&amp;Edit</string>
     </property>
@@ -45,7 +48,7 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="undoAction">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="text">
     <string>&amp;Undo</string>
