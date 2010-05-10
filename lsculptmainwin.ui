@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>LSculptMainWin</string>
+   <string>LSculpt [*]</string>
   </property>
   <widget class="QWidget" name="centralWidget"/>
   <widget class="QMenuBar" name="menuBar">
@@ -32,18 +32,7 @@
     <addaction name="separator"/>
     <addaction name="exitAction"/>
    </widget>
-   <widget class="QMenu" name="menu_Edit">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-    <property name="title">
-     <string>&amp;Edit</string>
-    </property>
-    <addaction name="undoAction"/>
-    <addaction name="redoAction"/>
-   </widget>
    <addaction name="menuLSculpt"/>
-   <addaction name="menu_Edit"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="undoAction">

@@ -14,6 +14,7 @@ class LSculptMainWin : public QMainWindow {
 public:
     LSculptMainWin(QWidget *parent = 0);
     ~LSculptMainWin();
+	void closeEvent(QCloseEvent *event);
 
 protected:
     void changeEvent(QEvent *e);
@@ -22,7 +23,7 @@ protected:
 private slots:
     void invokeLSculpt();
 	void import3DMesh();
-	void exportToLDraw();
+	bool exportToLDraw();
 
 private:
     Ui::LSculptMainWin *ui;

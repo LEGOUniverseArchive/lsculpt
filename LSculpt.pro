@@ -1,10 +1,9 @@
 # -------------------------------------------------
 # Project created by QtCreator 2010-04-22T21:11:11
 # -------------------------------------------------
-QT += opengl
+#QT += opengl
 TARGET = LSculpt
 TEMPLATE = app
-DEFINES += _GENERIC_STR_S_
 LIBS += -L./ -lLDVLib
 
 # Comment this out to build UI version of LSculpt

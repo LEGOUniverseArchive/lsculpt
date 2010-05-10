@@ -6,6 +6,8 @@
 #include <QFileDialog>
 #include <QByteArray>
 #include <QProgressDialog>
+#include <QMessageBox>
+#include <QCloseEvent>
 
 #include "LSculpt_functions.h"
 #include "lsculptmainwin.h"
@@ -15,6 +17,8 @@
 #include "LDVLib.h"
 
 using namespace std;
+
+#define lsculpt_version 0.4
 
 LSculptMainWin::LSculptMainWin(QWidget *parent) :
 	QMainWindow(parent),
@@ -42,7 +46,9 @@ LSculptMainWin::LSculptMainWin(QWidget *parent) :
 
 	statusBar()->showMessage("Welcome to LSculpt's new, partially finished UI");
 	setCentralWidget(center);
-	setWindowTitle("LSculpt");
+	setWindowModified(false);
+	QString title = QString("LSculpt %1 [*]").arg(lsculpt_version);
+	setWindowTitle(title);
 }
 
 LSculptMainWin::~LSculptMainWin()
@@ -120,45 +126,73 @@ void LSculptMainWin::invokeLSculpt()
 		LDVLoadModel(pLDV, true);
 		isLoaded = true;
 	}
+
+	setWindowModified(true);
 	progress->setValue(progress->maximum());  // Ensure progress goes away
+}
+
+void LSculptMainWin::closeEvent(QCloseEvent *event)
+{
+	if (offerSave())
+		event->accept();
+	else
+		event->ignore();
 }
 
 void LSculptMainWin::import3DMesh()
 {
-	if (this->offerSave())
+	if (offerSave())
 	{
 		QString filename = QFileDialog::getOpenFileName(this, "Import 3D mesh", QString(), "3D mesh files (*.ply *.stl *.obj);;All Files (*)");
 		if (!filename.isEmpty())
 		{
-			this->currentFilename = filename;
-			this->statusBar()->showMessage("Loaded: " + filename);
+			currentFilename = filename;
+			statusBar()->showMessage("Loaded: " + filename);
 			isLoaded = false;
 			invokeLSculpt();
+			QString title = QString("LSculpt %1 - %2 [*]").arg(lsculpt_version).arg(filename);
+			setWindowTitle(title);
+			setWindowModified(true);
 		}
 	}
 }
 
-void LSculptMainWin::exportToLDraw()
+// Returns true if successfully saved, false otherwise
+bool LSculptMainWin::exportToLDraw()
 {
-	if (this->offerSave())
-	{
-		QString filename = QFileDialog::getSaveFileName(this, "Save LDraw File As", QString(), "LDraw files (*.dat *.ldr *.mpd);;All Files (*)");
-		if (!filename.isEmpty())
-		{
-			QByteArray ba = filename.toLatin1();
-			char *infile = ba.data();
+	QString filename = QFileDialog::getSaveFileName(this, "Save LDraw File As", QString(), "LDraw files (*.dat *.ldr *.mpd);;All Files (*)");
+	if (filename.isEmpty())
+		return false;
 
-			if (save_ldraw(infile))
-				this->statusBar()->showMessage("Saved LDraw File: " + filename);
-			else
-				this->statusBar()->showMessage("Error Saving LDraw File: " + filename);
-		}
+	QByteArray ba = filename.toLatin1();
+	char *infile = ba.data();
+
+	if (save_ldraw(infile))
+	{
+		this->statusBar()->showMessage("Saved LDraw File: " + filename);
+		setWindowModified(false);
+		return true;
 	}
+
+	this->statusBar()->showMessage("Error Saving LDraw File: " + filename);
+	return false;
 }
 
+// Returns true if we should proceed with whatever is checking save state, false if we should cancel.
+// Will prompt user for save if necessary.
 bool LSculptMainWin::offerSave()
 {
-	return true;  // TODO: check modified state of current file & throw up Save dialog, if modified.
+	if (!this->isWindowModified())
+		return true;
+
+	QMessageBox::StandardButton reply;
+	reply = QMessageBox::question(this,
+								  tr("LSculpt - Unsaved Changes"),
+								  tr("Save unsaved changes?"),
+								  QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+	if (reply == QMessageBox::Yes)
+		return this->exportToLDraw();
+	return (reply == QMessageBox::No);
 }
 
 void LSculptMainWin::resizeEvent(QResizeEvent *e)
