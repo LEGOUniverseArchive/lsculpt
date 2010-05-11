@@ -1,0 +1,27 @@
+0 Box 4 (four faces)
+0 Name: box4.dat
+0 Author: James Jessiman
+0 Original LDraw Primitive
+0 LDRAW_ORG Primitive UPDATE 2002-02
+
+0 BFC CERTIFY CW
+
+0 2002-04-03 SEB Modified for BFC compliance
+
+2 24 1 1 1 -1 1 1
+2 24 -1 1 1 -1 1 -1
+2 24 -1 1 -1 1 1 -1
+2 24 1 1 -1 1 1 1
+2 24 1 0 1 -1 0 1
+2 24 -1 0 1 -1 0 -1
+2 24 -1 0 -1 1 0 -1
+2 24 1 0 -1 1 0 1
+2 24 1 0 1 1 1 1
+2 24 -1 0 1 -1 1 1
+2 24 1 0 -1 1 1 -1
+2 24 -1 0 -1 -1 1 -1
+4 16  1 1  1  1 0  1 -1 0  1 -1 1  1
+4 16 -1 1  1 -1 0  1 -1 0 -1 -1 1 -1
+4 16 -1 1 -1 -1 0 -1  1 0 -1  1 1 -1
+4 16  1 1 -1  1 0 -1  1 0  1  1 1  1
+0

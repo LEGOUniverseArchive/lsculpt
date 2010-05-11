@@ -40,7 +40,8 @@ LSculptMainWin::LSculptMainWin(QWidget *parent) :
 	layout->addWidget(ldvWin);
 	center->setLayout(layout);
 
-	LDVSetLDrawDir("C:\\LDraw");
+
+  LDVSetLDrawDir(((QApplication::applicationDirPath()).append("\\LDVLib")).toAscii());
 	pLDV = LDVInit(ldvWin->winId());
 	LDVGLInit(pLDV);
 

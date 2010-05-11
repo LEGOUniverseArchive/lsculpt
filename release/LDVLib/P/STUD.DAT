@@ -1,0 +1,15 @@
+0 Stud
+0 Name: stud.dat
+0 Author: James Jessiman
+0 Original LDraw Primitive
+0 LDRAW_ORG Primitive UPDATE 2002-02
+
+0 BFC CERTIFY CW
+
+0 2002-04-04 SEB Modified for BFC compliance
+
+1 16 0 0 0 6 0 0 0 1 0 0 0 6 4-4edge.dat
+1 16 0 -4 0 6 0 0 0 1 0 0 0 6 4-4edge.dat
+1 16 0 0 0 6 0 0 0 -4 0 0 0 6 4-4cyli.dat
+1 16 0 -4 0 6 0 0 0 1 0 0 0 6 4-4disc.dat
+0
