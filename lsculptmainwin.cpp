@@ -112,6 +112,10 @@ void LSculptMainWin::invokeLSculpt()
 	LDVSetFilename(pLDV, emptyLDraw);
 	LDVLoadModel(pLDV, false);
 
+  // setup options suited for display of LSculpt models:
+  LDVSetSeamWidth(pLDV, 0.0);
+  LDVSetTextureStuds(pLDV, false);
+
 	// Setup input & output filename (output is
 	QByteArray ba = this->currentFilename.toLatin1();
 	char *infile = ba.data();
