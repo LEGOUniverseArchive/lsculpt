@@ -1,10 +1,40 @@
-// Modified by Bram Lambrecht 2010.05.01:
-//   Some OBJ files are malformed: in a face description where only the vertex
-//   and vertex normal are provided, the correct form is "v//vn".  Some exporters
-//   incorrectly use "v/vn".  This would get normally be interpretted as a vertex
-//   and a texture vertex.  But, one would only use this form if there are no texture
-//   vertices.  So, if vt appears to be out of bounds, the modification treats the
-//   second index as a vertex normal instead and calls a warning instead of an error.
+/*	libobj: A modern C++ library for parsing the Wavefront OBJ file format.
+
+  Copyright (C) 2007 Ares Lagae <ares.lagae@cs.kuleuven.be>
+
+  http://www.cs.kuleuven.ac.be/~ares/libobj/
+
+  This file (obj_parser.cpp) is part of libobj.
+
+  libobj is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 2 of the License, or
+  (at your option) any later version.
+
+  libobj is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see http://www.gnu.org/licenses/  */
+
+
+/*
+  2010.05.14 Bram Lambrecht <bram@bldesign.org>
+    Copyright and license info added.
+
+  2010.05.01 Bram Lambrecht <bram@bldesign.org>
+    obj_parser.cpp was modified for LSculpt:
+
+    Some OBJ files are malformed: in a face description where only the vertex
+    and vertex normal are provided, the correct form is "v//vn".  Some exporters
+    incorrectly use "v/vn".  This would get normally be interpretted as a vertex
+    and a texture vertex.  But, one would only use this form if there are no texture
+    vertices.  So, if vt appears to be out of bounds, the modification treats the
+    second index as a vertex normal instead and calls a warning instead of an error.
+*/
+
 
 #include "obj_parser.hpp"
 
