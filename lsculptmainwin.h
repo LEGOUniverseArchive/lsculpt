@@ -53,6 +53,7 @@ private:
 
 	void *pLDV;
 	bool isLoaded;
+	QString appPath;
 
     bool offerSave();
 	void initProgressDialog();

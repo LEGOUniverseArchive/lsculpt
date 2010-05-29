@@ -29,6 +29,7 @@
 #include <QProgressDialog>
 #include <QMessageBox>
 #include <QCloseEvent>
+#include <QApplication>
 
 #include "LSculpt_functions.h"
 #include "lsculptmainwin.h"
@@ -61,8 +62,10 @@ LSculptMainWin::LSculptMainWin(QWidget *parent) :
 	layout->addWidget(ldvWin);
 	center->setLayout(layout);
 
+	this->appPath = QApplication::applicationDirPath().append("\\LDVLib");
+	QByteArray ba = this->appPath.toAscii();
 
-  LDVSetLDrawDir(((QApplication::applicationDirPath()).append("\\LDVLib")).toAscii());
+	LDVSetLDrawDir(ba.data());
 	pLDV = LDVInit(ldvWin->winId());
 	LDVGLInit(pLDV);
 
@@ -108,16 +111,16 @@ void LSculptMainWin::invokeLSculpt()
 	initProgressDialog();
 	incrProgress("Begin Update");
 
-	char emptyLDraw[80] = "C:\\LSculpt\\debug\\empty.ldr";
-	LDVSetFilename(pLDV, emptyLDraw);
+	QByteArray ba = (this->appPath.append("\\empty.ldr")).toAscii();
+	LDVSetFilename(pLDV, ba.data());
 	LDVLoadModel(pLDV, false);
 
-  // setup options suited for display of LSculpt models:
-  LDVSetSeamWidth(pLDV, 0.0);
-  LDVSetTextureStuds(pLDV, false);
+	// setup options suited for display of LSculpt models:
+	LDVSetSeamWidth(pLDV, 0.0);
+	LDVSetTextureStuds(pLDV, false);
 
-	// Setup input & output filename (output is
-	QByteArray ba = this->currentFilename.toLatin1();
+	// Setup input & output filename
+	ba = this->currentFilename.toAscii();
 	char *infile = ba.data();
 	char outfile[80] = "";
 
@@ -190,7 +193,7 @@ bool LSculptMainWin::exportToLDraw()
 	if (filename.isEmpty())
 		return false;
 
-	QByteArray ba = filename.toLatin1();
+	QByteArray ba = filename.toAscii();
 	char *infile = ba.data();
 
 	if (save_ldraw(infile))
