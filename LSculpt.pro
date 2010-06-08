@@ -1,10 +1,11 @@
 # -------------------------------------------------
 # Project created by QtCreator 2010-04-22T21:11:11
 # -------------------------------------------------
-#QT += opengl
+# QT += opengl
 TARGET = LSculpt
 TEMPLATE = app
-LIBS += -L./ -lLDVLib
+LIBS += -L./ \
+    -lLDVLib
 
 # Comment this out to build UI version of LSculpt
 # CONFIG += console
@@ -24,8 +25,9 @@ HEADERS += rply.h \
     obj_parser.hpp \
     obj.hpp \
     obj_config.hpp \
-	LSculpt_obj.h \
-	LDVLib.h
+    LSculpt_obj.h \
+    LDVLib.h
 FORMS += lsculptmainwin.ui \
     argpanel.ui \
     advanced_widgets.ui
+RC_FILE = LSculpt.rc
