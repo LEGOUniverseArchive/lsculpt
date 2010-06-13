@@ -111,7 +111,7 @@ void LSculptMainWin::invokeLSculpt()
 	initProgressDialog();
 	incrProgress("Begin Update");
 
-	QByteArray ba = (this->appPath.append("\\empty.ldr")).toAscii();
+	QByteArray ba = (this->appPath.append("\\LDVLib\\empty.ldr")).toAscii();
 	LDVSetFilename(pLDV, ba.data());
 	LDVLoadModel(pLDV, false);
 
