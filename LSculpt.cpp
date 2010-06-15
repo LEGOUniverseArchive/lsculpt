@@ -432,6 +432,9 @@ bool load_triangles_ply(char *fname)
 
 	// call face input callback function for each list of faces
     ntriangles = ply_set_read_cb(ply, "face", "vertex_indices", myply_face_cb, NULL, 0);
+
+  // call face input callback function for each list triangle strip
+    ply_set_read_cb(ply, "tristrips", "vertex_indices", myply_face_cb, NULL, 1);
     
 	// read the actual file in
 	if (!ply_read(ply)) return false;
@@ -467,12 +470,22 @@ int myply_vertex_cb(p_ply_argument argument) {
 
 // PLY file: read triangle callback function
 int myply_face_cb(p_ply_argument argument) {
-  long length, face_vertex_index;
-  static long v_index_first, v_index_prev, v_index_last;
+  long length, face_vertex_index, vtxs_length, is_strip;
+  static long v_index_first, v_index_prev, v_index_last, strip_offset=0;
+
   ply_get_argument_property(argument, NULL, &length, &face_vertex_index);
-	
+  ply_get_argument_user_data(argument, NULL, &is_strip);
+
+  // reset strip_offset for new strips or faces.
+  if (face_vertex_index == 0 || face_vertex_index == -1) {
+    strip_offset = 0;
+  }
+
+  vtxs_length = vtxs.size();
+  face_vertex_index -= strip_offset;
+
 	switch (face_vertex_index) {
-		case -1:
+    case -1:
 			// new vertex list
       break;
 		case 0:
@@ -483,12 +496,39 @@ int myply_face_cb(p_ply_argument argument) {
       break;
     default:
       v_index_last = ply_get_argument_value(argument);
-      inputmesh.push_back(Triangle());
-			// store the vertex in the current triangle
-      inputmesh.back().v[0] = roty(vtxs.at(v_index_first));
-      inputmesh.back().v[1] = roty(vtxs.at(v_index_prev));
-      inputmesh.back().v[2] = roty(vtxs.at(v_index_last));
-      v_index_prev = v_index_last;
+
+      if (v_index_last == -1) { // start a new strip
+        strip_offset += face_vertex_index + 1;      
+      } else if ( // error checking
+          v_index_first < 0 || v_index_first >= vtxs_length || // out of bounds
+          v_index_prev  < 0 || v_index_prev  >= vtxs_length ||
+          v_index_last  < 0 || v_index_last  >= vtxs_length )
+      {      
+        cerr << "WARNING: PLY file contains an out of bounds vertex";
+        return 0;
+      } else {
+
+        if( v_index_first == v_index_prev  ||  // degenerate triangle
+            v_index_prev  == v_index_last  ||
+            v_index_last  == v_index_first ) {
+        } else {
+
+          inputmesh.push_back(Triangle());
+
+          // store the vertex in the current triangle
+          inputmesh.back().v[0] = roty(vtxs.at(v_index_first));
+          inputmesh.back().v[1] = roty(vtxs.at(v_index_prev));
+          inputmesh.back().v[2] = roty(vtxs.at(v_index_last));
+
+        }
+      }
+
+      if(is_strip && !(face_vertex_index & 1) ) { // index is odd
+         v_index_first = v_index_last;
+      } else {
+         v_index_prev = v_index_last;
+      }
+
 			break;
 	}	
 
