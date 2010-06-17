@@ -62,7 +62,7 @@ LSculptMainWin::LSculptMainWin(QWidget *parent) :
 	layout->addWidget(ldvWin);
 	center->setLayout(layout);
 
-	this->appPath = QApplication::applicationDirPath().append("\\LDVLib");
+	this->appPath = QApplication::applicationDirPath() + "/LDVLib";
 	QByteArray ba = this->appPath.toAscii();
 
 	LDVSetLDrawDir(ba.data());
@@ -74,6 +74,10 @@ LSculptMainWin::LSculptMainWin(QWidget *parent) :
 	setWindowModified(false);
 	QString title = QString("LSculpt %1 [*]").arg(lsculpt_version);
 	setWindowTitle(title);
+
+	QString iniFile = QString(QApplication::applicationDirPath() + "/LSculpt.ini");
+	this->settings = new QSettings(iniFile, QSettings::IniFormat);
+	loadSettings();
 }
 
 LSculptMainWin::~LSculptMainWin()
@@ -111,7 +115,7 @@ int LSculptMainWin::invokeLSculpt()
 	initProgressDialog();
 	incrProgress("Begin Update");
 
-	QByteArray ba = (this->appPath.append("\\LDVLib\\empty.ldr")).toAscii();
+	QByteArray ba = (this->appPath + "/empty.ldr").toAscii();
 	LDVSetFilename(pLDV, ba.data());
 	LDVLoadModel(pLDV, false);
 
@@ -173,7 +177,10 @@ int LSculptMainWin::invokeLSculpt()
 void LSculptMainWin::closeEvent(QCloseEvent *event)
 {
 	if (offerSave())
+	{
+		this->saveSettings();
 		event->accept();
+	}
 	else
 		event->ignore();
 }
@@ -252,4 +259,18 @@ void LSculptMainWin::changeEvent(QEvent *e)
 	default:
 		break;
 	}
+}
+
+void LSculptMainWin::loadSettings()
+{
+	restoreGeometry(settings->value("Geometry").toByteArray());
+	restoreState(settings->value("MainWindow/State").toByteArray());
+	ldvWin->resize(settings->value("LDVWinSize", QSize(400, 320)).toSize());
+}
+
+void LSculptMainWin::saveSettings()
+{
+	settings->setValue("Geometry", QVariant(saveGeometry()));
+	settings->setValue("MainWindow/State", QVariant(saveState()));
+	settings->setValue("LDVWinSize", QVariant(ldvWin->size()));
 }

@@ -23,6 +23,7 @@
 #define LSCULPTMAINWIN_H
 
 #include <QMainWindow>
+#include <QSettings>
 
 #include "argpanel.h"
 
@@ -54,10 +55,13 @@ private:
 	void *pLDV;
 	bool isLoaded;
 	QString appPath;
+	QSettings *settings;
 
     bool offerSave();
 	void initProgressDialog();
     QString currentFilename;
+	void loadSettings();
+	void saveSettings();
 };
 
 #endif // LSCULPTMAINWIN_H
