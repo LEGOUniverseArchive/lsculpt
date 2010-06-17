@@ -42,7 +42,7 @@ protected:
 	void resizeEvent(QResizeEvent *e);
 
 private slots:
-    void invokeLSculpt();
+	int invokeLSculpt();
 	void import3DMesh();
 	bool exportToLDraw();
 

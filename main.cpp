@@ -23,12 +23,20 @@
 
 #include <QApplication>
 #include "lsculptmainwin.h"
+#include <exception>
+
+void handler()
+{
+	cout << "Fatal Error!\n";
+	//exit(EXIT_FAILURE);
+}
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    LSculptMainWin w;
-    w.show();
-    return a.exec();
+	set_terminate(handler);
+	QApplication a(argc, argv);
+	LSculptMainWin w;
+	w.show();
+	return a.exec();
 }
 #endif  // LSCULPT_CONSOLE

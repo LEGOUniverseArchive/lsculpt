@@ -100,12 +100,12 @@ void LSculptMainWin::initProgressDialog()
 	progress->setValue(1);  // Force immediate display
 }
 
-void LSculptMainWin::invokeLSculpt()
+int LSculptMainWin::invokeLSculpt()
 {
 	if (this->currentFilename.isEmpty())
 	{
 		this->statusBar()->showMessage("Open a 3D mesh before running LSculpt");
-		return;
+		return EXIT_FAILURE;
 	}
 
 	initProgressDialog();
@@ -136,7 +136,7 @@ void LSculptMainWin::invokeLSculpt()
 	ArgumentSet args = panel->getArguments(infile);
 	setArgumentSet(args);
 	setOutFile(args, infile, outfile);
-	main_wrapper(infile, outfile, incrProgress);
+	int res = main_wrapper(infile, outfile, incrProgress);
 
 	// Copy redirected string buffer to status bar
 	statusBar()->showMessage(buffer.str().c_str());
@@ -144,6 +144,13 @@ void LSculptMainWin::invokeLSculpt()
 	// Reset cout & cerr
 	cout.rdbuf(coutBuf);
 	cerr.rdbuf(cerrBuf);
+
+	if (res == EXIT_FAILURE)  // Total failure on model import - go no further
+	{
+		setWindowModified(false);
+		progress->setValue(progress->maximum());  // Ensure progress goes away
+		return EXIT_FAILURE;
+	}
 
 	LDVSetFilename(pLDV, outfile);
 	if (isLoaded)
@@ -158,6 +165,9 @@ void LSculptMainWin::invokeLSculpt()
 
 	setWindowModified(true);
 	progress->setValue(progress->maximum());  // Ensure progress goes away
+	if (statusBar()->currentMessage().isEmpty())
+		statusBar()->showMessage("Model loaded succesfully");
+	return EXIT_SUCCESS;
 }
 
 void LSculptMainWin::closeEvent(QCloseEvent *event)
@@ -170,15 +180,17 @@ void LSculptMainWin::closeEvent(QCloseEvent *event)
 
 void LSculptMainWin::import3DMesh()
 {
-	if (offerSave())
+	if (!offerSave())
+		return;
+
+	QString filename = QFileDialog::getOpenFileName(this, "Import 3D mesh", QString(), "3D mesh files (*.ply *.stl *.obj);;All Files (*)");
+	if (!filename.isEmpty())
 	{
-		QString filename = QFileDialog::getOpenFileName(this, "Import 3D mesh", QString(), "3D mesh files (*.ply *.stl *.obj);;All Files (*)");
-		if (!filename.isEmpty())
+		currentFilename = filename;
+		statusBar()->showMessage("Loaded: " + filename);
+		isLoaded = false;
+		if (invokeLSculpt() != EXIT_FAILURE)
 		{
-			currentFilename = filename;
-			statusBar()->showMessage("Loaded: " + filename);
-			isLoaded = false;
-			invokeLSculpt();
 			QString title = QString("LSculpt %1 - %2 [*]").arg(lsculpt_version).arg(filename);
 			setWindowTitle(title);
 			setWindowModified(true);
