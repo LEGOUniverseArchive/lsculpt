@@ -34,6 +34,8 @@
 #include <iomanip>
 #include <ctime>
 #include <cmath>
+#include <QFileInfo>
+#include <QString>
 #include "smVector.h"	// 2D and 3D vector library
 #include "rply.h"		// PLY input library
 
@@ -75,6 +77,9 @@ using namespace std;
 
 #define GRID_PN       "GRIDBOX.DAT"
 #define LDR_PREC      3
+#define COLOR_PLATES  16
+#define COLOR_MESH    9
+#define COLOR_GRID    10
 
 // LDraw colors
 #define COLOR_NONE 16
@@ -129,6 +134,9 @@ struct ArgumentSet {
 	int           OPTS_MAXITER; // maximum optimization iterations
 	unsigned char OPTS_PART;    // part to use for output
 	unsigned char OPTS_COLOR;   // color scheme for output
+  bool          OPTS_GRID;    // show the grid (space partitioning cubes) in output
+  bool          OPTS_MESH;    // show the input mesh in output
+  bool          OPTS_PLATES;  // show the result in output
 
 	// Energy functional weights for cube optimization
 	double OP_ORN;  // Weight of orientation with respect to cube's average normal
@@ -158,6 +166,9 @@ static const ArgumentSet defaultArgs = {
 	OPTIM_MAX,   // OPTS_MAXITER
 	0,           // OPTS_PART
 	COLOR_OFF,   // OPTS_COLOR
+  false,       // OPTS_GRID
+  false,       // OPTS_MESH
+  true,        // OPTS_PLATES
 	0.25,        // OP_ORN
 	0.25,        // OP_DIR
 	0.50,        // OP_NBR
@@ -554,3 +565,4 @@ inline unsigned char SpCubeEnergy::orientget() const
 }
 
 #endif // LSCULPT_CLASSES_H
+

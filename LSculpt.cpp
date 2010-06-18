@@ -1277,15 +1277,34 @@ bool save_ldraw(char *fname)
 	if(!ldr.good())
 		return false;
   else {
-    ldr << "0 FILE " << "main.ldr" << endl;
-    ldr << "0 BFC CERTIFY" << endl;
-    ldr << "1 16 0 0 0 1 0 0 0 1 0 0 0 1 plates.ldr" << endl;
-    ldr << "1  9 0 0 0 1 0 0 0 1 0 0 0 1 grid.ldr" << endl;
-    ldr << "1 10 0 0 0 1 0 0 0 1 0 0 0 1 mesh.ldr" << endl;
-    ldr << "0" << endl;
-    ldraw_plates(ldr, "plates.ldr");
-    ldraw_grid(ldr, "grid.ldr");
-    ldraw_mesh(ldr, "mesh.ldr");
+    QFileInfo finfo( fname );
+    QString name = finfo.baseName();
+    bool multiple_parts = ((char) args.OPTS_MESH + (char) args.OPTS_PLATES + (char) args.OPTS_GRID > 1);
+
+    if(multiple_parts) {
+      ldr << "0 FILE " << qPrintable(name) << ".ldr" << endl;
+      ldr << "0 BFC CERTIFY" << endl;
+      if (args.OPTS_PLATES)
+        ldr << "1 " << COLOR_PLATES << " 0 0 0 1 0 0 0 1 0 0 0 1 " << qPrintable(name) << "_plates.ldr" << endl;
+      if (args.OPTS_GRID)
+        ldr << "1 " << COLOR_GRID << " 0 0 0 1 0 0 0 1 0 0 0 1 " << qPrintable(name) << "_grid.ldr" << endl;
+      if (args.OPTS_MESH)
+        ldr << "1 " << COLOR_MESH << " 0 0 0 1 0 0 0 1 0 0 0 1 " << qPrintable(name) << "_mesh.ldr" << endl;
+      ldr << "0" << endl;
+    }
+
+    if (args.OPTS_PLATES) {
+      ldraw_plates(ldr, QString(name).append(multiple_parts ? "_plates.ldr" : ".ldr").toAscii().data());
+    }
+
+    if (args.OPTS_GRID) {
+      ldraw_grid(ldr, QString(name).append(multiple_parts ? "_grid.ldr" : ".ldr").toAscii().data());
+    }
+
+    if (args.OPTS_MESH) {
+      ldraw_mesh(ldr, QString(name).append(multiple_parts ? "_mesh.ldr" : ".ldr").toAscii().data());
+    }
+
     return true;
   }
 }
