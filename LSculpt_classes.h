@@ -31,6 +31,7 @@
 #include <set>
 #include <fstream>
 #include <iostream>
+#include <iomanip>
 #include <ctime>
 #include <cmath>
 #include "smVector.h"	// 2D and 3D vector library
@@ -70,6 +71,10 @@ using namespace std;
 #define VOXEL_PN_1    "3070B.DAT"
 #define VOXEL_PN_2    "3024FAST.DAT"
 #define VOXEL_PN_3    "3070FAST.DAT"
+
+
+#define GRID_PN       "GRIDBOX.DAT"
+#define LDR_PREC      3
 
 // LDraw colors
 #define COLOR_NONE 16

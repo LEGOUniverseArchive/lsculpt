@@ -1104,128 +1104,188 @@ double compute_energy(SpCube *cubeptr[7], unsigned char d, bool neg)
 	return e;
 }
 
+bool ldraw_grid(ofstream &ldr, char *name)
+{
+  if(!ldr.good())
+    return false;
+  else {
+    ldr << "0 FILE " << name << endl;
+    ldr << "0 LSculpt grid" << endl;
+    ldr << "0 Author: LSculpt" << endl;
+    ldr << "0 BFC CERTIFY" << endl;
+    for(map<SpCubeKey,SpCube>::iterator c = cubelist.begin(); c != cubelist.end(); c++) {
+      ldr << "1 16 "
+        << (*c).first[0]*SPCUBE_WIDTH+SPCUBE_WIDTH/2    << " "
+        << -((*c).first[1]*SPCUBE_WIDTH+SPCUBE_WIDTH/2) << " "
+        << -((*c).first[2]*SPCUBE_WIDTH+SPCUBE_WIDTH/2) << " "
+        << SPCUBE_WIDTH/2 << " 0 0 0 " << SPCUBE_WIDTH/2 << " 0 0 0 " << SPCUBE_WIDTH/2 << " "
+        << GRID_PN << endl;
+    }
+    ldr << "0" << endl;
+    ldr << "0 FILE " << GRID_PN << endl;
+    ldr << "0 BFC CERTIFY CCW" << endl;
+    ldr << "0 BFC INVERTNEXT" << endl;
+    ldr << "1 16 0 0 0 1 0 0 0 1 0 0 0 1 box.dat" << endl;
+    ldr << "0" << endl;
+
+    return true;
+  }
+}
+
+bool ldraw_mesh(ofstream &ldr, char *name)
+{
+  if(!ldr.good())
+    return false;
+  else {
+    ldr << "0 FILE " << name << endl;
+    ldr << "0 LSculpt mesh" << endl;
+    ldr << "0 Author: LSculpt" << endl;
+    ldr << fixed << setprecision (LDR_PREC);
+
+    SmVector3 vtx;
+
+    // convert each triangle to LDraw format
+    for(vector<Triangle>::iterator i = inputmesh.begin(); i != inputmesh.end(); i++) {
+      ldr << "3 16";
+
+      for(char j = 0; j < 3; j++) {
+        vtx = ((*i).v[j] + args.OPTS_OFFSET) / args.OPTS_SCALE;
+        ldr << " " << vtx[0] << " " << -vtx[1] << " " << -vtx[2];
+      }
+      ldr << endl;
+    }
+    ldr << "0" << endl;
+
+    return true;
+  }
+}
+
+bool ldraw_plates(ofstream &ldr, char *name)
+{
+  if(!ldr.good())
+    return false;
+
+  unsigned char i, w, h;
+  unsigned char d, e, f;
+  unsigned char color;
+  char o[20] = "";
+  int llc[3], loc[3];
+  w = SPCUBE_WIDTH/VOXEL_WIDTH;
+  h = SPCUBE_WIDTH/VOXEL_HEIGHT;
+
+  ldr << "0 FILE " << name << endl;
+  ldr << "0 Author: LSculpt" << endl;
+  ldr << "0 LSculpt options:" << endl;
+  ldr << "0 Up vector: " << ((args.OPTS_UP == UP_Y) ? "Y" : "Z") << endl;
+  ldr << "0 Rotation:  " << args.OPTS_ROT << endl;
+  ldr << "0 Offset:    " << args.OPTS_OFFSET[0] << ", " << args.OPTS_OFFSET[1] << ", " << args.OPTS_OFFSET[2] << endl;
+  ldr << "0 Scaling:   " << 1.0/args.OPTS_SCALE << endl << "0" << endl;
+  for (map<SpCubeKey,SpCube>::iterator c = cubelist.begin(); c != cubelist.end(); c++) {
+
+    d = (*c).second.orientget();
+    e = (d+1) % 3;
+    f = (d+2) % 3;
+
+    llc[0] = (*c).first[0]*SPCUBE_WIDTH;
+    llc[1] = (*c).first[1]*SPCUBE_WIDTH;
+    llc[2] = (*c).first[2]*SPCUBE_WIDTH;
+
+    llc[e] += VOXEL_WIDTH/2;
+    llc[f] += VOXEL_WIDTH/2;
+    llc[d] -= ((*c).second.isorientneg()) ? VOXEL_HEIGHT : 0;
+
+    for (i=0; i < w*w*h; i++) {
+      if (((*c).second.voxels[(*c).second.orientget()] >> i) & 1) {
+        loc[e] = llc[e] + (i / (h*w))*VOXEL_WIDTH;
+        loc[f] = llc[f] + (i % (h*w))/h*VOXEL_WIDTH;
+        loc[d] = llc[d] + ((i % h)+1)*VOXEL_HEIGHT;
+        switch((*c).second.orientget()) {
+          case 0:
+    strcpy(o, (*c).second.isorientneg() ?
+              "0 1 0 -1 0 0 0 0 1" :
+              "0 -1 0 1 0 0 0 0 1");
+            color = (*c).second.isorientneg() ? COLOR_1 : COLOR_0;
+            break;
+          case 1:
+    strcpy(o, (*c).second.isorientneg() ?
+              "-1 0 0 0 -1 0 0 0 1" :
+              "1 0 0 0 1 0 0 0 1");
+            color = (*c).second.isorientneg() ? COLOR_3 : COLOR_2;
+            break;
+          case 2:
+    strcpy(o, (*c).second.isorientneg() ?
+              "1 0 0 0 0 1 0 -1 0" :
+              "1 0 0 0 0 -1 0 1 0");
+            color = (*c).second.isorientneg() ? COLOR_5 : COLOR_4;
+            break;
+        }
+
+        switch (args.OPTS_COLOR) {
+          case COLOR_OFF:
+          default:
+            color = COLOR_NONE;
+            break;
+          case COLOR_LAY:
+            switch (i % h) {
+              case 0: color = COLOR_0; break;
+              case 1: color = COLOR_1; break;
+              case 2: color = COLOR_2; break;
+              case 3: color = COLOR_3; break;
+              default:
+              case 4: color = COLOR_4; break;
+            }
+            break;
+          case COLOR_DIR:
+            break;
+        }
+        ldr << "1 " << (int)color << " "
+          << loc[0] << " " << -loc[1] << " " << -loc[2] << " "
+          << o << " ";
+        switch (args.OPTS_PART){
+          case 1: ldr << VOXEL_PN_1; break;
+          case 2: ldr << VOXEL_PN_2; break;
+          case 3: ldr << VOXEL_PN_3; break;
+          case 0: default:
+            ldr << VOXEL_PN_0; break;
+        }
+        ldr << endl;
+      }
+    }
+  }
+  ldr << "0" << endl;
+  switch (args.OPTS_PART) {
+    default: break;
+    case 2:
+      ldr << "0 FILE " << VOXEL_PN_2 << endl;
+      ldr << "1 16 0 4 0 10 0 0 0 -4 0 0 0 10 box.dat" << endl;
+      ldr << "1 16 0 -2 0 3 0 -3 0 2 0 3 0 3 box.dat" << endl << "0" << endl;
+      break;
+    case 3:
+      ldr << "0 FILE " << VOXEL_PN_3 << endl;
+      ldr << "1 16 0 4 0 10 0 0 0 -4 0 0 0 10 box.dat" << endl << "0" << endl;
+      break;
+  }
+
+  return true;
+}
+
+
 bool save_ldraw(char *fname)
 {
 	ofstream ldr(fname, ios::out);
 
 	if(!ldr.good())
 		return false;
-
-	if(args.OPTS_MAXITER < 0) {
-		ldr << "0 Cube partitioned space of " << fname << endl;
-		ldr << "0 Author: LSculpt" << endl;
-		for(map<SpCubeKey,SpCube>::iterator c = cubelist.begin(); c != cubelist.end(); c++) {
-			ldr << "1 16 "
-				<< (*c).first[0]*SPCUBE_WIDTH+SPCUBE_WIDTH/2    << " "
-				<< -((*c).first[1]*SPCUBE_WIDTH+SPCUBE_WIDTH/2) << " "
-				<< -((*c).first[2]*SPCUBE_WIDTH+SPCUBE_WIDTH/2) << " "
-				<< SPCUBE_WIDTH/2 << " 0 0 0 " << SPCUBE_WIDTH/2 << " 0 0 0 " << SPCUBE_WIDTH/2
-				<< " box.dat" << endl;
-		}
-		ldr << "0" << endl;
-	}
-	else {
-		unsigned char i, w, h;
-		unsigned char d, e, f;
-		unsigned char color;
-		char o[20] = "";
-		int llc[3], loc[3];
-		w = SPCUBE_WIDTH/VOXEL_WIDTH;
-		h = SPCUBE_WIDTH/VOXEL_HEIGHT;
-
-		ldr << "0 FILE " << fname << endl;
-		ldr << "0 Author: LSculpt" << endl;
-		ldr << "0 LSculpt options:" << endl;
-		ldr << "0 Up vector: " << ((args.OPTS_UP == UP_Y) ? "Y" : "Z") << endl;
-		ldr << "0 Rotation:  " << args.OPTS_ROT << endl;
-		ldr << "0 Offset:    " << args.OPTS_OFFSET[0] << ", " << args.OPTS_OFFSET[1] << ", " << args.OPTS_OFFSET[2] << endl;
-		ldr << "0 Scaling:   " << 1.0/args.OPTS_SCALE << endl << "0" << endl;
-		for (map<SpCubeKey,SpCube>::iterator c = cubelist.begin(); c != cubelist.end(); c++) {
-
-			d = (*c).second.orientget();
-			e = (d+1) % 3;
-			f = (d+2) % 3;
-
-			llc[0] = (*c).first[0]*SPCUBE_WIDTH;
-			llc[1] = (*c).first[1]*SPCUBE_WIDTH;
-			llc[2] = (*c).first[2]*SPCUBE_WIDTH;
-
-			llc[e] += VOXEL_WIDTH/2;
-			llc[f] += VOXEL_WIDTH/2;
-			llc[d] -= ((*c).second.isorientneg()) ? VOXEL_HEIGHT : 0;
-
-			for (i=0; i < w*w*h; i++) {
-				if (((*c).second.voxels[(*c).second.orientget()] >> i) & 1) {
-					loc[e] = llc[e] + (i / (h*w))*VOXEL_WIDTH;
-					loc[f] = llc[f] + (i % (h*w))/h*VOXEL_WIDTH;
-					loc[d] = llc[d] + ((i % h)+1)*VOXEL_HEIGHT;
-					switch((*c).second.orientget()) {
-						case 0:
-			strcpy(o, (*c).second.isorientneg() ?
-								"0 1 0 -1 0 0 0 0 1" :
-								"0 -1 0 1 0 0 0 0 1");
-							color = (*c).second.isorientneg() ? COLOR_1 : COLOR_0;
-							break;
-						case 1:
-			strcpy(o, (*c).second.isorientneg() ?
-								"-1 0 0 0 -1 0 0 0 1" :
-								"1 0 0 0 1 0 0 0 1");
-							color = (*c).second.isorientneg() ? COLOR_3 : COLOR_2;
-							break;
-						case 2:
-			strcpy(o, (*c).second.isorientneg() ?
-								"1 0 0 0 0 1 0 -1 0" :
-								"1 0 0 0 0 -1 0 1 0");
-							color = (*c).second.isorientneg() ? COLOR_5 : COLOR_4;
-							break;
-					}
-
-					switch (args.OPTS_COLOR) {
-						case COLOR_OFF:
-						default:
-							color = COLOR_NONE;
-							break;
-						case COLOR_LAY:
-							switch (i % h) {
-								case 0: color = COLOR_0; break;
-								case 1: color = COLOR_1; break;
-								case 2: color = COLOR_2; break;
-								case 3: color = COLOR_3; break;
-								default:
-								case 4: color = COLOR_4; break;
-							}
-							break;
-						case COLOR_DIR:
-							break;
-					}
-					ldr << "1 " << (int)color << " "
-						<< loc[0] << " " << -loc[1] << " " << -loc[2] << " "
-						<< o << " ";
-					switch (args.OPTS_PART){
-						case 1: ldr << VOXEL_PN_1; break;
-						case 2: ldr << VOXEL_PN_2; break;
-						case 3: ldr << VOXEL_PN_3; break;
-						case 0: default:
-							ldr << VOXEL_PN_0; break;
-					}
-					ldr << endl;
-				}
-			}
-		}
-		ldr << "0" << endl;
-		switch (args.OPTS_PART) {
-			default: break;
-			case 2:
-				ldr << "0 FILE " << VOXEL_PN_2 << endl;
-				ldr << "1 16 0 4 0 10 0 0 0 -4 0 0 0 10 box.dat" << endl;
-				ldr << "1 16 0 -2 0 3 0 -3 0 2 0 3 0 3 box.dat" << endl << "0" << endl;
-				break;
-			case 3:
-				ldr << "0 FILE " << VOXEL_PN_3 << endl;
-				ldr << "1 16 0 4 0 10 0 0 0 -4 0 0 0 10 box.dat" << endl << "0" << endl;
-				break;
-		}
-	}
-
-	return true;
+  else {
+    ldr << "0 FILE " << "main.ldr" << endl;
+    ldr << "0 BFC CERTIFY" << endl;
+    ldr << "1 16 0 0 0 1 0 0 0 1 0 0 0 1 plates.ldr" << endl;
+    ldr << "1  9 0 0 0 1 0 0 0 1 0 0 0 1 grid.ldr" << endl;
+    ldr << "1 10 0 0 0 1 0 0 0 1 0 0 0 1 mesh.ldr" << endl;
+    ldr << "0" << endl;
+    ldraw_plates(ldr, "plates.ldr");
+    ldraw_grid(ldr, "grid.ldr");
+    ldraw_mesh(ldr, "mesh.ldr");
+    return true;
+  }
 }

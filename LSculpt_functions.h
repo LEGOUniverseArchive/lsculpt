@@ -138,6 +138,18 @@ double compute_energy(SpCube *cubes[7], unsigned char, bool);
 // reorienting the cube, and updating its neighbors.
 unsigned int optimize_voxels();
 
+// Write the grid in LDraw format
+// Returns true on success, false on error
+bool ldraw_grid(ofstream &, char *);
+
+// Write the triangle mesh in LDraw format
+// Returns true on success, false on error
+bool ldraw_mesh(ofstream &, char *);
+
+// Write the plates in LDraw format
+// Returns true on success, false on error
+bool ldraw_plates(ofstream &, char *);
+
 // Write the output file
 // Returns true on success, false on error
 bool save_ldraw(char *f);
