@@ -889,16 +889,37 @@ void voxelize(SpCubeKey loc, SpCube *cubeptr)
 			if(!intersections.empty()) {
 				k = 0; fill = 0;
 				if(args.OPTS_NOFILL) {
-					for(s = intersections.begin(); s != intersections.end(); s++) {
+          for(s = intersections.begin(); s != intersections.end(); s++) {
+            // convert the intersection into a position in the cube
 						k = (((*s).position+SPCUBE_PAD*args.OPTS_SCALE - llc[d]) / VOXEL_HEIGHT / args.OPTS_SCALE - 0.5);
+            // if the position is inside the cube, turn on that voxel
 						if( k < SPCUBE_WIDTH/VOXEL_HEIGHT )
 							fill |= 1 << k;
 					}
 				} else {
 					for(s = intersections.begin(); s != intersections.end(); s++) {
-						for (;k < SPCUBE_WIDTH/VOXEL_HEIGHT && (k+1)*VOXEL_HEIGHT*args.OPTS_SCALE + llc[d] < (*s).position+SPCUBE_PAD*args.OPTS_SCALE; k++) {
+            for (;k < SPCUBE_WIDTH/VOXEL_HEIGHT && (k+1)*VOXEL_HEIGHT*args.OPTS_SCALE + llc[d] < (*s).position+SPCUBE_PAD*args.OPTS_SCALE; k++) {
 							if((*s).inside) fill |= 1 << k;
-						}
+						}           
+
+            // if the previous for loop ended because the voxel position was past
+            // the current intersection, and there is a previous intersection in the cube
+            if(k < SPCUBE_WIDTH/VOXEL_HEIGHT && (s != intersections.begin())) {
+              // look at the previous intersection
+              s--;
+              // and check if that previous intersection happened within the same voxel position as the current intersection
+              if( (k+1)*VOXEL_HEIGHT*args.OPTS_SCALE + llc[d] >= (*s).position+SPCUBE_PAD*args.OPTS_SCALE &&
+                   k*VOXEL_HEIGHT*args.OPTS_SCALE + llc[d] < (*s).position+SPCUBE_PAD*args.OPTS_SCALE) {
+
+                // if so, there are two very closely spaced intersections, so a voxel should be placed
+                if((*(++s)).inside) fill |= 1 << k;
+
+              } else {
+
+                // go back to the current intersection
+                s++;
+              }
+            }
 					}
 					// finish the fill after the last intersection
 					for (; k < SPCUBE_WIDTH/VOXEL_HEIGHT && (k+1)*VOXEL_HEIGHT*args.OPTS_SCALE + llc[d] >= (*intersections.rbegin()).position+SPCUBE_PAD*args.OPTS_SCALE; k++) {
