@@ -54,7 +54,7 @@ private:
 
 	void *pLDV;
 	bool isLoaded;
-	QString appPath;
+        QString LDVPath;
 	QSettings *settings;
 
     bool offerSave();

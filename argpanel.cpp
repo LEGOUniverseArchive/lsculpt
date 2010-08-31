@@ -90,6 +90,10 @@ ArgumentSet ArgPanel::getArguments(char *infile)
 
 	args.OPTS_NOFILL = ui->emptyCheck->isChecked();
 
+	args.OPTS_GRID = ui->showGridCheck->isChecked();
+	args.OPTS_MESH = ui->showMeshCheck->isChecked();
+	args.OPTS_PLATES = ui->showPlatesCheck->isChecked();
+
 #if 0  // Remove advanced argument widgets for now
 	args.OPTS_MAXITER = ui->optimizeSpin->value();
 	if (ui->noOptimizeCheck->isChecked())

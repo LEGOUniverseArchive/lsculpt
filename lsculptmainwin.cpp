@@ -21,6 +21,8 @@
 
 #include <iostream>
 #include <sstream>
+#include <QDir>
+#include <QFile>
 #include <QWidget>
 #include <QHBoxLayout>
 #include <QTextEdit>
@@ -46,6 +48,20 @@ LSculptMainWin::LSculptMainWin(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::LSculptMainWin)
 {
+	this->LDVPath = QApplication::applicationDirPath() + "/LDVLib";
+	QDir dir(this->LDVPath);
+	if (!dir.exists())
+	{
+		// Check if LDVLib path exists.  LDVLib path contains empty.ldr, PARTS & P folders and all the parts LSculpt needs.
+		// Might want to check for existence of all necessary folders & parts too, eventually.
+		QMessageBox::warning(this, tr("LSculpt"),
+		                     tr("LSculpt cannot find the LDraw parts it needs to build models.\n"
+		                     "Try reinstalling LSculpt to fix this.\n"
+		                     "LSculpt will now terminate"),
+		QMessageBox::Ok);
+		exit(1);
+	}
+
 	ui->setupUi(this);
 
 	QWidget *center = new QWidget(this);
@@ -62,9 +78,7 @@ LSculptMainWin::LSculptMainWin(QWidget *parent) :
 	layout->addWidget(ldvWin);
 	center->setLayout(layout);
 
-	this->appPath = QApplication::applicationDirPath() + "/LDVLib";
-	QByteArray ba = this->appPath.toAscii();
-
+	QByteArray ba = this->LDVPath.toAscii();
 	LDVSetLDrawDir(ba.data());
 	pLDV = LDVInit(ldvWin->winId());
 	LDVGLInit(pLDV);
@@ -115,7 +129,15 @@ int LSculptMainWin::invokeLSculpt()
 	initProgressDialog();
 	incrProgress("Begin Update");
 
-	QByteArray ba = (this->appPath + "/empty.ldr").toAscii();
+	QString emptyLDrawFilename = QString(this->LDVPath + "/empty.ldr");
+	if (!QFile::exists(emptyLDrawFilename))  // Check if empty file exists - need to give LDView an empty file to begin with
+	{
+		QFile empty(emptyLDrawFilename);
+		empty.open(QIODevice::WriteOnly);
+		empty.close();
+	}
+
+	QByteArray ba = emptyLDrawFilename.toAscii();
 	LDVSetFilename(pLDV, ba.data());
 	LDVLoadModel(pLDV, false);
 
@@ -235,9 +257,9 @@ bool LSculptMainWin::offerSave()
 
 	QMessageBox::StandardButton reply;
 	reply = QMessageBox::question(this,
-								  tr("LSculpt - Unsaved Changes"),
-								  tr("Save unsaved changes?"),
-								  QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+	                              tr("LSculpt - Unsaved Changes"),
+	                              tr("Save unsaved changes?"),
+	                              QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
 	if (reply == QMessageBox::Yes)
 		return this->exportToLDraw();
 	return (reply == QMessageBox::No);
