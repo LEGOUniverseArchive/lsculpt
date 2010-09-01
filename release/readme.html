@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>LSculpt Readme</title>
+
+<style>
+body {
+	background-color: #FFF;
+	color: #000;
+	font: 12px/1em "Arial", "Helvetica", sans-serif;
+	padding: 0px 10px;
+	text-align: left;
+	width: 850px;
+	}
+h1 {
+	font: bold 20px/1.5em "Arial", "Helvetica", sans-serif;
+	border-bottom: 1px solid #666;
+	}
+h2 {
+	font: bold 16px/1em "Arial", "Helvetica", sans-serif;
+	border-bottom: 1px dashed #666;
+	}
+h3 {
+	font: bold 14px/1em "Arial", "Helvetica", sans-serif;
+	}
+h4 {
+	font: bold 12px/.8em "Arial", "Helvetica", sans-serif;
+	margin: 12px 0px 0px 0px;
+	padding: 0px;
+	}
+ul li {
+	margin: 6px 0px;
+	}
+ul li p {
+	margin: 0px 0px 10px 0px;
+	}
+</style>
+
+</head>
+
+<body>
+<h1>LSculpt Help</h1>
+
+<h2>Overall Use</h2>
+
+<p>To use LSculpt, you first need some kind of 3D mesh.  LSculpt works with OBJ, STL and PLY.</p>
+
+<ul>
+  <li>Use 'File -> Import 3D File... to import your mesh.</li>
+  <li>Make any number of changes using the various controls in the LSculpt window, then click 'Update Preview' to see the results of your changes.</li>
+  <li>The model preview window is fully interactive. Click & drag with your mouse to rotate the model.  Right click and drag to zoom in & out.</li>
+  <li>When you are happy with your model, click 'File -> Save LDraw file As' to create an LDraw file of your finished LEGO model.</li>
+</ul>
+
+<h2>Individual Controls</h2>
+
+<p>Click on a control to see what it does.</p>
+
+<map name="screenshot">
+  <area shape="rect" coords="49,91,221,116" href="#units" alt="Units" />
+  <area shape="rect" coords="43,121,216,217" href="#distance" alt="Distance to offset origin" />
+  <area shape="rect" coords="61,219,207,240" href="#re-center" alt="Re-center Mesh at Origin" />
+  <area shape="rect" coords="228,83,402,164" href="#up-drection" alt="Up Direction &amp; Rotation" />
+  <area shape="rect" coords="226,170,402,250" href="#scaling" alt="Model Scale" />
+  <area shape="rect" coords="231,186,394,214" href="#max-size" alt="Max Size" />
+  <area shape="rect" coords="232,212,393,237" href="#scale-factor" alt="Scale Factor" />
+  <area shape="rect" coords="32,288,298,315" href="#lego-part" alt="Lego Part" />
+  <area shape="rect" coords="31,316,299,343" href="#part-color" alt="Part Color" />
+  <area shape="rect" coords="31,343,297,367" href="#min-base" alt="Minimum Base Studs Up" />
+  <area shape="rect" coords="32,370,287,393" href="#show" alt="Show Part, Mesh, Grid" />
+  <area shape="rect" coords="302,279,397,301" href="#empty" alt="Empty Shell" />
+  <area shape="rect" coords="302,302,398,325" href="#studs" alt="Studs Up" />
+  <area shape="rect" coords="300,326,401,348" href="#detail" alt="Highest Detail" />
+  <area shape="rect" coords="299,348,400,373" href="#easiest" alt="Easiest to Build" />
+  <area shape="rect" coords="317,402,410,432" href="#update" alt="Update Preview" />
+</map>
+
+<img src="images/screenshot.png" alt="LSculpt Screenshot" height="472" width="840" usemap="#screenshot" />
+
+<h3>Mesh Size & Position</h3>
+
+<ul>
+  <li><a name="units"></a>
+  <h4>Units</h4>
+  <p>This option controls how other controls measure sizes in the imported 3D mesh.
+  This affects 'Distance to offset origin', and 'Scaling: Max Size & Scale Factor',
+  which control the final, physical size of the LEGO model that LSculpt creates.
+  Options are 'Stud', 'LDraw Units', or some measure of distance (milimeters, inches, etc).</p>
+  <p>For example, setting 'Units' to 'Stud' and 'Max Size' to 32 will give you a final model less than 32 studs long overall.</p>
+  </li>
+  
+  <li><a name="distance"></a>
+  <h4>Distance to offset origin</h4>
+  <p>These controls allow you to move the center of the imported mesh.
+  This is useful if you want LSculpt to add an extra layer or two of plates in one particular direction.</p>
+  </li>
+
+  <li><a name="re-center"></a>
+  <h4>Re-center Mesh at Origin</h4>
+  <p>This option is used together with the 'Distance to offset origin' options, 
+  and will move the imported mesh back to the center of LSculpt's world.</p>
+  </li>
+
+  <li><a name="up-direction"></a>
+  <h4>Up Direction & Rotation</h4>
+  <p>These control which direction the imported mesh is facing.</p>
+    <ul>
+      <li>Use 'Y' or 'Z' to tell LSculpt which direction in the imported mesh is Up.</li>
+      <li>Use 'Rotate Mesh' to rotate the mesh around the chosen Up direction.  
+    This changes how LSculpt lines up the layers of LEGO plates with your mesh.</li>
+    </ul>
+  </li>
+
+  <li><a name="scaling"></a>
+  <h4>Scaling</h4>
+  <p>These control how many studs LSculpt will use to build the LEGO model.</p>
+    <ul>
+      <li><a name="max-size"></a>
+      <h4>Max Size</h4>
+      <p>Use this if you want to force the overall model to be under a specific size.
+      The Max Size is measured in the units set in the 'Units' dropdown box.</p></li>
+        
+      <li><a name="scale-factor"></a>
+      <h4>Scale Factor</h4>
+      <p>This is handy if you don't know what final model size you want, and you just
+        want to shrink or enlargen your mesh directly.</p></li>
+    </ul>
+  </li>
+</ul>
+
+<h3>LDraw Output Options</h3>
+<ul>
+  <li><a name="lego-part"></a>
+  <h4>LEGO Part</h4>
+  <p>This controls what LEGO part LSculpt will build your model out of.</p>  
+  <p>Options are:</p>
+    <ul>
+      <li>1x1 plate</li>
+      <li>1x1 tile</li>
+      <li>simple 1x1 plate</li>
+      <li>simple 1x1 tile</li>
+    </ul>
+  <p>The first two options are high quality, accurate versions of their respective parts.
+  The last two are greatly simplified versions of their parts: use either of these
+  if LSculpt is running slow for you. You can set this to 'simple 1x1 tile', tweak your 
+  model until you are satisfied, then set it to 1x1 plate and export to LDraw for a nice
+  finished product.</p>
+  </li>
+  
+  <li><a name="part-color"></a>
+  <h4>Part Color</h4>
+  <p>This controls how LSculpt chooses colors for your LEGO model. Note that
+  it's not yet possible to choose specific colors directly; this control is useful as
+  a building aid, to help you see how your model is built.</p>
+  <p>Options are:</p>
+    <ul>
+      <li><a name="all"></a>
+      <h4>All the same Color</h4>
+      <p>Color everything light bley.</p></li>
+      
+      <li><a name="layer"></a>
+      <h4>Color by Layer</h4>
+      <p>Change the color of each successive stack of plates. This is useful 
+      to highlight the differences between otherwise similar stacks of plates.</p></li>
+      
+      <li><a name="orientation"></a>
+      <h4>Color by Orientation</h4>
+      <p>Color all plates that are facing the same direction in the same color.
+      This is useful to get an overall sense of the different big chunks your model is made up of.</p></li>
+    </ul>
+  </li>
+  
+  <li><a name="min-base"></a>
+  <h4>Min Base Studs Up</h4>
+  <p>This tells LSculpt to make sure that a specific number of layers on the bottom of 
+your model are facing up.</p>
+      
+  <li><a name="empty"></a>
+  <h4>Empty Shell</h4>
+  <p>This tells LSculpt to only include the topmost plate in each stack of plates in your model.
+  This is useful when you have a mesh with disconnected or overlapping surfaces that otherwise result in lots of artifacts.
+  This can also help increase LSculpt performance, since it doesn't have to render all the plates buried inside your model.</p>
+  </li>
+  
+  <li><a name="studs"></a>
+  <h4>Studs Up only</h4>
+  <p>LSculpt will create a model with all studs facing up.</p>
+
+  <li><a name="detail"></a>
+  <h4>Highest Detail</h4>
+  <p>Allow LSculpt to change plate orientation as much as possible, to get the best possible fit for your mesh.
+This might result in some areas in your model overlapping with other areas.</p>
+
+  <li><a name="easiest"></a>
+  <h4>Easiest to Build</h4>
+  <p>LSculpt will change the orientation of plates less often, to make your model easier to build.</p>
+
+  <li><a name="show"></a>
+  <h4>Show Plates, Show Mesh and Show Grid</h4>
+  <p>These control what LSculpt will include when it is run.</p>
+    <ul>
+      <li>Plates are the final LEGO model, built with the chosen LEGO part.</li>
+      <li>Mesh is your original, imported 3D mesh. Turn this and plates on to see how close LSculpt matched the model to your mesh.</li>
+      <li>Grid is the 3D cube grid that LSculpt created internally to 'slice up' your model. 
+      This gives you an idea of what LSculpt is doing internally.</li>
+    </ul>
+  </li>
+  
+  <li><a name="update"></a>
+  <h4>Update Preview</h4>
+  <p>Click this whenever you want to update the model preview in the right pane, 
+  usually after making some changes to the controls on this panel.</p>
+  
+</ul>
+</body>
+</html>

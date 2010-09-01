@@ -23,7 +23,9 @@
 #include <sstream>
 #include <QDir>
 #include <QFile>
+#include <QURL>
 #include <QWidget>
+#include <QTextBrowser>
 #include <QHBoxLayout>
 #include <QTextEdit>
 #include <QFileDialog>
@@ -48,7 +50,9 @@ LSculptMainWin::LSculptMainWin(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::LSculptMainWin)
 {
-	this->LDVPath = QApplication::applicationDirPath() + "/LDVLib";
+	this->appPath = QApplication::applicationDirPath() + "/";
+	this->LDVPath =  this->appPath + "LDVLib/";
+
 	QDir dir(this->LDVPath);
 	if (!dir.exists())
 	{
@@ -89,7 +93,7 @@ LSculptMainWin::LSculptMainWin(QWidget *parent) :
 	QString title = QString("LSculpt %1 [*]").arg(lsculpt_version);
 	setWindowTitle(title);
 
-	QString iniFile = QString(QApplication::applicationDirPath() + "/LSculpt.ini");
+	QString iniFile = this->appPath + "LSculpt.ini";
 	this->settings = new QSettings(iniFile, QSettings::IniFormat);
 	loadSettings();
 }
@@ -129,7 +133,7 @@ int LSculptMainWin::invokeLSculpt()
 	initProgressDialog();
 	incrProgress("Begin Update");
 
-	QString emptyLDrawFilename = QString(this->LDVPath + "/empty.ldr");
+	QString emptyLDrawFilename = QString(this->LDVPath + "empty.ldr");
 	if (!QFile::exists(emptyLDrawFilename))  // Check if empty file exists - need to give LDView an empty file to begin with
 	{
 		QFile empty(emptyLDrawFilename);
@@ -295,4 +299,12 @@ void LSculptMainWin::saveSettings()
 	settings->setValue("Geometry", QVariant(saveGeometry()));
 	settings->setValue("MainWindow/State", QVariant(saveState()));
 	settings->setValue("LDVWinSize", QVariant(ldvWin->size()));
+}
+
+void LSculptMainWin::showHelpFile()
+{
+	QTextBrowser *tb = new QTextBrowser(0);
+	tb->setSource(QUrl::fromLocalFile(this->appPath + "readme.html"));
+	tb->resize(950, 800);
+	tb->show();
 }

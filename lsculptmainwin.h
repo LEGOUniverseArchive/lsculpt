@@ -46,6 +46,7 @@ private slots:
 	int invokeLSculpt();
 	void import3DMesh();
 	bool exportToLDraw();
+	void showHelpFile();
 
 private:
     Ui::LSculptMainWin *ui;
@@ -54,7 +55,8 @@ private:
 
 	void *pLDV;
 	bool isLoaded;
-        QString LDVPath;
+	QString appPath;
+	QString LDVPath;
 	QSettings *settings;
 
     bool offerSave();
