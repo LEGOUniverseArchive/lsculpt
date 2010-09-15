@@ -113,7 +113,7 @@ int main_wrapper(char *infile, char *outfile, void (*progress_cb)(const char *))
 		if (progress_cb) progress_cb("Partitioning Space");
 		partition_space();
 		if(args.OPTS_MESSAGE==MESSAGE_ALL) cout << now() << "\t: mesh partitioned into " << cubelist.size() << " cubes" << endl;
-		if(args.OPTS_MAXITER >= 0) {
+    if(args.OPTS_MAXITER >= 0 && args.OPTS_PLATES) {
 			if (progress_cb) progress_cb("Computing Normals");
 			compute_cube_normals();
 			if(args.OPTS_MESSAGE==MESSAGE_ALL) cout << now() << "\t: computed initial cube orientations" << endl;
@@ -121,7 +121,7 @@ int main_wrapper(char *infile, char *outfile, void (*progress_cb)(const char *))
 			init_voxels();
 			if(args.OPTS_MESSAGE==MESSAGE_ALL) cout << now() << "\t: surfaces found in " << cubelist.size() << " cubes" << endl;
 		}
-		if(args.OPTS_MAXITER > 0) {
+    if(args.OPTS_MAXITER > 0 && args.OPTS_PLATES) {
 			identify_neighbors();
 			initialize_energy();
 			if(args.OPTS_MESSAGE==MESSAGE_ALL) cout << now() << "\t: optimization started" << endl;
