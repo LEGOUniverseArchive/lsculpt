@@ -93,6 +93,8 @@ LSculptMainWin::LSculptMainWin(QWidget *parent) :
 	QString title = QString("LSculpt %1 [*]").arg(lsculpt_version);
 	setWindowTitle(title);
 
+	this->defaults = getDefaultArgumentSet();
+
 	QString iniFile = this->appPath + "LSculpt.ini";
 	this->settings = new QSettings(iniFile, QSettings::IniFormat);
 	loadSettings();
@@ -163,7 +165,7 @@ int LSculptMainWin::invokeLSculpt()
 	cerr.rdbuf(&buffer);
 
 	// Build set of arguments from UI, pass to LSculpt, then run LSculpt
-	ArgumentSet args = panel->getArguments(infile);
+	ArgumentSet args = panel->getArguments(this->defaults, infile);
 	setArgumentSet(args);
 	setOutFile(args, infile, outfile);
 	int res = main_wrapper(infile, outfile, incrProgress);
@@ -289,16 +291,42 @@ void LSculptMainWin::changeEvent(QEvent *e)
 
 void LSculptMainWin::loadSettings()
 {
-	restoreGeometry(settings->value("Geometry").toByteArray());
+	defaults.OPTS_COLOR_NONE = settings->value("LDrawColors/COLOR_NONE", defaults.OPTS_COLOR_NONE).toInt();
+	defaults.OPTS_COLOR_0 = settings->value("LDrawColors/COLOR_0", defaults.OPTS_COLOR_0).toInt();
+	defaults.OPTS_COLOR_1 = settings->value("LDrawColors/COLOR_1", defaults.OPTS_COLOR_1).toInt();
+	defaults.OPTS_COLOR_2 = settings->value("LDrawColors/COLOR_2", defaults.OPTS_COLOR_2).toInt();
+	defaults.OPTS_COLOR_3 = settings->value("LDrawColors/COLOR_3", defaults.OPTS_COLOR_3).toInt();
+	defaults.OPTS_COLOR_4 = settings->value("LDrawColors/COLOR_4", defaults.OPTS_COLOR_4).toInt();
+	defaults.OPTS_COLOR_5 = settings->value("LDrawColors/COLOR_5", defaults.OPTS_COLOR_5).toInt();
+
+	defaults.OPTS_COLOR_PLATES = settings->value("LDrawColors/COLOR_PLATES", defaults.OPTS_COLOR_PLATES).toInt();
+	defaults.OPTS_COLOR_MESH = settings->value("LDrawColors/COLOR_MESH", defaults.OPTS_COLOR_MESH).toInt();
+	defaults.OPTS_COLOR_GRID = settings->value("LDrawColors/COLOR_GRID", defaults.OPTS_COLOR_GRID).toInt();
+	
+	restoreGeometry(settings->value("MainWindow/Geometry").toByteArray());
 	restoreState(settings->value("MainWindow/State").toByteArray());
-	ldvWin->resize(settings->value("LDVWinSize", QSize(400, 320)).toSize());
+	ldvWin->resize(settings->value("MainWindow/LDVWinSize", QSize(400, 320)).toSize());
 }
 
 void LSculptMainWin::saveSettings()
 {
-	settings->setValue("Geometry", QVariant(saveGeometry()));
+	ArgumentSet args = panel->getArguments(this->defaults);  // Pull arguments from panel so that, in the future, can save any settings made by user
+
+	settings->setValue("LDrawColors/COLOR_NONE", args.OPTS_COLOR_NONE);
+	settings->setValue("LDrawColors/COLOR_0", args.OPTS_COLOR_0);
+	settings->setValue("LDrawColors/COLOR_1", args.OPTS_COLOR_1);
+	settings->setValue("LDrawColors/COLOR_2", args.OPTS_COLOR_2);
+	settings->setValue("LDrawColors/COLOR_3", args.OPTS_COLOR_3);
+	settings->setValue("LDrawColors/COLOR_4", args.OPTS_COLOR_4);
+	settings->setValue("LDrawColors/COLOR_5", args.OPTS_COLOR_5);
+
+	settings->setValue("LDrawColors/COLOR_PLATES", QVariant(args.OPTS_COLOR_PLATES));
+	settings->setValue("LDrawColors/COLOR_MESH", QVariant(args.OPTS_COLOR_MESH));
+	settings->setValue("LDrawColors/COLOR_GRID", QVariant(args.OPTS_COLOR_GRID));
+
+	settings->setValue("MainWindow/Geometry", QVariant(saveGeometry()));
 	settings->setValue("MainWindow/State", QVariant(saveState()));
-	settings->setValue("LDVWinSize", QVariant(ldvWin->size()));
+	settings->setValue("MainWindow/LDVWinSize", QVariant(ldvWin->size()));
 }
 
 void LSculptMainWin::showHelpFile()

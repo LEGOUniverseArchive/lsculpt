@@ -142,6 +142,11 @@ float now()
 	return float(clock()) / CLK_TCK;
 }
 
+ArgumentSet getDefaultArgumentSet()
+{
+	return defaultArgs;
+}
+
 void setArgumentSet(ArgumentSet localArgs)
 {
 	args = localArgs;
@@ -321,7 +326,7 @@ void setFileFormat(ArgumentSet *localArgs, char *in)
 
 	// if no input format specified, get it from the file extension
 	if(!localArgs->OPTS_FORMAT) {
-    strcpy(arg,strrchr(in,'.') + 1);
+		strcpy(arg,strrchr(in,'.') + 1);
 		strupper(arg);
 		if (strcmp(arg,"PLY")==0)
 			localArgs->OPTS_FORMAT = FORMAT_PLY;
@@ -1225,35 +1230,35 @@ bool ldraw_plates(ofstream &ldr, char *name)
     strcpy(o, (*c).second.isorientneg() ?
               "0 1 0 -1 0 0 0 0 1" :
               "0 -1 0 1 0 0 0 0 1");
-            color = (*c).second.isorientneg() ? COLOR_1 : COLOR_0;
+            color = (*c).second.isorientneg() ? args.OPTS_COLOR_1 : args.OPTS_COLOR_0;
             break;
           case 1:
     strcpy(o, (*c).second.isorientneg() ?
               "-1 0 0 0 -1 0 0 0 1" :
               "1 0 0 0 1 0 0 0 1");
-            color = (*c).second.isorientneg() ? COLOR_3 : COLOR_2;
+            color = (*c).second.isorientneg() ? args.OPTS_COLOR_3 : args.OPTS_COLOR_2;
             break;
           case 2:
     strcpy(o, (*c).second.isorientneg() ?
               "1 0 0 0 0 1 0 -1 0" :
               "1 0 0 0 0 -1 0 1 0");
-            color = (*c).second.isorientneg() ? COLOR_5 : COLOR_4;
+            color = (*c).second.isorientneg() ? args.OPTS_COLOR_5 : args.OPTS_COLOR_4;
             break;
         }
 
         switch (args.OPTS_COLOR) {
           case COLOR_OFF:
           default:
-            color = COLOR_NONE;
+            color = args.OPTS_COLOR_NONE;
             break;
           case COLOR_LAY:
             switch (i % h) {
-              case 0: color = COLOR_0; break;
-              case 1: color = COLOR_1; break;
-              case 2: color = COLOR_2; break;
-              case 3: color = COLOR_3; break;
+              case 0: color = args.OPTS_COLOR_0; break;
+              case 1: color = args.OPTS_COLOR_1; break;
+              case 2: color = args.OPTS_COLOR_2; break;
+              case 3: color = args.OPTS_COLOR_3; break;
               default:
-              case 4: color = COLOR_4; break;
+              case 4: color = args.OPTS_COLOR_4; break;
             }
             break;
           case COLOR_DIR:
@@ -1306,11 +1311,11 @@ bool save_ldraw(char *fname)
       ldr << "0 FILE " << qPrintable(name) << ".ldr" << endl;
       ldr << "0 BFC CERTIFY" << endl;
       if (args.OPTS_PLATES)
-        ldr << "1 " << COLOR_PLATES << " 0 0 0 1 0 0 0 1 0 0 0 1 " << qPrintable(name) << "_plates.ldr" << endl;
+        ldr << "1 " << args.OPTS_COLOR_PLATES << " 0 0 0 1 0 0 0 1 0 0 0 1 " << qPrintable(name) << "_plates.ldr" << endl;
       if (args.OPTS_GRID)
-        ldr << "1 " << COLOR_GRID << " 0 0 0 1 0 0 0 1 0 0 0 1 " << qPrintable(name) << "_grid.ldr" << endl;
+        ldr << "1 " << args.OPTS_COLOR_GRID << " 0 0 0 1 0 0 0 1 0 0 0 1 " << qPrintable(name) << "_grid.ldr" << endl;
       if (args.OPTS_MESH)
-        ldr << "1 " << COLOR_MESH << " 0 0 0 1 0 0 0 1 0 0 0 1 " << qPrintable(name) << "_mesh.ldr" << endl;
+        ldr << "1 " << args.OPTS_COLOR_MESH << " 0 0 0 1 0 0 0 1 0 0 0 1 " << qPrintable(name) << "_mesh.ldr" << endl;
       ldr << "0" << endl;
     }
 

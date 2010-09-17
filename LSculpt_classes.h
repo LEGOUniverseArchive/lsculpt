@@ -77,18 +77,6 @@ using namespace std;
 
 #define GRID_PN       "GRIDBOX.DAT"
 #define LDR_PREC      3
-#define COLOR_PLATES  16
-#define COLOR_MESH    9
-#define COLOR_GRID    10
-
-// LDraw colors
-#define COLOR_NONE 16
-#define COLOR_0  7  // Gray
-#define COLOR_1  4  // Red
-#define COLOR_2  14 // Yellow
-#define COLOR_3  15 // White
-#define COLOR_4  1  // Blue
-#define COLOR_5  2  // Green
 
 //
 // ===== Argument definitions ======
@@ -134,9 +122,22 @@ struct ArgumentSet {
 	int           OPTS_MAXITER; // maximum optimization iterations
 	unsigned char OPTS_PART;    // part to use for output
 	unsigned char OPTS_COLOR;   // color scheme for output
-  bool          OPTS_GRID;    // show the grid (space partitioning cubes) in output
-  bool          OPTS_MESH;    // show the input mesh in output
-  bool          OPTS_PLATES;  // show the result in output
+	bool          OPTS_GRID;    // show the grid (space partitioning cubes) in output
+	bool          OPTS_MESH;    // show the input mesh in output
+	bool          OPTS_PLATES;  // show the result in output
+
+	int           OPTS_COLOR_PLATES;
+	int           OPTS_COLOR_MESH;
+	int           OPTS_COLOR_GRID;
+	
+	// LDraw colors
+	int           OPTS_COLOR_NONE;
+	int           OPTS_COLOR_0;
+	int           OPTS_COLOR_1;
+	int           OPTS_COLOR_2;
+	int           OPTS_COLOR_3;
+	int           OPTS_COLOR_4;
+	int           OPTS_COLOR_5;
 
 	// Energy functional weights for cube optimization
 	double OP_ORN;  // Weight of orientation with respect to cube's average normal
@@ -166,9 +167,22 @@ static const ArgumentSet defaultArgs = {
 	OPTIM_MAX,   // OPTS_MAXITER
 	0,           // OPTS_PART
 	COLOR_OFF,   // OPTS_COLOR
-  false,       // OPTS_GRID
-  false,       // OPTS_MESH
-  true,        // OPTS_PLATES
+	false,       // OPTS_GRID
+	false,       // OPTS_MESH
+	true,        // OPTS_PLATES
+
+	16,          // OPTS_COLOR_PLATES
+	9,           // OPTS_COLOR_MESH
+	10,          // OPTS_COLOR_GRID
+	
+	16,          // OPTS_COLOR_NONE
+	7,           // OPTS_COLOR_0 - Gray
+	4,           // OPTS_COLOR_1 - Red
+	14,          // OPTS_COLOR_2 - Yellow
+	15,          // OPTS_COLOR_3 - White
+	1,           // OPTS_COLOR_4 - Blue
+	2,           // OPTS_COLOR_5 - Green
+
 	0.25,        // OP_ORN
 	0.25,        // OP_DIR
 	0.50,        // OP_NBR

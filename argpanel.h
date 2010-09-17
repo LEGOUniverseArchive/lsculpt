@@ -31,7 +31,7 @@ class ArgPanel : public QWidget {
 public:
     ArgPanel(QWidget *parent = 0);
     ~ArgPanel();
-	ArgumentSet getArguments(char *infile);
+	ArgumentSet getArguments(ArgumentSet defaults, char *infile = NULL);
 
 signals:
     void runLSculptBtnClicked();

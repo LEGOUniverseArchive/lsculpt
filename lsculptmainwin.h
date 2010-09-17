@@ -51,6 +51,7 @@ private slots:
 private:
     Ui::LSculptMainWin *ui;
     ArgPanel *panel;
+    ArgumentSet defaults;  // Local copy of default arguments, which we can munge through INI file
 	QWidget *ldvWin;
 
 	void *pLDV;

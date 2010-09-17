@@ -50,6 +50,9 @@ void setOutFile(ArgumentSet localArgs, char *in, char *out);
 // Setting studs up base argument isn't a simple set, so wrap it
 void setStudsUpBaseArg(ArgumentSet *localArgs, int value);
 
+// Keep default argument set inside LSculpt engine, and access it with this
+ArgumentSet getDefaultArgumentSet();
+
 // Allow global LSculpt argument set to be set elsewhere
 void setArgumentSet(ArgumentSet args);
 

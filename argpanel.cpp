@@ -37,7 +37,6 @@ ArgPanel::ArgPanel(QWidget *parent) :
 	ui->unitsCombo->setItemData(4, QVariant(UNIT_LDU_M));
 	ui->unitsCombo->setItemData(5, QVariant(UNIT_LDU_IN));
 	ui->unitsCombo->setItemData(6, QVariant(UNIT_LDU_FT));
-
 }
 
 ArgPanel::~ArgPanel()
@@ -45,16 +44,17 @@ ArgPanel::~ArgPanel()
     delete ui;
 }
 
-ArgumentSet ArgPanel::getArguments(char *infile)
+ArgumentSet ArgPanel::getArguments(ArgumentSet defaults, char *infile)
 {
-	ArgumentSet args = defaultArgs;  // Start with default argument set
+	ArgumentSet args = defaults;  // Start with default argument set
 
 	// Set each argument based on corresponding UI widget.  Order matches load_options.
 	args.OPTS_COLOR = ui->colorCombo->currentIndex();
 	args.OPTS_PART = ui->partCombo->currentIndex();
 
 	// TODO: need UI widget for forcing a mesh file format
-	setFileFormat(&args, infile);
+	if (infile != NULL)
+		setFileFormat(&args, infile);
 
 	args.OPTS_SCALE *= ui->unitsCombo->itemData(ui->unitsCombo->currentIndex()).toDouble();
 
