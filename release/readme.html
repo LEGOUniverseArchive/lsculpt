@@ -49,7 +49,7 @@ ul li p {
 <ul>
   <li>Use 'File -> Import 3D File... to import your mesh.</li>
   <li>Make any number of changes using the various controls in the LSculpt window, then click 'Update Preview' to see the results of your changes.</li>
-  <li>The model preview window is fully interactive. Click & drag with your mouse to rotate the model.  Right click and drag to zoom in & out.</li>
+  <li>The model preview window is fully interactive. Click & drag with your mouse to rotate the model.  Use the mouse wheel or right click and drag to zoom in & out.</li>
   <li>When you are happy with your model, click 'File -> Save LDraw file As' to create an LDraw file of your finished LEGO model.</li>
 </ul>
 
@@ -76,39 +76,40 @@ ul li p {
   <area shape="rect" coords="317,402,410,432" href="#update" alt="Update Preview" />
 </map>
 
-<img src="screenshot.png" alt="LSculpt Screenshot" height="472" width="840" usemap="#screenshot" />
+<img src="screenshot.png" alt="LSculpt Screenshot" height="472" width="840" usemap="#screenshot" border="0" />
 
 <h3>Mesh Size & Position</h3>
 
 <ul>
   <li><a name="units"></a>
   <h4>Units</h4>
-  <p>This option controls how other controls measure sizes in the imported 3D mesh.
-  This affects 'Distance to offset origin', and 'Scaling: Max Size & Scale Factor',
-  which control the final, physical size of the LEGO model that LSculpt creates.
-  Options are 'Stud', 'LDraw Units', or some measure of distance (milimeters, inches, etc).</p>
-  <p>For example, setting 'Units' to 'Stud' and 'Max Size' to 32 will give you a final model less than 32 studs long overall.</p>
+  <p>This options selects the units of measurement for the input mesh.
+  This also sets the units for the 'Distance to offset origin' and for the 'Model Scale'.
+  Options are 'Stud', the width of a 1x1 Lego brick (approximately 8mm);
+  'LDraw Unit', the scale used in LDraw files (approximately 0.4mm); or a
+  common metric or imperial measure of distance.</p>
+  <p>For example, setting 'Units' to 'Stud' and 'Max Size' to 32 will give you a final model which measures 32 stud in its longest dimension.</p>
   </li>
   
   <li><a name="distance"></a>
   <h4>Distance to offset origin</h4>
   <p>These controls allow you to move the center of the imported mesh.
-  This is useful if you want LSculpt to add an extra layer or two of plates in one particular direction.</p>
+  This is useful if you adjust how the grid (and the plates in the model) lines up with some feature in the mesh.</p>
+  <p>The offset is relative to the original mesh before any scaling.</p>
   </li>
 
   <li><a name="re-center"></a>
   <h4>Re-center Mesh at Origin</h4>
-  <p>This option is used together with the 'Distance to offset origin' options, 
-  and will move the imported mesh back to the center of LSculpt's world.</p>
+  <p>This option will move the imported mesh to the center of LSculpt's world.</p> 
   </li>
 
   <li><a name="up-direction"></a>
   <h4>Up Direction & Rotation</h4>
   <p>These control which direction the imported mesh is facing.</p>
     <ul>
-      <li>Use 'Y' or 'Z' to tell LSculpt which direction in the imported mesh is Up.</li>
-      <li>Use 'Rotate Mesh' to rotate the mesh around the chosen Up direction.  
-    This changes how LSculpt lines up the layers of LEGO plates with your mesh.</li>
+      <li>Use 'Y' or 'Z' to tell LSculpt which direction in the imported mesh is Up. If your model appears to be lying on its side, try changing the 'Up' direction.</li>
+      <li>Use 'Rotate Mesh' to rotate the mesh around the chosen Up direction. This changes how LSculpt lines up the layers of LEGO plates with your mesh.</li>
+    </li>
     </ul>
   </li>
 
@@ -123,8 +124,8 @@ ul li p {
         
       <li><a name="scale-factor"></a>
       <h4>Scale Factor</h4>
-      <p>This is handy if you don't know what final model size you want, and you just
-        want to shrink or enlargen your mesh directly.</p></li>
+      <p>This is handy if you know the size of the imported mesh, and you just
+        want to shrink or enlargen the mesh directly.</p></li>
     </ul>
   </li>
 </ul>
@@ -157,7 +158,7 @@ ul li p {
     <ul>
       <li><a name="all"></a>
       <h4>All the same Color</h4>
-      <p>Color everything light bley.</p></li>
+      <p>Color everything the default LDraw color.  In LSculpt, this will show up as light gray.</p></li>
       
       <li><a name="layer"></a>
       <h4>Color by Layer</h4>
@@ -174,7 +175,7 @@ ul li p {
   <li><a name="min-base"></a>
   <h4>Min Base Studs Up</h4>
   <p>This tells LSculpt to make sure that a specific number of layers on the bottom of 
-your model are facing up.</p>
+your model are facing up rather than down.</p>
       
   <li><a name="empty"></a>
   <h4>Empty Shell</h4>
@@ -190,11 +191,12 @@ your model are facing up.</p>
   <li><a name="detail"></a>
   <h4>Highest Detail</h4>
   <p>Allow LSculpt to change plate orientation as much as possible, to get the best possible fit for your mesh.
-This might result in some areas in your model overlapping with other areas.</p>
+This might result in a model with pieces that are impossible to connect together.</p>
 
   <li><a name="easiest"></a>
   <h4>Easiest to Build</h4>
-  <p>LSculpt will change the orientation of plates less often, to make your model easier to build.</p>
+  <p>LSculpt will optimize the orientation of plates so that neighboring plates are more likely to face the same direction.  Hopefully,
+  this will make your model easier to build.</p>
 
   <li><a name="show"></a>
   <h4>Show Plates, Show Mesh and Show Grid</h4>
@@ -202,8 +204,8 @@ This might result in some areas in your model overlapping with other areas.</p>
     <ul>
       <li>Plates are the final LEGO model, built with the chosen LEGO part.</li>
       <li>Mesh is your original, imported 3D mesh. Turn this and plates on to see how close LSculpt matched the model to your mesh.</li>
-      <li>Grid is the 3D cube grid that LSculpt created internally to 'slice up' your model. 
-      This gives you an idea of what LSculpt is doing internally.</li>
+      <li>Grid is the 3D cube grid that LSculpt created internally to 'slice up' your model.  You can turn on the grid and the mesh only
+       to line up the grid with specific features on the mesh using the rotation, scale, and offset options.</li>
     </ul>
   </li>
   
