@@ -196,7 +196,7 @@ int LSculptMainWin::invokeLSculpt()
 	setWindowModified(true);
 	progress->setValue(progress->maximum());  // Ensure progress goes away
 	if (statusBar()->currentMessage().isEmpty())
-		statusBar()->showMessage("Model loaded succesfully");
+		statusBar()->showMessage("Model loaded successfully");
 	return EXIT_SUCCESS;
 }
 
