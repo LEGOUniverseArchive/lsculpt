@@ -4,30 +4,42 @@
 # QT += opengl
 TARGET = LSculpt
 TEMPLATE = app
-LIBS += -L./ \
-    -lLDVLib
 
 # Comment this out to build UI version of LSculpt
-# CONFIG += console
+#CONFIG += console
+
 console:DEFINES += LSCULPT_CONSOLE
-SOURCES += main.cpp \
-    LSculpt.cpp \
+
+QMAKE_LFLAGS += -static-libgcc
+
+SOURCES += LSculpt.cpp \
     rply.c \
-    lsculptmainwin.cpp \
-    argpanel.cpp \
     obj_parser.cpp
+
 HEADERS += rply.h \
     LSculpt_functions.h \
     LSculpt_classes.h \
     smVector.h \
-    lsculptmainwin.h \
-    argpanel.h \
     obj_parser.hpp \
     obj.hpp \
     obj_config.hpp \
     LSculpt_obj.h \
-    LDVLib.h
-FORMS += lsculptmainwin.ui \
-    argpanel.ui \
-    advanced_widgets.ui
-RC_FILE = LSculpt.rc
+
+!console {
+
+	LIBS += -L./ \
+		-lLDVLib
+
+	SOURCES += main.cpp \
+		lsculptmainwin.cpp \
+	    argpanel.cpp \
+
+	HEADERS += lsculptmainwin.h \
+	    argpanel.h \
+	    LDVLib.h
+
+	FORMS += lsculptmainwin.ui \
+		argpanel.ui \
+		advanced_widgets.ui
+	RC_FILE = LSculpt.rc
+}
