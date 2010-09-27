@@ -173,7 +173,7 @@ static const ArgumentSet defaultArgs = {
 
 	16,          // OPTS_COLOR_PLATES
 	9,           // OPTS_COLOR_MESH
-	10,          // OPTS_COLOR_GRID
+  47,          // OPTS_COLOR_GRID
 	
 	16,          // OPTS_COLOR_NONE
 	7,           // OPTS_COLOR_0 - Gray

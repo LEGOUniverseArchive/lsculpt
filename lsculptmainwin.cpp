@@ -44,7 +44,7 @@
 
 using namespace std;
 
-#define lsculpt_version 0.4
+#define lsculpt_version "0.5.0"
 
 LSculptMainWin::LSculptMainWin(QWidget *parent) :
 	QMainWindow(parent),
@@ -87,7 +87,7 @@ LSculptMainWin::LSculptMainWin(QWidget *parent) :
 	pLDV = LDVInit(ldvWin->winId());
 	LDVGLInit(pLDV);
 
-	statusBar()->showMessage("Welcome to LSculpt's new, partially finished UI");
+  statusBar()->showMessage("Adjust the settings or import a 3D file to get started...");
 	setCentralWidget(center);
 	setWindowModified(false);
 	QString title = QString("LSculpt %1 [*]").arg(lsculpt_version);

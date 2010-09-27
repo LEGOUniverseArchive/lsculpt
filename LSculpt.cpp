@@ -445,11 +445,11 @@ bool load_triangles_ply(char *fname)
 	// call face input callback function for each list of faces
 	ntriangles = ply_set_read_cb(ply, "face", "vertex_indices", myply_face_cb, NULL, 0);
 
-	if (nvertices <= 0 || ntriangles <= 0)
-		cerr << "WARNING: No polygons found in Mesh file.\n";
-
 	// call face input callback function for each list triangle strip
-	ply_set_read_cb(ply, "tristrips", "vertex_indices", myply_face_cb, NULL, 1);
+  ntriangles += ply_set_read_cb(ply, "tristrips", "vertex_indices", myply_face_cb, NULL, 1);
+
+  if (nvertices <= 0 || ntriangles <= 0)
+    cerr << "WARNING: No polygons found in Mesh file.\n";
 
 	// read the actual file in
 	if (!ply_read(ply))
@@ -689,7 +689,7 @@ bool mesh_bounds(SmVector3 &mn, SmVector3 &mx)
 	maxlen = max(sz[0],max(sz[1],sz[2]));
 	if(maxlen / (SPCUBE_WIDTH*args.OPTS_SCALE) > (1 << (sizeof(SpCubeCoord)*CHAR_BIT-1))) {
 		if(args.OPTS_MESSAGE) cerr << "ERROR: The mesh is larger than the maximum allowed stud length." << endl
-			                  << "       Try centering the mesh with option '-c'" << endl;
+                        << "  Try re-centering the mesh at the origin, or check your scale settings" << endl;
 		return false;
 	}
 	// check if the mesh is too big in - direction
@@ -697,7 +697,7 @@ bool mesh_bounds(SmVector3 &mn, SmVector3 &mx)
 	maxlen = -min(sz[0],min(sz[1],sz[2]));
 	if(maxlen / (SPCUBE_WIDTH*args.OPTS_SCALE) > (1 << (sizeof(SpCubeCoord)*CHAR_BIT-1))) {
 		if(args.OPTS_MESSAGE) cerr << "ERROR: The mesh is larger than the maximum allowed stud length." << endl
-			                  << "       Try centering the mesh with option '-c'" << endl;
+                        << "  Try re-centering the mesh at the origin, or check your scale settings"  << endl;
 		return false;
 	}
 

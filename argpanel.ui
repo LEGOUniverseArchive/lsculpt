@@ -161,6 +161,9 @@
       </item>
       <item row="3" column="1">
        <widget class="QCheckBox" name="centerCheck">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
         <property name="toolTip">
          <string>Re-center the Mesh at origin</string>
         </property>
@@ -168,7 +171,7 @@
          <string>Re-center Mesh at Origin</string>
         </property>
         <property name="checked">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -558,7 +561,7 @@
         <string>Highest Detail</string>
        </property>
        <property name="checked">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -569,6 +572,9 @@
        </property>
        <property name="text">
         <string>Easiest to Build</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
