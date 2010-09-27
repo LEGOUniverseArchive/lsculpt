@@ -23,7 +23,7 @@ HEADERS += rply.h \
     obj_parser.hpp \
     obj.hpp \
     obj_config.hpp \
-    LSculpt_obj.h \
+    LSculpt_obj.h
 
 !console {
 
@@ -32,14 +32,18 @@ HEADERS += rply.h \
 
 	SOURCES += main.cpp \
 		lsculptmainwin.cpp \
-	    argpanel.cpp \
+		argpanel.cpp \
+		aboutdialog.cpp
 
 	HEADERS += lsculptmainwin.h \
-	    argpanel.h \
+		argpanel.h \
+		aboutdialog.h \
 	    LDVLib.h
 
 	FORMS += lsculptmainwin.ui \
 		argpanel.ui \
+		aboutdialog.ui \
 		advanced_widgets.ui
+
 	RC_FILE = LSculpt.rc
 }

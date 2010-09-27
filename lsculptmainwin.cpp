@@ -31,6 +31,7 @@
 #include <QFileDialog>
 #include <QByteArray>
 #include <QProgressDialog>
+#include <QDialog>
 #include <QMessageBox>
 #include <QCloseEvent>
 #include <QApplication>
@@ -39,6 +40,7 @@
 #include "lsculptmainwin.h"
 #include "ui_lsculptmainwin.h"
 #include "argpanel.h"
+#include "aboutdialog.h"
 
 #include "LDVLib.h"
 
@@ -310,6 +312,17 @@ void LSculptMainWin::loadSettings()
 
 void LSculptMainWin::saveSettings()
 {
+
+//  Sample code to write an array to .ini file
+//	int colors[5] = {1,2,3,4,5};
+//	
+//	settings->beginWriteArray("LDrawColorArray");
+//	for (int i = 0; i < 5; i++) {
+//		settings->setArrayIndex(i);
+//		settings->setValue("color", colors[i]);
+//	}
+//	settings->endArray();
+
 	ArgumentSet args = panel->getArguments(this->defaults);  // Pull arguments from panel so that, in the future, can save any settings made by user
 
 	settings->setValue("LDrawColors/COLOR_NONE", args.OPTS_COLOR_NONE);
@@ -335,4 +348,10 @@ void LSculptMainWin::showHelpFile()
 	tb->setSource(QUrl::fromLocalFile(this->appPath + "readme.html"));
 	tb->resize(950, 800);
 	tb->show();
+}
+
+void LSculptMainWin::showAboutDialog()
+{
+	AboutDialog *d = new AboutDialog(lsculpt_version);
+	d->show();
 }

@@ -37,6 +37,8 @@
      <string>&amp;Help</string>
     </property>
     <addaction name="helpAction"/>
+    <addaction name="separator"/>
+    <addaction name="aboutAction"/>
    </widget>
    <addaction name="menuLSculpt"/>
    <addaction name="menu_Help"/>
@@ -93,7 +95,12 @@
   </action>
   <action name="helpAction">
    <property name="text">
-    <string>Contents</string>
+    <string>&amp;Contents</string>
+   </property>
+  </action>
+  <action name="aboutAction">
+   <property name="text">
+    <string>About &amp;LSculpt...</string>
    </property>
   </action>
  </widget>
@@ -164,10 +171,27 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>aboutAction</sender>
+   <signal>triggered()</signal>
+   <receiver>LSculptMainWin</receiver>
+   <slot>showAboutDialog()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>374</x>
+     <y>204</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>import3DMesh()</slot>
   <slot>exportToLDraw()</slot>
   <slot>showHelpFile()</slot>
+  <slot>showAboutDialog()</slot>
  </slots>
 </ui>

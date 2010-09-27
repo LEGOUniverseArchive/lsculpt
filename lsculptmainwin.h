@@ -47,6 +47,7 @@ private slots:
 	void import3DMesh();
 	bool exportToLDraw();
 	void showHelpFile();
+	void showAboutDialog();
 
 private:
     Ui::LSculptMainWin *ui;
