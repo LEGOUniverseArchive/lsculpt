@@ -58,25 +58,27 @@ ul li p {
 <p>Click on a control to see what it does.</p>
 
 <map name="screenshot">
-  <area shape="rect" coords="49,91,221,116" href="#units" alt="Units" />
-  <area shape="rect" coords="43,121,216,217" href="#distance" alt="Distance to offset origin" />
-  <area shape="rect" coords="61,219,207,240" href="#re-center" alt="Re-center Mesh at Origin" />
-  <area shape="rect" coords="228,83,402,164" href="#up-drection" alt="Up Direction &amp; Rotation" />
-  <area shape="rect" coords="226,170,402,250" href="#scaling" alt="Model Scale" />
-  <area shape="rect" coords="231,186,394,214" href="#max-size" alt="Max Size" />
-  <area shape="rect" coords="232,212,393,237" href="#scale-factor" alt="Scale Factor" />
-  <area shape="rect" coords="32,288,298,315" href="#lego-part" alt="Lego Part" />
-  <area shape="rect" coords="31,316,299,343" href="#part-color" alt="Part Color" />
-  <area shape="rect" coords="31,343,297,367" href="#min-base" alt="Minimum Base Studs Up" />
-  <area shape="rect" coords="32,370,287,393" href="#show" alt="Show Part, Mesh, Grid" />
-  <area shape="rect" coords="302,279,397,301" href="#empty" alt="Empty Shell" />
-  <area shape="rect" coords="302,302,398,325" href="#studs" alt="Studs Up" />
-  <area shape="rect" coords="300,326,401,348" href="#detail" alt="Highest Detail" />
-  <area shape="rect" coords="299,348,400,373" href="#easiest" alt="Easiest to Build" />
-  <area shape="rect" coords="317,402,410,432" href="#update" alt="Update Preview" />
+  <area shape="rect" alt="Units" coords="30,50,216,84" href="#units"/>
+  <area shape="rect" alt="Distance to offset origin" coords="30,86,216,182" href="#distance"/>
+  <area shape="rect" alt="Re-center mesh at origin" coords="30,184,216,206" href="#re-center"/>
+  <area shape="rect" alt="Up direction & rotation" coords="222,50,388,127" href="#up-direction"/>
+  <area shape="rect" alt="Model Scale" coords="222,131,388,150" href="#scaling"/>
+  <area shape="rect" alt="Max Size" coords="222,152,388,176" href="#max-size"/>
+  <area shape="rect" alt="Scale Factor" coords="222,177,388,206" href="#scale-factor"/>
+  <area shape="rect" alt="Lego Part" coords="22,252,290,279" href="#lego-part"/>
+  <area shape="rect" alt="Part Color" coords="22,280,290,307" href="#part-color"/>
+  <area shape="rect" alt="Minimum base studs up" coords="22,308,290,335" href="#min-base"/>
+  <area shape="rect" alt="Show Part, Mesh, Grid" coords="22,336,290,363" href="#show"/>
+  <area shape="rect" alt="Empty shell" coords="292,240,396,265" href="#empty"/><area shape="rect" alt="Studs up" coords="292,266,396,291" href="#studs"/>
+  <area shape="rect" alt="Highest detail" coords="292,292,396,315" href="#detail"/>
+  <area shape="rect" alt="Easiest to build" coords="292,316,396,339" href="#easiest"/>
+  <area shape="rect" alt="Update Preview" coords="300,360,410,404" href="#update"/>
+  <area shape="rect" alt="Preview window" coords="414,22,818,402" href="#preview"/>
+  <area shape="rect" alt="Status bar" coords="0,402,260,430" href="#status"/>
+  <area shape="rect" alt="Resize handle" coords="800,403,828,430" href="#resize"/> 
 </map>
 
-<img src="screenshot.png" alt="LSculpt Screenshot" height="472" width="840" usemap="#screenshot" border="0" />
+<img src="screenshot.png" alt="LSculpt Screenshot" height="430" width="828" usemap="#screenshot" border="0" />
 
 <h3>Mesh Size & Position</h3>
 
@@ -213,6 +215,25 @@ This might result in a model with pieces that are impossible to connect together
   <h4>Update Preview</h4>
   <p>Click this whenever you want to update the model preview in the right pane, 
   usually after making some changes to the controls on this panel.</p>
+
+  <li><a name="preview"></a>
+  <h4>Preview window</h4>
+  <p>Preview of the LEGO model.  Use the mouse to move the image around:
+      <ul>
+      <li>Left-click and drag to spin the model</li>
+      <li>Middle-click (CTRL left-click) and drag to move the model (pan)</li>
+      <li>Right-click and drag to zoom in and out</li>
+      <li>SHIFT left-click and drag to change the lighting</li>
+    </ul>
+  </p>
+
+  <li><a name="status"></a>
+  <h4>Status Bar</h4>
+  <p>Warning and error messages will appear in the status bar as needed.</p>  
+  
+  <li><a name="resize"></a>
+  <h4>Resize Handle</h4>
+  <p>Click and drag the handle to resize the preview window.</p>
   
 </ul>
 </body>

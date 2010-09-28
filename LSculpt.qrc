@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>ls_icon_120.png</file>
+    </qresource>
+</RCC>

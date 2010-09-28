@@ -6,16 +6,12 @@ TARGET = LSculpt
 TEMPLATE = app
 
 # Comment this out to build UI version of LSculpt
-#CONFIG += console
-
+# CONFIG += console
 console:DEFINES += LSCULPT_CONSOLE
-
-QMAKE_LFLAGS += -static-libgcc
-
+# QMAKE_LFLAGS += -static-libgcc
 SOURCES += LSculpt.cpp \
     rply.c \
     obj_parser.cpp
-
 HEADERS += rply.h \
     LSculpt_functions.h \
     LSculpt_classes.h \
@@ -24,26 +20,22 @@ HEADERS += rply.h \
     obj.hpp \
     obj_config.hpp \
     LSculpt_obj.h
-
-!console {
-
-	LIBS += -L./ \
-		-lLDVLib
-
-	SOURCES += main.cpp \
-		lsculptmainwin.cpp \
-		argpanel.cpp \
-		aboutdialog.cpp
-
-	HEADERS += lsculptmainwin.h \
-		argpanel.h \
-		aboutdialog.h \
-	    LDVLib.h
-
-	FORMS += lsculptmainwin.ui \
-		argpanel.ui \
-		aboutdialog.ui \
-		advanced_widgets.ui
-
-	RC_FILE = LSculpt.rc
+!console { 
+    LIBS += -L./ \
+        -lLDVLib
+    SOURCES += main.cpp \
+        lsculptmainwin.cpp \
+        argpanel.cpp \
+        aboutdialog.cpp
+    HEADERS += lsculptmainwin.h \
+        argpanel.h \
+        aboutdialog.h \
+        LDVLib.h
+    FORMS += lsculptmainwin.ui \
+        argpanel.ui \
+        aboutdialog.ui \
+        advanced_widgets.ui
+    RC_FILE = LSculpt.rc
+    RESOURCES += LSculpt.qrc
 }
+

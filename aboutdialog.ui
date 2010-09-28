@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>450</width>
-    <height>250</height>
+    <width>400</width>
+    <height>200</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>450</width>
-    <height>250</height>
+    <width>400</width>
+    <height>200</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>450</width>
+    <width>400</width>
     <height>250</height>
    </size>
   </property>
@@ -28,10 +28,10 @@
   <widget class="QLabel" name="titleLabel">
    <property name="geometry">
     <rect>
-     <x>158</x>
-     <y>20</y>
-     <width>275</width>
-     <height>16</height>
+     <x>139</x>
+     <y>10</y>
+     <width>191</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="font">
@@ -48,8 +48,8 @@
   <widget class="QPushButton" name="closeButton">
    <property name="geometry">
     <rect>
-     <x>361</x>
-     <y>215</y>
+     <x>310</x>
+     <y>170</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -61,8 +61,8 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>14</x>
-     <y>30</y>
+     <x>10</x>
+     <y>10</y>
      <width>120</width>
      <height>120</height>
     </rect>
@@ -71,7 +71,7 @@
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap>ls_icon_120.png</pixmap>
+    <pixmap resource="LSculpt.qrc">:/images/ls_icon_120.png</pixmap>
    </property>
   </widget>
   <widget class="QTextEdit" name="textEdit">
@@ -80,10 +80,10 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>155</x>
-     <y>45</y>
-     <width>280</width>
-     <height>160</height>
+     <x>140</x>
+     <y>35</y>
+     <width>250</width>
+     <height>130</height>
     </rect>
    </property>
    <property name="frameShape">
@@ -97,15 +97,26 @@
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Text line 1&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Text line 2&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Text line 3&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Text&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="textBuild">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>175</y>
+     <width>281</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
    </property>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="LSculpt.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>closeButton</sender>
