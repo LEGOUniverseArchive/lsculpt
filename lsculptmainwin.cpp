@@ -23,7 +23,7 @@
 #include <sstream>
 #include <QDir>
 #include <QFile>
-#include <QURL>
+#include <QUrl>
 #include <QWidget>
 #include <QTextBrowser>
 #include <QHBoxLayout>
@@ -42,7 +42,9 @@
 #include "argpanel.h"
 #include "aboutdialog.h"
 
-#include "LDVLib.h"
+#ifdef _WIN32
+    #include "LDVLib.h"
+#endif
 
 using namespace std;
 
@@ -55,18 +57,21 @@ LSculptMainWin::LSculptMainWin(QWidget *parent) :
 	this->appPath = QApplication::applicationDirPath() + "/";
 	this->LDVPath =  this->appPath + "LDVLib/";
 
-	QDir dir(this->LDVPath);
-	if (!dir.exists())
-	{
-		// Check if LDVLib path exists.  LDVLib path contains empty.ldr, PARTS & P folders and all the parts LSculpt needs.
-		// Might want to check for existence of all necessary folders & parts too, eventually.
-		QMessageBox::warning(this, tr("LSculpt"),
-		                     tr("LSculpt cannot find the LDraw parts it needs to build models.\n"
-		                     "Try reinstalling LSculpt to fix this.\n"
-		                     "LSculpt will now terminate"),
-		QMessageBox::Ok);
-		exit(1);
-	}
+    hideLDView = false;
+    #ifdef _WIN32
+        QDir dir(this->LDVPath);
+        if (!dir.exists())
+        {
+            // Check if LDVLib path exists.  LDVLib path contains empty.ldr, PARTS & P folders and all the parts LSculpt needs.
+            // Might want to check for existence of all necessary folders & parts too, eventually.
+            QMessageBox::warning(this, tr("LSculpt"),
+                                 tr("LSculpt cannot find the LDraw parts it needs to build models.\n"
+                                 "Try reinstalling LSculpt to fix this.\n"
+                                 "LSculpt will now terminate"),
+            QMessageBox::Ok);
+            exit(1);
+        }
+    #endif
 
 	ui->setupUi(this);
 
@@ -75,19 +80,25 @@ LSculptMainWin::LSculptMainWin(QWidget *parent) :
 
 	panel = new ArgPanel(this);
 	connect(panel, SIGNAL(runLSculptBtnClicked()), this, SLOT(invokeLSculpt()));
+    connect(panel, SIGNAL(hideLDViewBtnClicked()), this, SLOT(hidePreview()));
 
 	ldvWin = new QWidget(this);
-	ldvWin->setMinimumWidth(panel->minimumWidth());
+    //#ifdef _WIN32
+        ldvWin->setMinimumWidth(panel->minimumWidth());
+    //#endif
 	ldvWin->setMinimumHeight(panel->minimumHeight());
 
 	layout->addWidget(panel);
-	layout->addWidget(ldvWin);
-	center->setLayout(layout);
+    layout->addWidget(ldvWin);
+    center->setLayout(layout);
 
-	QByteArray ba = this->LDVPath.toAscii();
-	LDVSetLDrawDir(ba.data());
-	pLDV = LDVInit(ldvWin->winId());
-	LDVGLInit(pLDV);
+    QByteArray ba = this->LDVPath.toUtf8();
+
+    #ifdef _WIN32
+        LDVSetLDrawDir(ba.data());
+        pLDV = LDVInit(ldvWin->winId());
+        LDVGLInit(pLDV);
+    #endif
 
   statusBar()->showMessage("Adjust the settings or import a 3D file to get started...");
 	setCentralWidget(center);
@@ -103,8 +114,10 @@ LSculptMainWin::LSculptMainWin(QWidget *parent) :
 }
 
 LSculptMainWin::~LSculptMainWin()
-{
-	LDVDeInit(pLDV);
+{   
+    #ifdef _WIN32
+        LDVDeInit(pLDV);
+    #endif
 	delete ui;
 }
 
@@ -126,6 +139,25 @@ void LSculptMainWin::initProgressDialog()
 	progress->setValue(1);  // Force immediate display
 }
 
+int LSculptMainWin::hidePreview()
+{
+    //QPoint winloc = this->pos();
+    if(hideLDView) {
+        ldvWin->show();
+        this->setMinimumWidth(panel->minimumWidth()+ldvWin->minimumWidth());
+        this->invokeLSculpt();
+    } else {
+        ldvWin->hide();
+        this->setFixedWidth(this->size().width()-ldvWin->width());
+        this->setMinimumWidth(panel->minimumWidth());
+        this->setMaximumWidth(QWIDGETSIZE_MAX);
+    }
+    //this->move(winloc.x()+10,winloc.y()+10);
+    panel->toggleLDViewBtn(hideLDView);
+    hideLDView = !hideLDView;
+    return EXIT_SUCCESS;
+}
+
 int LSculptMainWin::invokeLSculpt()
 {
 	if (this->currentFilename.isEmpty())
@@ -137,7 +169,7 @@ int LSculptMainWin::invokeLSculpt()
 	initProgressDialog();
 	incrProgress("Begin Update");
 
-	QString emptyLDrawFilename = QString(this->LDVPath + "empty.ldr");
+    QString emptyLDrawFilename = QString(this->LDVPath + "empty.ldr");
 	if (!QFile::exists(emptyLDrawFilename))  // Check if empty file exists - need to give LDView an empty file to begin with
 	{
 		QFile empty(emptyLDrawFilename);
@@ -145,16 +177,21 @@ int LSculptMainWin::invokeLSculpt()
 		empty.close();
 	}
 
-	QByteArray ba = emptyLDrawFilename.toAscii();
-	LDVSetFilename(pLDV, ba.data());
-	LDVLoadModel(pLDV, false);
+    QByteArray ba = emptyLDrawFilename.toUtf8();
 
-	// setup options suited for display of LSculpt models:
-	LDVSetSeamWidth(pLDV, 0.0);
-	LDVSetTextureStuds(pLDV, false);
+    #ifdef _WIN32
+    if(!hideLDView) {
+        LDVSetFilename(pLDV, ba.data());
+        LDVLoadModel(pLDV, false);
+
+        // setup options suited for display of LSculpt models:
+        LDVSetSeamWidth(pLDV, 0.0);
+        LDVSetTextureStuds(pLDV, false);
+    }
+    #endif
 
 	// Setup input & output filename
-	ba = this->currentFilename.toAscii();
+    ba = this->currentFilename.toUtf8();
 	char *infile = ba.data();
 	char outfile[80] = "";
 
@@ -186,16 +223,20 @@ int LSculptMainWin::invokeLSculpt()
 		return EXIT_FAILURE;
 	}
 
-	LDVSetFilename(pLDV, outfile);
-	if (isLoaded)
-	{
-		LDVLoadModel(pLDV, false);
-	}
-	else
-	{
-		LDVLoadModel(pLDV, true);
-		isLoaded = true;
-	}
+    #ifdef _WIN32
+    if(!hideLDView) {
+        LDVSetFilename(pLDV, outfile);
+        if (isLoaded)
+        {
+            LDVLoadModel(pLDV, false);
+        }
+        else
+        {
+            LDVLoadModel(pLDV, true);
+            isLoaded = true;
+        }
+    }
+    #endif
 
 	setWindowModified(true);
 	progress->setValue(progress->maximum());  // Ensure progress goes away
@@ -220,7 +261,7 @@ void LSculptMainWin::import3DMesh()
 	if (!offerSave())
 		return;
 
-	QString filename = QFileDialog::getOpenFileName(this, "Import 3D mesh", QString(), "3D mesh files (*.ply *.stl *.obj);;All Files (*)");
+    QString filename = QFileDialog::getOpenFileName(this, "Import 3D mesh", QString(), "3D mesh files (*.ply *.stl *.obj *.PLY *.STL *.OBJ);;All Files (*)");
 	if (!filename.isEmpty())
 	{
 		currentFilename = filename;
@@ -242,7 +283,7 @@ bool LSculptMainWin::exportToLDraw()
 	if (filename.isEmpty())
 		return false;
 
-	QByteArray ba = filename.toAscii();
+    QByteArray ba = filename.toUtf8();
 	char *infile = ba.data();
 
 	if (save_ldraw(infile))
@@ -276,7 +317,9 @@ bool LSculptMainWin::offerSave()
 void LSculptMainWin::resizeEvent(QResizeEvent *e)
 {
 	QMainWindow::resizeEvent(e);
-	LDVSetSize(pLDV, ldvWin->width(), ldvWin->height());
+    #ifdef _WIN32
+        LDVSetSize(pLDV, ldvWin->width(), ldvWin->height());
+    #endif
 }
 
 void LSculptMainWin::changeEvent(QEvent *e)

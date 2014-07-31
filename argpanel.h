@@ -32,9 +32,11 @@ public:
     ArgPanel(QWidget *parent = 0);
     ~ArgPanel();
 	ArgumentSet getArguments(ArgumentSet defaults, char *infile = NULL);
+    void toggleLDViewBtn(bool hide);
 
 signals:
     void runLSculptBtnClicked();
+    void hideLDViewBtnClicked();
 
 public slots:
 

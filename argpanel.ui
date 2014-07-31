@@ -76,8 +76,8 @@
       <rect>
        <x>10</x>
        <y>22</y>
-       <width>162</width>
-       <height>98</height>
+       <width>222</width>
+       <height>123</height>
       </rect>
      </property>
      <layout class="QFormLayout" name="formLayout">
@@ -195,8 +195,8 @@
       <rect>
        <x>6</x>
        <y>19</y>
-       <width>153</width>
-       <height>48</height>
+       <width>183</width>
+       <height>62</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="gridLayout">
@@ -290,8 +290,8 @@
       <rect>
        <x>10</x>
        <y>20</y>
-       <width>145</width>
-       <height>48</height>
+       <width>176</width>
+       <height>57</height>
       </rect>
      </property>
      <layout class="QFormLayout" name="formLayout_2">
@@ -426,8 +426,8 @@
      <rect>
       <x>10</x>
       <y>24</y>
-      <width>257</width>
-      <height>78</height>
+      <width>343</width>
+      <height>95</height>
      </rect>
     </property>
     <layout class="QFormLayout" name="formLayout_4">
@@ -527,8 +527,8 @@
      <rect>
       <x>278</x>
       <y>12</y>
-      <width>97</width>
-      <height>92</height>
+      <width>137</width>
+      <height>108</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -585,8 +585,8 @@
      <rect>
       <x>10</x>
       <y>103</y>
-      <width>261</width>
-      <height>21</height>
+      <width>334</width>
+      <height>24</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -616,6 +616,19 @@
      </item>
     </layout>
    </widget>
+  </widget>
+  <widget class="QPushButton" name="hideLDViewBtn">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>340</y>
+     <width>99</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Hide Preview</string>
+   </property>
   </widget>
  </widget>
  <tabstops>

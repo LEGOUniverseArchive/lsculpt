@@ -44,6 +44,7 @@ protected:
 
 private slots:
 	int invokeLSculpt();
+    int hidePreview();
 	void import3DMesh();
 	bool exportToLDraw();
 	void showHelpFile();
@@ -57,6 +58,7 @@ private:
 
 	void *pLDV;
 	bool isLoaded;
+    bool hideLDView;
 	QString appPath;
 	QString LDVPath;
 	QSettings *settings;

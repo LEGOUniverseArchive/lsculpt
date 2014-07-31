@@ -2,11 +2,14 @@
 # Project created by QtCreator 2010-04-22T21:11:11
 # -------------------------------------------------
 # QT += opengl
+QT += widgets \
+    core
 TARGET = LSculpt
 TEMPLATE = app
 
 # Comment this out to build UI version of LSculpt
 # CONFIG += console
+
 console:DEFINES += LSCULPT_CONSOLE
 # QMAKE_LFLAGS += -static-libgcc
 SOURCES += LSculpt.cpp \
@@ -21,8 +24,10 @@ HEADERS += rply.h \
     obj_config.hpp \
     LSculpt_obj.h
 !console { 
-    LIBS += -L./ \
-        -lLDVLib
+    win32 {
+        LIBS += -L./ \
+            -lLDVLib
+    }
     SOURCES += main.cpp \
         lsculptmainwin.cpp \
         argpanel.cpp \

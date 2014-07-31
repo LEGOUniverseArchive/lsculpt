@@ -29,6 +29,7 @@ ArgPanel::ArgPanel(QWidget *parent) :
 {
     ui->setupUi(this);
     connect(ui->runLSculptBtn, SIGNAL(clicked()), this, SIGNAL(runLSculptBtnClicked()));
+    connect(ui->hideLDViewBtn, SIGNAL(clicked()), this, SIGNAL(hideLDViewBtnClicked()));
 
 	ui->unitsCombo->setItemData(0, QVariant(UNIT_LDU_ST));
 	ui->unitsCombo->setItemData(1, QVariant(1.0));  // LDraw Units, default 1
@@ -42,6 +43,12 @@ ArgPanel::ArgPanel(QWidget *parent) :
 ArgPanel::~ArgPanel()
 {
     delete ui;
+}
+
+void ArgPanel::toggleLDViewBtn(bool hide)
+{
+    if(hide) ui->hideLDViewBtn->setText("Hide Preview");
+    else ui->hideLDViewBtn->setText("Show Preview");
 }
 
 ArgumentSet ArgPanel::getArguments(ArgumentSet defaults, char *infile)

@@ -139,7 +139,7 @@ int main_wrapper(char *infile, char *outfile, void (*progress_cb)(const char *))
 
 float now()
 {
-	return float(clock()) / CLK_TCK;
+    return float(clock()) / CLOCKS_PER_SEC;
 }
 
 ArgumentSet getDefaultArgumentSet()
@@ -424,7 +424,7 @@ bool load_triangles_ply(char *fname)
 	long nvertices, ntriangles;
 
 	// Open PLY file
-	p_ply ply = ply_open(fname, NULL);
+    p_ply ply = ply_open(fname, NULL, NULL, NULL);
 
 	// Error check file
 	if (!ply) {
@@ -1320,15 +1320,15 @@ bool save_ldraw(char *fname)
     }
 
     if (args.OPTS_PLATES) {
-      ldraw_plates(ldr, QString(name).append(multiple_parts ? "_plates.ldr" : ".ldr").toAscii().data());
+      ldraw_plates(ldr, QString(name).append(multiple_parts ? "_plates.ldr" : ".ldr").toUtf8().data());
     }
 
     if (args.OPTS_GRID) {
-      ldraw_grid(ldr, QString(name).append(multiple_parts ? "_grid.ldr" : ".ldr").toAscii().data());
+      ldraw_grid(ldr, QString(name).append(multiple_parts ? "_grid.ldr" : ".ldr").toUtf8().data());
     }
 
     if (args.OPTS_MESH) {
-      ldraw_mesh(ldr, QString(name).append(multiple_parts ? "_mesh.ldr" : ".ldr").toAscii().data());
+      ldraw_mesh(ldr, QString(name).append(multiple_parts ? "_mesh.ldr" : ".ldr").toUtf8().data());
     }
 
     return true;
