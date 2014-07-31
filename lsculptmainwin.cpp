@@ -83,9 +83,10 @@ LSculptMainWin::LSculptMainWin(QWidget *parent) :
     connect(panel, SIGNAL(hideLDViewBtnClicked()), this, SLOT(hidePreview()));
 
 	ldvWin = new QWidget(this);
-    //#ifdef _WIN32
+    #ifdef _WIN32
         ldvWin->setMinimumWidth(panel->minimumWidth());
-    //#endif
+    #endif
+
 	ldvWin->setMinimumHeight(panel->minimumHeight());
 
 	layout->addWidget(panel);
@@ -96,7 +97,7 @@ LSculptMainWin::LSculptMainWin(QWidget *parent) :
 
     #ifdef _WIN32
         LDVSetLDrawDir(ba.data());
-        pLDV = LDVInit(ldvWin->winId());
+        pLDV = LDVInit((HWND)ldvWin->winId());
         LDVGLInit(pLDV);
     #endif
 
@@ -142,19 +143,26 @@ void LSculptMainWin::initProgressDialog()
 int LSculptMainWin::hidePreview()
 {
     //QPoint winloc = this->pos();
+    panel->toggleLDViewBtn(hideLDView);
     if(hideLDView) {
-        ldvWin->show();
+        this->setFixedWidth(panel->width()+ldvWin->width());
         this->setMinimumWidth(panel->minimumWidth()+ldvWin->minimumWidth());
+        this->setMaximumWidth(QWIDGETSIZE_MAX);
+        #ifdef WIN32
+            LDVSetSize(pLDV, ldvWin->width(), ldvWin->height());
+        #endif
+        ldvWin->show();
+        hideLDView = !hideLDView;
         this->invokeLSculpt();
     } else {
         ldvWin->hide();
         this->setFixedWidth(this->size().width()-ldvWin->width());
         this->setMinimumWidth(panel->minimumWidth());
         this->setMaximumWidth(QWIDGETSIZE_MAX);
+        hideLDView = !hideLDView;
     }
     //this->move(winloc.x()+10,winloc.y()+10);
-    panel->toggleLDViewBtn(hideLDView);
-    hideLDView = !hideLDView;
+
     return EXIT_SUCCESS;
 }
 
@@ -318,7 +326,7 @@ void LSculptMainWin::resizeEvent(QResizeEvent *e)
 {
 	QMainWindow::resizeEvent(e);
     #ifdef _WIN32
-        LDVSetSize(pLDV, ldvWin->width(), ldvWin->height());
+    if(!hideLDView) LDVSetSize(pLDV, ldvWin->width(), ldvWin->height());
     #endif
 }
 

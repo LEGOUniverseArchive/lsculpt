@@ -23,10 +23,10 @@ HEADERS += rply.h \
     obj.hpp \
     obj_config.hpp \
     LSculpt_obj.h
-!console { 
+!console {
     win32 {
         LIBS += -L./ \
-            -lLDVLib
+             -lLDVLib
     }
     SOURCES += main.cpp \
         lsculptmainwin.cpp \

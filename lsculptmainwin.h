@@ -56,8 +56,8 @@ private:
     ArgumentSet defaults;  // Local copy of default arguments, which we can munge through INI file
 	QWidget *ldvWin;
 
-	void *pLDV;
-	bool isLoaded;
+    void *pLDV;
+    bool isLoaded;
     bool hideLDView;
 	QString appPath;
 	QString LDVPath;
