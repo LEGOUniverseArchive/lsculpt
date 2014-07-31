@@ -85,6 +85,7 @@ LSculptMainWin::LSculptMainWin(QWidget *parent) :
 	ldvWin = new QWidget(this);
     #ifdef _WIN32
         ldvWin->setMinimumWidth(panel->minimumWidth());
+        ldvWin->setMinimumHeight(panel->minimumHeight());
     #endif
 
 	ldvWin->setMinimumHeight(panel->minimumHeight());
@@ -99,6 +100,9 @@ LSculptMainWin::LSculptMainWin(QWidget *parent) :
         LDVSetLDrawDir(ba.data());
         pLDV = LDVInit((HWND)ldvWin->winId());
         LDVGLInit(pLDV);
+    #else
+        this->hidePreview();
+        panel->disableLDViewBtn();
     #endif
 
   statusBar()->showMessage("Adjust the settings or import a 3D file to get started...");

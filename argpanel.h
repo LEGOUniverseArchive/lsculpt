@@ -33,6 +33,7 @@ public:
     ~ArgPanel();
 	ArgumentSet getArguments(ArgumentSet defaults, char *infile = NULL);
     void toggleLDViewBtn(bool hide);
+    void disableLDViewBtn(void);
 
 signals:
     void runLSculptBtnClicked();

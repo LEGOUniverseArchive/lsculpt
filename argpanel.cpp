@@ -51,6 +51,12 @@ void ArgPanel::toggleLDViewBtn(bool hide)
     else ui->hideLDViewBtn->setText("Show Preview");
 }
 
+void ArgPanel::disableLDViewBtn()
+{
+    ui->hideLDViewBtn->setEnabled(false);
+}
+
+
 ArgumentSet ArgPanel::getArguments(ArgumentSet defaults, char *infile)
 {
 	ArgumentSet args = defaults;  // Start with default argument set
