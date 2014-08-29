@@ -148,6 +148,8 @@ struct ArgumentSet {
 	double OP_SOR;  // Importance of neighbors with the same orientation but different direction
 	double OP_BAK;  // Importance of neighbor directly behind or in front of cube
 	double OP_BKO;  // Importance of neighbor directly behind or in front of cube with same orientation
+
+    double       meshsize;
 };
 
 static const ArgumentSet defaultArgs = {
@@ -191,6 +193,8 @@ static const ArgumentSet defaultArgs = {
 	0.00,        // OP_SOR
 	0.00,        // OP_BAK
 	0.00,        // OP_BKO
+
+    0.00         // meshsize
 };
 
 

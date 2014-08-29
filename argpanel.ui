@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>375</height>
+    <width>1287</width>
+    <height>731</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -18,13 +18,13 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>400</width>
+    <width>600</width>
     <height>375</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>400</width>
+    <width>16777215</width>
     <height>16777215</height>
    </size>
   </property>
@@ -34,9 +34,9 @@
   <widget class="QPushButton" name="runLSculptBtn">
    <property name="geometry">
     <rect>
-     <x>304</x>
-     <y>345</y>
-     <width>86</width>
+     <x>550</x>
+     <y>600</y>
+     <width>131</width>
      <height>23</height>
     </rect>
    </property>
@@ -50,22 +50,22 @@
   <widget class="QGroupBox" name="groupBox_4">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>6</y>
-     <width>380</width>
-     <height>190</height>
+     <x>690</x>
+     <y>0</y>
+     <width>580</width>
+     <height>211</height>
     </rect>
    </property>
    <property name="title">
-    <string>Mesh Size &amp;&amp; Position</string>
+    <string>Size &amp;&amp; Positioning</string>
    </property>
    <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
      <rect>
       <x>12</x>
       <y>54</y>
-      <width>182</width>
-      <height>126</height>
+      <width>261</width>
+      <height>151</height>
      </rect>
     </property>
     <property name="title">
@@ -181,10 +181,10 @@
    <widget class="QGroupBox" name="groupBox_3">
     <property name="geometry">
      <rect>
-      <x>202</x>
-      <y>104</y>
-      <width>168</width>
-      <height>76</height>
+      <x>380</x>
+      <y>100</y>
+      <width>191</width>
+      <height>81</height>
      </rect>
     </property>
     <property name="title">
@@ -201,52 +201,7 @@
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0">
-       <widget class="QRadioButton" name="lengthRadio">
-        <property name="toolTip">
-         <string>Grow or shrink the Mesh so this is its longest side, measured in the chosen Units</string>
-        </property>
-        <property name="text">
-         <string>Max Size:</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QDoubleSpinBox" name="lengthDSpin">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>60</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string>Grow or shrink the Mesh so this is its longest side, measured in the chosen Units</string>
-        </property>
-        <property name="maximum">
-         <double>1000.000000000000000</double>
-        </property>
-        <property name="value">
-         <double>32.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QRadioButton" name="scaleRadio">
-        <property name="toolTip">
-         <string>Grow or shrink the Mesh by this amount overall</string>
-        </property>
-        <property name="text">
-         <string>Scale Factor:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QDoubleSpinBox" name="scaleDSpin">
+       <widget class="QDoubleSpinBox" name="scaleDSpinold">
         <property name="enabled">
          <bool>false</bool>
         </property>
@@ -276,9 +231,9 @@
    <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">
      <rect>
-      <x>202</x>
-      <y>17</y>
-      <width>168</width>
+      <x>260</x>
+      <y>10</y>
+      <width>191</width>
       <height>80</height>
      </rect>
     </property>
@@ -344,82 +299,60 @@
      </layout>
     </widget>
    </widget>
-   <widget class="QLabel" name="label_2">
-    <property name="geometry">
-     <rect>
-      <x>26</x>
-      <y>28</y>
-      <width>32</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Units:</string>
-    </property>
-    <property name="buddy">
-     <cstring>unitsCombo</cstring>
-    </property>
-   </widget>
-   <widget class="QComboBox" name="unitsCombo">
-    <property name="geometry">
-     <rect>
-      <x>62</x>
-      <y>26</y>
-      <width>129</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="toolTip">
-     <string>Measurement Units to use for the size of the imported Mesh plus Offset and Scaling values</string>
-    </property>
-    <item>
-     <property name="text">
-      <string>Stud</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>LDraw Units</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Milimeters</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Centimeters</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Meters</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Inches</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Feet</string>
-     </property>
-    </item>
-   </widget>
+  </widget>
+  <widget class="QPushButton" name="hideLDViewBtn">
+   <property name="geometry">
+    <rect>
+     <x>410</x>
+     <y>590</y>
+     <width>99</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Hide Preview</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="emptyCheck">
+   <property name="geometry">
+    <rect>
+     <x>220</x>
+     <y>640</y>
+     <width>135</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Create an empty shell (use with disconnected or overlapping surfaces that otherwise result in lots of artifacts)</string>
+   </property>
+   <property name="text">
+    <string>Empty Shell</string>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="radioButton">
+   <property name="geometry">
+    <rect>
+     <x>510</x>
+     <y>660</y>
+     <width>117</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>RadioButton</string>
+   </property>
   </widget>
   <widget class="QGroupBox" name="groupBox_5">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>208</y>
-     <width>380</width>
-     <height>131</height>
+     <x>650</x>
+     <y>210</y>
+     <width>571</width>
+     <height>221</height>
     </rect>
    </property>
    <property name="title">
-    <string>LDraw Output Options</string>
+    <string>Conversion</string>
    </property>
    <widget class="QWidget" name="formLayoutWidget_4">
     <property name="geometry">
@@ -522,69 +455,11 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>278</x>
-      <y>12</y>
-      <width>137</width>
-      <height>108</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QCheckBox" name="emptyCheck">
-       <property name="toolTip">
-        <string>Create an empty shell (use with disconnected or overlapping surfaces that otherwise result in lots of artifacts)</string>
-       </property>
-       <property name="text">
-        <string>Empty Shell</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="studsUpCheck">
-       <property name="toolTip">
-        <string>Use only Studs Up parts</string>
-       </property>
-       <property name="text">
-        <string>Studs Up only</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QRadioButton" name="maxDetailRadio">
-       <property name="toolTip">
-        <string>Create a LEGO model that is the closest match to the Mesh as possible.  Could result in some seriously tricky building.</string>
-       </property>
-       <property name="text">
-        <string>Highest Detail</string>
-       </property>
-       <property name="checked">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QRadioButton" name="radioButton_2">
-       <property name="toolTip">
-        <string>Create a LEGO model that's as easy to build as possible.  May lose some accuracy in favor of buildability.</string>
-       </property>
-       <property name="text">
-        <string>Easiest to Build</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
    <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>103</y>
+      <y>130</y>
       <width>334</width>
       <height>24</height>
      </rect>
@@ -617,18 +492,426 @@
     </layout>
    </widget>
   </widget>
-  <widget class="QPushButton" name="hideLDViewBtn">
+  <widget class="QWidget" name="verticalLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>190</x>
-     <y>340</y>
-     <width>99</width>
+     <x>70</x>
+     <y>30</y>
+     <width>491</width>
+     <height>521</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
+     <widget class="QGroupBox" name="groupBox_6">
+      <property name="title">
+       <string>Size &amp;&amp; Positioning</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QGroupBox" name="groupBox_7">
+      <property name="title">
+       <string>Conversion</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QGroupBox" name="groupBox_8">
+      <property name="title">
+       <string>Display</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>930</x>
+     <y>110</y>
+     <width>137</width>
+     <height>108</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QCheckBox" name="studsUpCheck">
+      <property name="toolTip">
+       <string>Use only Studs Up parts</string>
+      </property>
+      <property name="text">
+       <string>Studs Up only</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QRadioButton" name="maxDetailRadio">
+      <property name="toolTip">
+       <string>Create a LEGO model that is the closest match to the Mesh as possible.  Could result in some seriously tricky building.</string>
+      </property>
+      <property name="text">
+       <string>Highest Detail</string>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QRadioButton" name="radioButton_2">
+      <property name="toolTip">
+       <string>Create a LEGO model that's as easy to build as possible.  May lose some accuracy in favor of buildability.</string>
+      </property>
+      <property name="text">
+       <string>Easiest to Build</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit">
+   <property name="geometry">
+    <rect>
+     <x>590</x>
+     <y>500</y>
+     <width>51</width>
      <height>27</height>
     </rect>
    </property>
-   <property name="text">
-    <string>Hide Preview</string>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>730</x>
+     <y>430</y>
+     <width>239</width>
+     <height>129</height>
+    </rect>
    </property>
+   <layout class="QVBoxLayout" name="verticalLayout_3">
+    <item>
+     <widget class="QRadioButton" name="lengthRadio">
+      <property name="toolTip">
+       <string/>
+      </property>
+      <property name="text">
+       <string>Specify Output Size</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QRadioButton" name="scaleRadio">
+      <property name="toolTip">
+       <string/>
+      </property>
+      <property name="text">
+       <string>Import Size from Mesh</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QFormLayout" name="formLayout_3">
+      <property name="fieldGrowthPolicy">
+       <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+      </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="unitsLabel">
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>100</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Output Units:</string>
+        </property>
+        <property name="buddy">
+         <cstring>unitsCombo</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="unitsCombo">
+        <property name="maximumSize">
+         <size>
+          <width>120</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <item>
+         <property name="text">
+          <string>LEGO Studs</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>LDraw Units</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Millimeters</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Centimeters</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Meters</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Inches</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Feet</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="scaleLabel">
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>100</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Output Size:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QDoubleSpinBox" name="scaleDSpin">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>120</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="toolTipDuration">
+         <number>-4</number>
+        </property>
+        <property name="layoutDirection">
+         <enum>Qt::LeftToRight</enum>
+        </property>
+        <property name="decimals">
+         <number>3</number>
+        </property>
+        <property name="maximum">
+         <double>10240.000000000000000</double>
+        </property>
+        <property name="value">
+         <double>32.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="gridLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>730</x>
+     <y>570</y>
+     <width>241</width>
+     <height>101</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_7">
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="text">
+       <string>Up</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="label_2">
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="text">
+       <string>Left</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="3">
+     <widget class="QLineEdit" name="nudgeZ">
+      <property name="minimumSize">
+       <size>
+        <width>50</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>50</width>
+        <height>16777215</height>
+       </size>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="2">
+     <widget class="QLabel" name="label_6">
+      <property name="text">
+       <string>Right</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QSlider" name="sliderY">
+      <property name="minimum">
+       <number>-20</number>
+      </property>
+      <property name="maximum">
+       <number>20</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="tickPosition">
+       <enum>QSlider::TicksBelow</enum>
+      </property>
+      <property name="tickInterval">
+       <number>10</number>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QSlider" name="sliderZ">
+      <property name="minimum">
+       <number>-20</number>
+      </property>
+      <property name="maximum">
+       <number>20</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="tickPosition">
+       <enum>QSlider::TicksBelow</enum>
+      </property>
+      <property name="tickInterval">
+       <number>10</number>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="2">
+     <widget class="QLabel" name="label_13">
+      <property name="text">
+       <string>Back</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="2">
+     <widget class="QLabel" name="label_11">
+      <property name="text">
+       <string>Down</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_12">
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="text">
+       <string>Front</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="3">
+     <widget class="QLineEdit" name="nudgeX">
+      <property name="minimumSize">
+       <size>
+        <width>50</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>50</width>
+        <height>16777215</height>
+       </size>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="3">
+     <widget class="QLineEdit" name="nudgeY">
+      <property name="minimumSize">
+       <size>
+        <width>50</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>50</width>
+        <height>16777215</height>
+       </size>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QSlider" name="sliderX">
+      <property name="minimum">
+       <number>-20</number>
+      </property>
+      <property name="maximum">
+       <number>20</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="tickPosition">
+       <enum>QSlider::TicksBelow</enum>
+      </property>
+      <property name="tickInterval">
+       <number>10</number>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <tabstops>
@@ -636,56 +919,18 @@
   <tabstop>offsetXDSpin</tabstop>
   <tabstop>offsetYDSpin</tabstop>
   <tabstop>offsetZDSpin</tabstop>
-  <tabstop>centerCheck</tabstop>
   <tabstop>upYRadio</tabstop>
   <tabstop>upZRadio</tabstop>
   <tabstop>rotateDSpin</tabstop>
-  <tabstop>lengthRadio</tabstop>
-  <tabstop>lengthDSpin</tabstop>
-  <tabstop>scaleRadio</tabstop>
-  <tabstop>scaleDSpin</tabstop>
+  <tabstop>scaleDSpinold</tabstop>
   <tabstop>partCombo</tabstop>
   <tabstop>colorCombo</tabstop>
   <tabstop>baseSpin</tabstop>
-  <tabstop>emptyCheck</tabstop>
   <tabstop>studsUpCheck</tabstop>
   <tabstop>maxDetailRadio</tabstop>
   <tabstop>radioButton_2</tabstop>
   <tabstop>runLSculptBtn</tabstop>
  </tabstops>
  <resources/>
- <connections>
-  <connection>
-   <sender>scaleRadio</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>lengthDSpin</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>262</x>
-     <y>164</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>369</x>
-     <y>149</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>scaleRadio</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>scaleDSpin</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>262</x>
-     <y>164</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>369</x>
-     <y>164</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

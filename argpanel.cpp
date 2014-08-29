@@ -20,6 +20,7 @@
 	along with this program.  If not, see http://www.gnu.org/licenses/  */
 
 #include <QVariant>
+#include <QMessageBox>
 
 #include "argpanel.h"
 
@@ -30,6 +31,15 @@ ArgPanel::ArgPanel(QWidget *parent) :
     ui->setupUi(this);
     connect(ui->runLSculptBtn, SIGNAL(clicked()), this, SIGNAL(runLSculptBtnClicked()));
     connect(ui->hideLDViewBtn, SIGNAL(clicked()), this, SIGNAL(hideLDViewBtnClicked()));
+    connect(ui->scaleRadio, SIGNAL(toggled(bool)), this, SLOT(switchToScale()));
+    connect(ui->lengthRadio, SIGNAL(toggled(bool)), this, SLOT(switchToSize()));
+    connect(ui->unitsCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(switchUnits(int)));
+    connect(ui->sliderX, SIGNAL(sliderMoved(int)), this, SLOT(sliderToBoxX()));
+    connect(ui->sliderY, SIGNAL(sliderMoved(int)), this, SLOT(sliderToBoxY()));
+    connect(ui->sliderZ, SIGNAL(sliderMoved(int)), this, SLOT(sliderToBoxZ()));
+    connect(ui->nudgeX, SIGNAL(textEdited(QString)), this, SLOT(boxToSliderX()));
+    connect(ui->nudgeY, SIGNAL(textEdited(QString)), this, SLOT(boxToSliderY()));
+    connect(ui->nudgeZ, SIGNAL(textEdited(QString)), this, SLOT(boxToSliderZ()));
 
 	ui->unitsCombo->setItemData(0, QVariant(UNIT_LDU_ST));
 	ui->unitsCombo->setItemData(1, QVariant(1.0));  // LDraw Units, default 1
@@ -38,6 +48,17 @@ ArgPanel::ArgPanel(QWidget *parent) :
 	ui->unitsCombo->setItemData(4, QVariant(UNIT_LDU_M));
 	ui->unitsCombo->setItemData(5, QVariant(UNIT_LDU_IN));
 	ui->unitsCombo->setItemData(6, QVariant(UNIT_LDU_FT));
+
+    ui->scaleRadio->setToolTip(SCALETIPR);
+    ui->lengthRadio->setToolTip(SIZETIPR);
+    this->switchToSize();
+
+    ui->nudgeX->setValidator(new QDoubleValidator(-1.0,1.0,1000,0));
+    ui->nudgeY->setValidator(new QDoubleValidator(-1.0,1.0,1000,0));
+    ui->nudgeZ->setValidator(new QDoubleValidator(-1.0,1.0,1000,0));
+    this->sliderToBoxX();
+    this->sliderToBoxY();
+    this->sliderToBoxZ();
 }
 
 ArgPanel::~ArgPanel()
@@ -45,17 +66,110 @@ ArgPanel::~ArgPanel()
     delete ui;
 }
 
+void ArgPanel::sliderToBoxX(){
+    ui->nudgeX->setText(QString::number((double)ui->sliderX->value()/(double)ui->sliderX->maximum(),'f',2));
+}
+
+void ArgPanel::sliderToBoxY(){
+    ui->nudgeY->setText(QString::number((double)ui->sliderY->value()/(double)ui->sliderY->maximum(),'f',2));
+}
+
+void ArgPanel::sliderToBoxZ(){
+    ui->nudgeZ->setText(QString::number((double)ui->sliderZ->value()/(double)ui->sliderZ->maximum(),'f',2));
+}
+
+void ArgPanel::boxToSliderX(){
+    double val;
+    val = ui->nudgeX->text().toDouble();
+    val = val > 1.0 ? 1.0 : (val < -1.0 ? -1.0 : val);
+    if(val >= 1.0 || val <= -1.0) ui->nudgeX->setText(QString::number(val,'f',2));
+    ui->sliderX->setValue((int)(val * (double)ui->sliderX->maximum()));
+}
+void ArgPanel::boxToSliderY()
+{
+    double val;
+    val = ui->nudgeY->text().toDouble();
+    val = val > 1.0 ? 1.0 : (val < -1.0 ? -1.0 : val);
+    if(val >= 1.0 || val <= -1.0) ui->nudgeY->setText(QString::number(val,'f',2));
+    ui->sliderY->setValue((int)(val * (double)ui->sliderY->maximum()));
+}
+void ArgPanel::boxToSliderZ()
+{
+    double val;
+    val = ui->nudgeZ->text().toDouble();
+    val = val > 1.0 ? 1.0 : (val < -1.0 ? -1.0 : val);
+    if(val >= 1.0 || val <= -1.0) ui->nudgeZ->setText(QString::number(val,'f',2));
+    ui->sliderZ->setValue((int)(val * (double)ui->sliderZ->maximum()));
+}
+
+void ArgPanel::switchToScale()
+{
+    ui->scaleLabel->setText(SCALELABEL);
+    ui->scaleLabel->setToolTip(SCALETIP);
+    ui->scaleDSpin->setToolTip(SCALETIP);
+    ui->unitsLabel->setText(SCALEUNITS);
+    ui->unitsLabel->setToolTip(SCALETIPU);
+    ui->unitsCombo->setToolTip(SCALETIPU);
+    ui->scaleDSpin->setValue(SCALEDFLT);
+    this->switchUnits(ui->unitsCombo->currentIndex());
+}
+
+void ArgPanel::switchToSize()
+{
+    ui->scaleLabel->setText(SIZELABEL);
+    ui->scaleLabel->setToolTip(SIZETIP);
+    ui->scaleDSpin->setToolTip(SIZETIP);
+    ui->unitsLabel->setText(SIZEUNITS);
+    ui->unitsLabel->setToolTip(SIZETIPU);
+    ui->unitsCombo->setToolTip(SIZETIPU);
+    ui->scaleDSpin->setValue(SIZEDFLT * ui->unitsCombo->currentData().toDouble() / UNIT_LDU_ST);
+    this->switchUnits(ui->unitsCombo->currentIndex());
+}
+
+void ArgPanel::switchUnits(int newindex)
+{
+    static int previndex = 0;
+
+    /*
+    int places;
+    for( places = 1;
+         places < 15 && (scalesize*pow(10,places) != (double) qRound(scalesize*pow(10,places)));
+         places++
+    );
+    ui->scaleDSpin->setDecimals(places);
+    */
+
+    if(ui->lengthRadio->isChecked() || 1 ){ // or mesh is loaded
+        ui->scaleDSpin->setValue(
+            ui->scaleDSpin->value() *
+            ui->unitsCombo->itemData(newindex).toDouble() /
+            ui->unitsCombo->itemData(previndex).toDouble()
+        );
+    }
+
+    if(ui->lengthRadio->isChecked()){
+        double newmax = (double)(2 << (sizeof(SpCubeCoord)*CHAR_BIT)) *
+                ui->unitsCombo->itemData(newindex).toDouble() / UNIT_LDU_ST;
+        ui->scaleDSpin->setDecimals(5 - (int)(log10(newmax)));
+        ui->scaleDSpin->setMaximum(newmax);
+    } else {
+        ui->scaleDSpin->setDecimals(6);
+        ui->scaleDSpin->setMaximum(10000);
+    }
+
+    previndex = newindex;
+}
+
 void ArgPanel::toggleLDViewBtn(bool hide)
 {
-    if(hide) ui->hideLDViewBtn->setText("Hide Preview");
-    else ui->hideLDViewBtn->setText("Show Preview");
+    if(hide) ui->hideLDViewBtn->setText(HIDEBUTTON);
+    else ui->hideLDViewBtn->setText(SHOWBUTTON);
 }
 
 void ArgPanel::disableLDViewBtn()
 {
     ui->hideLDViewBtn->setEnabled(false);
 }
-
 
 ArgumentSet ArgPanel::getArguments(ArgumentSet defaults, char *infile)
 {
@@ -95,7 +209,7 @@ ArgumentSet ArgPanel::getArguments(ArgumentSet defaults, char *infile)
 	}
 	else
 	{
-		args.OPTS_FIT = ui->lengthDSpin->value();
+        args.OPTS_FIT = ui->scaleDSpin->value();
 	}
 
 	// TODO: need UI widget to set message output level

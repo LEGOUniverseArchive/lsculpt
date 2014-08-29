@@ -23,8 +23,26 @@
 #define ARGPANEL_H
 
 #include <QWidget>
-#include "ui_argpanel.h"
+#include <QLabel>
+#include <QSignalMapper>
+#include <QString>
 #include "LSculpt_functions.h"
+#include "ui_argpanel.h"
+
+#define SHOWBUTTON "Show Preview"
+#define HIDEBUTTON "Hide Preview"
+#define SCALELABEL "Scale Factor:"
+#define SIZELABEL  "Output Size:"
+#define SIZEUNITS  "Output Units:"
+#define SCALEUNITS "Mesh Units:"
+#define SIZETIPR   "Use the desired size of the LEGO conversion"
+#define SCALETIPR  "Use the size data from the mesh and scale it up or down"
+#define SIZETIPU   "Measure the size of the output in these units"
+#define SCALETIPU  "Interpret the mesh using these Measurement units"
+#define SIZETIP    "Grow or shrink the mesh until this is the length of its longest side"
+#define SCALETIP   "Grow or shrink the mesh by this multiplication factor"
+#define SCALEDFLT  1.0
+#define SIZEDFLT   32.0
 
 class ArgPanel : public QWidget {
     Q_OBJECT
@@ -40,6 +58,15 @@ signals:
     void hideLDViewBtnClicked();
 
 public slots:
+    void switchToScale();
+    void switchToSize();
+    void sliderToBoxX();
+    void sliderToBoxY();
+    void sliderToBoxZ();
+    void boxToSliderX();
+    void boxToSliderY();
+    void boxToSliderZ();
+    void switchUnits(int unitindex);
 
 protected:
     void changeEvent(QEvent *e);

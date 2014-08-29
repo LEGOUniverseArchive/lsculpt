@@ -659,7 +659,6 @@ bool load_triangles_stla(char *fname)
 bool mesh_bounds(SmVector3 &mn, SmVector3 &mx)
 {
 	SmVector3 tmin, tmax, sz;
-	double maxlen;
 
 	// calculate the normals, bounding boxes for each triangle
 	for(vector<Triangle>::iterator i = inputmesh.begin(); i != inputmesh.end(); i++) {
@@ -679,23 +678,27 @@ bool mesh_bounds(SmVector3 &mn, SmVector3 &mx)
 	// size of the mesh
 	sz = mx - mn;
 	// longest edge
-	maxlen = max(sz[0],max(sz[1],sz[2]));
+
+    args.meshsize = max(sz[0],max(sz[1],sz[2]));
+
 	// if fitting is turned on, adjust the scale factor for SpCube
-	if(args.OPTS_FIT > 0.0) args.OPTS_SCALE *= maxlen/args.OPTS_FIT;
+    if(args.OPTS_FIT > 0.0) args.OPTS_SCALE *= args.meshsize/args.OPTS_FIT;
+
 	// if centering is turned on, adjust the offset for the mesh
 	if(args.OPTS_CENTER) args.OPTS_OFFSET -= 0.5*(mx+mn);
 	// check if the mesh is too big in + direction
 	sz = mx + args.OPTS_OFFSET;
-	maxlen = max(sz[0],max(sz[1],sz[2]));
-	if(maxlen / (SPCUBE_WIDTH*args.OPTS_SCALE) > (1 << (sizeof(SpCubeCoord)*CHAR_BIT-1))) {
+
+    args.meshsize = max(sz[0],max(sz[1],sz[2]));
+    if(args.meshsize / (SPCUBE_WIDTH*args.OPTS_SCALE) > (1 << (sizeof(SpCubeCoord)*CHAR_BIT-1))) {
 		if(args.OPTS_MESSAGE) cerr << "ERROR: The mesh is larger than the maximum allowed stud length." << endl
                         << "  Try re-centering the mesh at the origin, or check your scale settings" << endl;
 		return false;
 	}
 	// check if the mesh is too big in - direction
 	sz = mn + args.OPTS_OFFSET;
-	maxlen = -min(sz[0],min(sz[1],sz[2]));
-	if(maxlen / (SPCUBE_WIDTH*args.OPTS_SCALE) > (1 << (sizeof(SpCubeCoord)*CHAR_BIT-1))) {
+    args.meshsize = -min(sz[0],min(sz[1],sz[2]));
+    if(args.meshsize / (SPCUBE_WIDTH*args.OPTS_SCALE) > (1 << (sizeof(SpCubeCoord)*CHAR_BIT-1))) {
 		if(args.OPTS_MESSAGE) cerr << "ERROR: The mesh is larger than the maximum allowed stud length." << endl
                         << "  Try re-centering the mesh at the origin, or check your scale settings"  << endl;
 		return false;
